@@ -39,7 +39,7 @@ __screenshots__/
 *.timestamp-*-*.mjs
 
 # API
-api/
+api/db.json
 
 # Variables
 .env
