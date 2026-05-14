@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import HomeHero from '@/components/home/HomeHero.vue'
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="home-view">
+    <HomeHero />
+  </div>
 </template>
+
+<style scoped>
+.home-view {
+  display: flex;
+  flex-direction: column;
+}
+</style>
