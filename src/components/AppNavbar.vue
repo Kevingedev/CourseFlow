@@ -12,8 +12,9 @@ const toggleMenu = () => {
   <nav class="navbar glass-card">
     <div class="container navbar-content">
       <div class="logo">
-        <div class="logo-icon">F5</div>
-        <span class="logo-text">CourseFlow</span>
+        <router-link to="/">
+          <img src="@/assets/logo.png" alt="Course Flow Logo" class="navbar-logo" />
+        </router-link>
       </div>
 
       <!-- Desktop Links -->
@@ -94,25 +95,10 @@ const toggleMenu = () => {
   gap: 0.75rem;
 }
 
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  background-color: var(--primary-color);
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 1.25rem;
-}
-
-.logo-text {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  letter-spacing: -0.02em;
+.navbar-logo {
+  height: 40px; /* Adjust height as needed */
+  width: auto;
+  object-fit: contain;
 }
 
 .nav-links-desktop {
