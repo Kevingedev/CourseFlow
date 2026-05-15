@@ -48,6 +48,12 @@
   color: var(--text-dark);
 }
 
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.75rem;
+  }
+}
+
 .text-accent {
   color: var(--primary-color);
 }

@@ -197,9 +197,6 @@
 }
 
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
   .contact-form-container {
     padding: 2rem;
   }

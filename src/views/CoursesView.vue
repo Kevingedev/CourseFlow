@@ -226,10 +226,4 @@
   max-width: 800px;
   margin: 0 auto;
 }
-
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-}
 </style>
