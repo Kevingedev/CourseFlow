@@ -6,14 +6,14 @@
   <section class="hero section-padding">
     <div class="container hero-grid">
       <div class="hero-content">
-        <h1 class="hero-title">Lorem Ipsum <span class="text-accent">Dolor Sit.</span></h1>
+        <h1 class="hero-title">Elevate Your <span class="text-accent">Learning Journey.</span></h1>
         <p class="hero-subtitle">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua.
+          Discover a new way to manage and participate in pedagogical courses. Expertly designed for
+          educators and learners alike.
         </p>
         <div class="hero-actions">
-          <button class="btn-primary">Get Started</button>
-          <button class="btn-secondary">Learn More</button>
+          <router-link to="/courses" class="btn-primary">Explore Courses</router-link>
+          <router-link to="/about" class="btn-secondary">Learn More</router-link>
         </div>
       </div>
       <div class="hero-image-container">
@@ -46,6 +46,12 @@
   font-size: 4.5rem;
   margin-bottom: 1.5rem;
   color: var(--text-dark);
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.75rem;
+  }
 }
 
 .text-accent {

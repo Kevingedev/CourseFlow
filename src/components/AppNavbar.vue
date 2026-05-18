@@ -19,9 +19,9 @@ const toggleMenu = () => {
 
       <!-- Desktop Links -->
       <div class="nav-links-desktop">
-        <a href="#" class="nav-link">About Us</a>
-        <a href="#" class="nav-link">Courses</a>
-        <a href="#" class="nav-link">Contact</a>
+        <router-link to="/about" class="nav-link">About Us</router-link>
+        <router-link to="/courses" class="nav-link">Courses</router-link>
+        <router-link to="/contact" class="nav-link">Contact</router-link>
         <button class="btn-primary">Log In</button>
       </div>
 
@@ -62,9 +62,15 @@ const toggleMenu = () => {
     <!-- Mobile Menu Overlay -->
     <Transition name="slide">
       <div v-if="isMenuOpen" class="mobile-menu">
-        <a href="#" class="mobile-link" @click="isMenuOpen = false">About Us</a>
-        <a href="#" class="mobile-link" @click="isMenuOpen = false">Courses</a>
-        <a href="#" class="mobile-link" @click="isMenuOpen = false">Contact</a>
+        <router-link to="/about" class="mobile-link" @click="isMenuOpen = false"
+          >About Us</router-link
+        >
+        <router-link to="/courses" class="mobile-link" @click="isMenuOpen = false"
+          >Courses</router-link
+        >
+        <router-link to="/contact" class="mobile-link" @click="isMenuOpen = false"
+          >Contact</router-link
+        >
         <button class="btn-primary w-full">Log In</button>
       </div>
     </Transition>

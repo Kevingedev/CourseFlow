@@ -8,17 +8,17 @@
           <span class="logo-text">CourseFlow</span>
         </div>
         <p class="footer-desc">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Madrid, España.
+          Professional pedagogical management platform. Empowering educators and learners worldwide.
         </p>
       </div>
 
-      <!-- Column 2: Home Links -->
+      <!-- Column 2: Quick Links -->
       <div class="footer-col">
-        <h4 class="footer-title">Home</h4>
+        <h4 class="footer-title">Quick Links</h4>
         <ul class="footer-links">
-          <li><a href="#">About Us</a></li>
-          <li><a href="#">Courses</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><router-link to="/about">About Us</router-link></li>
+          <li><router-link to="/courses">Courses</router-link></li>
+          <li><router-link to="/contact">Contact</router-link></li>
         </ul>
       </div>
 
@@ -26,8 +26,8 @@
       <div class="footer-col">
         <h4 class="footer-title">Contact</h4>
         <ul class="footer-links">
-          <li>+23 23456 789</li>
-          <li>www.courseflow.com</li>
+          <li>+34 900 123 456</li>
+          <li>info@courseflow.com</li>
         </ul>
       </div>
 
@@ -35,10 +35,10 @@
       <div class="footer-col">
         <h4 class="footer-title">Socials</h4>
         <div class="social-icons">
-          <a href="#" class="social-icon">FB</a>
-          <a href="#" class="social-icon">IG</a>
-          <a href="#" class="social-icon">YT</a>
-          <a href="#" class="social-icon">LI</a>
+          <a href="#" class="social-icon" aria-label="Facebook">FB</a>
+          <a href="#" class="social-icon" aria-label="Instagram">IG</a>
+          <a href="#" class="social-icon" aria-label="YouTube">YT</a>
+          <a href="#" class="social-icon" aria-label="LinkedIn">LI</a>
         </div>
       </div>
     </div>
@@ -46,8 +46,8 @@
     <div class="container footer-bottom">
       <p>© 2024 CourseFlow. All rights reserved.</p>
       <div class="legal-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms & Conditions</a>
+        <router-link to="/">Privacy Policy</router-link>
+        <router-link to="/">Terms & Conditions</router-link>
       </div>
     </div>
   </footer>
