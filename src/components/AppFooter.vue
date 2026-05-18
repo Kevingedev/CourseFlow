@@ -1,11 +1,14 @@
+<script setup lang="ts">
+import logoUrl from '@/assets/logo.svg'
+</script>
+
 <template>
   <footer class="footer">
     <div class="container footer-grid">
       <!-- Column 1: Brand -->
       <div class="footer-col">
         <div class="logo">
-          <div class="logo-icon">F5</div>
-          <span class="logo-text">CourseFlow</span>
+          <img :src="logoUrl" alt="CourseFlow Logo" class="footer-logo" />
         </div>
         <p class="footer-desc">
           Professional pedagogical management platform. Empowering educators and learners worldwide.
@@ -87,24 +90,10 @@
   margin-bottom: 1.5rem;
 }
 
-.logo-icon {
-  width: 32px;
-  height: 32px;
-  background-color: var(--primary-color);
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.logo-text {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--primary-color);
+.footer-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
 }
 
 .footer-desc {

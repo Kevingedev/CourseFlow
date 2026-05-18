@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import logoUrl from '@/assets/logo.svg'
 
 const isMenuOpen = ref(false)
 const authStore = useAuthStore()
@@ -22,8 +23,7 @@ const handleLogout = () => {
   <nav class="navbar glass-card">
     <div class="container navbar-content">
       <router-link to="/" class="logo">
-        <div class="logo-icon">F5</div>
-        <span class="logo-text">CourseFlow</span>
+        <img :src="logoUrl" alt="CourseFlow Logo" class="navbar-logo" />
       </router-link>
 
       <!-- Desktop Links -->
