@@ -1,8 +1,72 @@
 <script setup lang="ts">
-/**
- * CoursesView.vue
- * Placeholder for the Course Catalog page.
- */
+import { ref, onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import api from '../services/api';
+
+interface Course {
+  id: number;
+  name: string;
+  description: string;
+  instructor?: string;
+  duration?: string;
+  start_date?: string;
+  end_date?: string;
+  category?: string;
+  capacity?: number;
+  is_active?: boolean;
+}
+
+const courses = ref<Course[]>([]);
+const loading = ref(false);
+const error = ref<string | null>(null);
+const showAll = ref(false);
+
+const displayedCourses = computed(() => {
+  if (showAll.value) return courses.value;
+  return courses.value.slice(0, 6);
+});
+
+const router = useRouter();
+
+function goToCourse(id?: number) {
+  if (!id) return;
+  router.push(`/courses/${id}`);
+}
+
+function formatDuration(start?: string, end?: string) {
+  if (!start || !end) return 'TBD';
+  const s = new Date(start);
+  const e = new Date(end);
+  if (isNaN(s.getTime()) || isNaN(e.getTime()) || e <= s) return 'TBD';
+  const diffMs = e.getTime() - s.getTime();
+  const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays >= 30) {
+    const months = Math.round(diffDays / 30);
+    return `${months} ${months === 1 ? 'mes' : 'meses'}`;
+  }
+  if (diffDays >= 7) {
+    const weeks = Math.round(diffDays / 7);
+    return `${weeks} ${weeks === 1 ? 'semana' : 'semanas'}`;
+  }
+  return `${diffDays} ${diffDays === 1 ? 'día' : 'días'}`;
+}
+
+async function loadCourses() {
+  loading.value = true;
+  error.value = null;
+  try {
+    const res = await api.get('/courses');
+    courses.value = res.data;
+  } catch (err: unknown) {
+    error.value = (err as { response?: { data?: string }; message?: string }).response?.data || (err as { message?: string }).message || 'Error cargando cursos';
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(() => {
+  loadCourses();
+});
 </script>
 
 <template>
@@ -42,24 +106,42 @@
       </div>
     </section>
 
-    <!-- Upcoming Courses Grid -->
+    <!-- Courses Grid -->
     <section class="upcoming-courses section-padding">
       <div class="container">
-        <h2 class="section-title text-center">Upcoming Courses</h2>
-        <div class="courses-grid">
-          <div v-for="i in 3" :key="i" class="course-card glass-card">
-            <div class="course-image-placeholder">
-              <span>Coming Soon</span>
-            </div>
-            <div class="course-content">
-              <span class="course-tag">New</span>
-              <h3>Course Title {{ i }}</h3>
-              <p>A brief description of what this amazing pedagogical course will cover.</p>
-              <div class="course-footer">
-                <span class="course-price">Provisional</span>
-                <button class="btn-primary-small">Notify Me</button>
+        <h2 class="section-title text-center">Catálogo de Cursos</h2>
+
+        <div v-if="loading" class="text-center">
+          Cargando cursos...
+        </div>
+
+        <div v-else-if="error" class="text-center">
+          <p style="color: var(--error-color)">Error: {{ error }}</p>
+        </div>
+
+        <div v-else>
+          <div class="courses-grid">
+            <div v-if="courses.length === 0" class="text-center">No hay cursos disponibles.</div>
+
+            <div v-for="course in displayedCourses" :key="course.id" class="course-card glass-card">
+              <div class="course-image-placeholder">
+                <span>{{ course.category || 'Course' }}</span>
+              </div>
+              <div class="course-content">
+                <span class="course-tag">{{ course.is_active ? 'Open' : 'Closed' }}</span>
+                <h3>{{ course.name }}</h3>
+                <p>{{ course.description }}</p>
+                <p class="course-meta">Duración: <strong>{{ formatDuration(course.start_date, course.end_date) }}</strong></p>
+                <div class="course-footer">
+                  <span class="course-price">Capacidad: {{ course.capacity ?? '–' }}</span>
+                  <button class="btn-primary-small" :disabled="!course.is_active" @click="goToCourse(course.id)">¡Inscríbete ya!</button>
+                </div>
               </div>
             </div>
+          </div>
+
+          <div v-if="courses.length > 6" class="text-center" style="margin-top: 1.5rem">
+            <button class="btn-primary" @click="showAll = !showAll">{{ showAll ? 'Mostrar menos' : 'Ver más' }}</button>
           </div>
         </div>
       </div>
@@ -157,9 +239,21 @@
   transform: translateY(-8px);
 }
 
+
+/* Make grid items stretch so cards have equal height */
+.courses-grid {
+  align-items: stretch;
+}
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .course-image-placeholder {
   width: 100%;
-  aspect-ratio: 16/9;
+  height: 160px;
   background-color: var(--primary-color-soft);
   display: flex;
   align-items: center;
@@ -171,6 +265,9 @@
 
 .course-content {
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
 }
 
 .course-tag {
@@ -201,6 +298,7 @@
   align-items: center;
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
+  margin-top: auto;
 }
 
 .course-price {
