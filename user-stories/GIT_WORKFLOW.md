@@ -32,6 +32,10 @@ Used for critical production fixes.
 | **HU-002** | Course Catalog View | `feature/HU-002-course-catalog` |
 | **HU-003** | Course Applications | `feature/HU-003-course-applications` |
 | **HU-004** | Public Information Pages | `feature/HU-004-public-pages` |
+| **HU-005** | Admin Access & Role Redirection | `feature/HU-005-admin-access` |
+| **HU-006** | Admin Dashboard & Stats Charts | `feature/HU-006-admin-dashboard` |
+| **HU-007** | Request Waitlist & Excel Export | `feature/HU-007-requests-excel` |
+| **HU-008** | Courses CRUD & Catalog Management | `feature/HU-008-courses-crud` |
 
 ## 4. Commit Message Convention
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
