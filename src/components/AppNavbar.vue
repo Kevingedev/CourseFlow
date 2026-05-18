@@ -34,7 +34,7 @@ const handleLogout = () => {
         <router-link v-if="authStore.isAdminOrSuadmin" to="/admin/dashboard" class="nav-link admin-link">
           Admin Panel
         </router-link>
-        
+
         <template v-if="authStore.isAuthenticated">
           <span class="user-greeting">Hola, {{ authStore.user?.fullName }}</span>
           <button class="btn-logout" @click="handleLogout">Log Out</button>
@@ -87,9 +87,9 @@ const handleLogout = () => {
         <router-link v-if="authStore.isAdminOrSuadmin" to="/admin/dashboard" class="mobile-link admin-link" @click="isMenuOpen = false">
           Admin Panel
         </router-link>
-        
+
         <div class="mobile-divider"></div>
-        
+
         <template v-if="authStore.isAuthenticated">
           <div class="mobile-user-greeting">Hola, {{ authStore.user?.fullName }}</div>
           <button class="btn-logout w-full" @click="handleLogout">Log Out</button>
@@ -126,25 +126,10 @@ const handleLogout = () => {
   gap: 0.75rem;
 }
 
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  background-color: var(--primary-color);
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 1.25rem;
-}
-
-.logo-text {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  letter-spacing: -0.02em;
+.navbar-logo {
+  height: 40px; /* Adjust height as needed */
+  width: auto;
+  object-fit: contain;
 }
 
 .nav-links-desktop {

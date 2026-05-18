@@ -31,7 +31,7 @@ onMounted(() => {
     sessionExpiredMsg.value = customEvent.detail || 'Tu sesión ha expirado.'
     errors.general = ''
   }
-  
+
   window.addEventListener('auth:expired', handleSessionExpired)
   unsubscribe = () => {
     window.removeEventListener('auth:expired', handleSessionExpired)
@@ -53,7 +53,7 @@ const fillCredentials = (role: 'suadmin' | 'admin' | 'user') => {
   errors.general = ''
   errors.email = ''
   errors.password = ''
-  
+
   if (role === 'suadmin') {
     form.email = 'super@admin.com'
     form.password = 'super123'
@@ -102,10 +102,10 @@ const handleSubmit = async () => {
 
   try {
     const user = await authStore.login(form.email, form.password)
-    
+
     // Redirect based on role and query redirects
     const redirectTo = route.query.redirect as string
-    
+
     if (redirectTo) {
       router.push({ path: redirectTo })
     } else if (user.role === 'admin' || user.role === 'suadmin') {
@@ -185,25 +185,25 @@ const handleSubmit = async () => {
       <div class="demo-accounts">
         <span class="demo-title">Autocompletar cuentas de prueba:</span>
         <div class="demo-buttons">
-          <button 
-            type="button" 
-            class="demo-btn role-suadmin" 
+          <button
+            type="button"
+            class="demo-btn role-suadmin"
             @click="fillCredentials('suadmin')"
             :disabled="isLoading"
           >
             ⭐ Super Admin
           </button>
-          <button 
-            type="button" 
-            class="demo-btn role-admin" 
+          <button
+            type="button"
+            class="demo-btn role-admin"
             @click="fillCredentials('admin')"
             :disabled="isLoading"
           >
             🛡️ Admin
           </button>
-          <button 
-            type="button" 
-            class="demo-btn role-user" 
+          <button
+            type="button"
+            class="demo-btn role-user"
             @click="fillCredentials('user')"
             :disabled="isLoading"
           >

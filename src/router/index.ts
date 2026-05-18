@@ -11,6 +11,16 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/login',
+      name: 'login',
+      component: LoginView,
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView,
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
@@ -79,10 +89,10 @@ const router = createRouter({
 // Global Navigation Guard
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
-  
+
   // Find if any parent route requires auth
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  
+
   // Find allowed roles for this route (checking all matched nested routes)
   const allowedRoles = to.matched.reduce<string[]>((roles, record) => {
     if (record.meta.roles) {
@@ -102,12 +112,12 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth) {
     // 1. Check if token/session exists
     if (!authStore.isAuthenticated) {
-      return next({ 
-        name: 'login', 
-        query: { redirect: to.fullPath } 
+      return next({
+        name: 'login',
+        query: { redirect: to.fullPath }
       })
     }
-    
+
     // 2. Check if user's role is allowed
     if (allowedRoles.length > 0 && !allowedRoles.includes(authStore.userRole || '')) {
       // Role not allowed, redirect to public home
