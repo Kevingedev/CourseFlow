@@ -13,12 +13,12 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LoginView,
+      component: () => import('../views/LoginView.vue'),
     },
     {
       path: '/register',
       name: 'register',
-      component: RegisterView,
+      component: () => import('../views/RegisterView.vue'),
     },
     {
       path: '/about',
@@ -34,11 +34,6 @@ const router = createRouter({
       path: '/courses',
       name: 'courses',
       component: () => import('../views/CoursesView.vue'),
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/LoginView.vue'),
     },
     // Admin routes protected by authentication and role validation
     {

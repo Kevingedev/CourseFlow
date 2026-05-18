@@ -27,7 +27,6 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-<<<<<<< HEAD
       const authStore = useAuthStore()
       authStore.logout()
 
@@ -41,14 +40,3 @@ api.interceptors.response.use(
 )
 
 export default api
-=======
-      // Clear session or redirect to login if needed
-      Cookies.remove('auth_token');
-      // window.location.href = '/login';
-    }
-    return Promise.reject(error);
-  }
-);
-
-export default api;
->>>>>>> fe/user-registration

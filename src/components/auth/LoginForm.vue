@@ -37,7 +37,7 @@ const handleSubmit = async () => {
   errors.general = '';
 
   try {
-    await authStore.login(formData.email);
+    await authStore.login(formData.email, formData.password);
     router.push('/');
   } catch(error: unknown) {
     errors.general = error instanceof Error ? error.message : 'Invalid email or password';
