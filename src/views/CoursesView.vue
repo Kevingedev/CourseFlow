@@ -10,10 +10,10 @@
     <!-- Courses Hero -->
     <section class="courses-hero section-padding">
       <div class="container text-center">
-        <h1 class="hero-title">Our Pedagogical <span class="text-accent">Catalog</span></h1>
+        <h1 class="hero-title">Nuestros itinerarios <span class="text-accent">formativos</span></h1>
         <p class="hero-subtitle mx-auto">
-          Explore our diverse range of courses designed to elevate your teaching and learning
-          experience.
+          Descubre y aprende con nuestros programas gratuitos diseñados para impulsar tu carrera en
+          tecnología.
         </p>
       </div>
     </section>
@@ -21,22 +21,31 @@
     <!-- Categories -->
     <section class="categories section-padding bg-soft">
       <div class="container">
-        <h2 class="section-title text-center">Explore by Category</h2>
+        <h2 class="section-title text-center">Explora por especialidad</h2>
         <div class="categories-grid">
           <div class="category-card glass-card">
-            <div class="category-icon">🏫</div>
-            <h3>Teaching Methods</h3>
-            <p>Modern strategies for effective classroom management and engagement.</p>
-          </div>
-          <div class="category-card glass-card">
             <div class="category-icon">💻</div>
-            <h3>Digital Tools</h3>
-            <p>Master the latest technology to enhance your educational workflows.</p>
+            <h3>Desarrollo Web y Apps</h3>
+            <p>
+              Adquiere las competencias técnicas en front-end y back-end más demandadas del sector
+              digital.
+            </p>
           </div>
           <div class="category-card glass-card">
-            <div class="category-icon">👥</div>
-            <h3>Leadership</h3>
-            <p>Develop the skills needed to lead educational institutions and teams.</p>
+            <div class="category-icon">📊</div>
+            <h3>Datos e Inteligencia Artificial</h3>
+            <p>
+              Domina el análisis de datos y aprende a aplicar soluciones de inteligencia artificial
+              en proyectos reales.
+            </p>
+          </div>
+          <div class="category-card glass-card">
+            <div class="category-icon">⚙️</div>
+            <h3>Soporte y Sistemas</h3>
+            <p>
+              Especialízate en infraestructuras de red, sistemas cloud y soporte informático
+              profesional.
+            </p>
           </div>
         </div>
       </div>
@@ -45,19 +54,22 @@
     <!-- Upcoming Courses Grid -->
     <section class="upcoming-courses section-padding">
       <div class="container">
-        <h2 class="section-title text-center">Upcoming Courses</h2>
+        <h2 class="section-title text-center">Próximas formaciones</h2>
         <div class="courses-grid">
           <div v-for="i in 3" :key="i" class="course-card glass-card">
             <div class="course-image-placeholder">
-              <span>Coming Soon</span>
+              <span>Próximamente</span>
             </div>
             <div class="course-content">
-              <span class="course-tag">New</span>
-              <h3>Course Title {{ i }}</h3>
-              <p>A brief description of what this amazing pedagogical course will cover.</p>
+              <span class="course-tag">Nuevo</span>
+              <h3>Título de la formación {{ i }}</h3>
+              <p>
+                Una descripción detallada sobre lo que abarcará esta increíble formación tecnológica
+                orientada al empleo.
+              </p>
               <div class="course-footer">
                 <span class="course-price">Provisional</span>
-                <button class="btn-primary-small">Notify Me</button>
+                <button class="btn-primary-small">Avisarme</button>
               </div>
             </div>
           </div>
@@ -69,10 +81,10 @@
     <section class="coming-soon section-padding bg-soft">
       <div class="container text-center max-w-md">
         <div class="provisional-banner glass-card">
-          <h2 class="section-title">Full Catalog Under Development</h2>
+          <h2 class="section-title">Catálogo completo en desarrollo</h2>
           <p>
-            We are working hard to bring you a fully interactive course catalog. Soon you will be
-            able to filter, search, and enroll in our premium courses directly.
+            Estamos preparando un catálogo interactivo de cursos. Muy pronto podrás buscar, filtrar
+            e inscribirte directamente en nuestras formaciones de calidad.
           </p>
         </div>
       </div>

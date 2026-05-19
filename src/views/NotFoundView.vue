@@ -7,9 +7,9 @@
 
 <template>
   <div class="not-found-view">
-    <h1>404 - Page Not Found</h1>
-    <p>Sorry, the page you are looking for does not exist.</p>
-    <router-link to="/" class="back-home">Back to Home</router-link>
+    <h1>404 - Página no encontrada</h1>
+    <p>Lo sentimos, la página que estás buscando no existe.</p>
+    <router-link to="/" class="back-home">Volver al inicio</router-link>
   </div>
 </template>
 
