@@ -1,10 +1,24 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useAuthStore } from '../stores/auth'
+import { useRouter } from 'vue-router'
 
 const isMenuOpen = ref(false)
+const authStore = useAuthStore()
+const router = useRouter()
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
+}
+
+const handleAuthClick = () => {
+  isMenuOpen.value = false
+  if (authStore.isAuthenticated) {
+    authStore.logout()
+    router.push('/')
+  } else {
+    router.push('/login')
+  }
 }
 </script>
 
@@ -22,7 +36,9 @@ const toggleMenu = () => {
         <router-link to="/about" class="nav-link">About Us</router-link>
         <router-link to="/courses" class="nav-link">Courses</router-link>
         <router-link to="/contact" class="nav-link">Contact</router-link>
-        <button class="btn-primary">Log In</button>
+        <button class="btn-primary" @click="handleAuthClick">
+          {{ authStore.isAuthenticated ? 'Log Out' : 'Log In' }}
+        </button>
       </div>
 
       <!-- Mobile Toggle -->
@@ -71,7 +87,9 @@ const toggleMenu = () => {
         <router-link to="/contact" class="mobile-link" @click="isMenuOpen = false"
           >Contact</router-link
         >
-        <button class="btn-primary w-full">Log In</button>
+        <button class="btn-primary w-full" @click="handleAuthClick">
+          {{ authStore.isAuthenticated ? 'Log Out' : 'Log In' }}
+        </button>
       </div>
     </Transition>
   </nav>
