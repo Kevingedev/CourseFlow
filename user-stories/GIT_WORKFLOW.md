@@ -28,14 +28,18 @@ Used for critical production fixes.
 
 | User Story ID | Feature Description | Recommended Branch Name |
 | :--- | :--- | :--- |
-| **HU-001** | User Registration | `feature/HU-001-user-registration` |
-| **HU-002** | Course Catalog View | `feature/HU-002-course-catalog` |
-| **HU-003** | Course Applications | `feature/HU-003-course-applications` |
-| **HU-004** | Public Information Pages | `feature/HU-004-public-pages` |
+| **HU-001** | User Registration | `fe/user-registration` |
+| **HU-002** | Course Catalog View | `fe/course-catalog` |
+| **HU-003** | Course Applications | `fe/course-applications` |
+| **HU-004** | Public Information Pages | `fe/public-pages` |
+| **HU-005** | Admin Access & Role Redirection | `fe/admin-access` |
+| **HU-006** | Admin Dashboard & Stats Charts | `fe/admin-dashboard` |
+| **HU-007** | Request Waitlist & Excel Export | `fe/requests-excel` |
+| **HU-008** | Courses CRUD & Catalog Management | `fe/courses-crud` |
 
 ## 4. Commit Message Convention
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
-- `feat(HU-001): add registration form components`
+- `feat(fe/user-registration): add registration form components`
 - `fix(UI): correct responsive issues on contact page`
 - `docs: update rules.md with modular architecture`
 - `style: reformat user stories to markdown`

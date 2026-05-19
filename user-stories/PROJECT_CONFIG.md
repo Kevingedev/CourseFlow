@@ -41,6 +41,11 @@ Se han organizado y formateado las historias de usuario en la carpeta `user-stor
 - `us-01.md`: Registro de usuarios.
 - `us-02.md`: Visualización de cursos.
 - `us-03.md`: Solicitud de participación.
+- `us-04.md`: Implementación de páginas informativas públicas.
+- `us-05.md`: Redirección y acceso basada en roles al panel administrativo.
+- `us-06.md`: Estructura del panel administrativo y dashboard de estadísticas.
+- `us-07.md`: Gestión de solicitudes, lista de espera y exportación a Excel.
+- `us-08.md`: Gestión integral de cursos (CRUD de administración).
 
 ### 4. Reglas del Proyecto (Estándares de Código)
 Se ha creado el archivo `rules.md` que define los estándares obligatorios:
