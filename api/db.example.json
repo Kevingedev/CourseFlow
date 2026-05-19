@@ -1,8 +1,7 @@
-
 {
-    "users": [],
-    "courses": [],
-    "applications":[],
-    "waiting_list": []
+  "users": [],
+  "courses": [],
+  "applications": [],
+  "waiting_list": []
 }
 
