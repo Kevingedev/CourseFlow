@@ -10,10 +10,10 @@
     <!-- About Hero -->
     <section class="about-hero section-padding">
       <div class="container text-center">
-        <h1 class="hero-title">About <span class="text-accent">Course Flow</span></h1>
+        <h1 class="hero-title">Conoce <span class="text-accent">Course Flow</span></h1>
         <p class="hero-subtitle mx-auto">
-          We are dedicated to revolutionizing pedagogical management through innovation and
-          technology.
+          Construimos un entorno de aprendizaje tecnológico, equitativo y accesible para todas y
+          todos.
         </p>
       </div>
     </section>
@@ -22,17 +22,18 @@
     <section class="mission-vision section-padding bg-soft">
       <div class="container grid-2">
         <div class="mission-content">
-          <h2 class="section-title">Our Mission</h2>
+          <h2 class="section-title">Nuestra Misión</h2>
           <p>
-            To empower learners and educators through an intuitive and efficient course management
-            system that streamlines administrative tasks and enhances the learning experience.
+            Acompañar a las personas en su desarrollo digital ofreciendo formación tecnológica
+            inclusiva para reducir la brecha digital y fomentar la diversidad en el sector
+            tecnológico.
           </p>
         </div>
         <div class="vision-content">
-          <h2 class="section-title">Our Vision</h2>
+          <h2 class="section-title">Nuestra Visión</h2>
           <p>
-            To become the leading global platform for pedagogical organization, fostering a seamless
-            connection between high-quality educational content and those seeking to grow.
+            Ser la red de aprendizaje de referencia que conecta el talento diverso con las
+            oportunidades laborales y de crecimiento profesional en el sector digital.
           </p>
         </div>
       </div>
@@ -41,35 +42,65 @@
     <!-- Core Values -->
     <section class="values section-padding">
       <div class="container">
-        <h2 class="section-title text-center">Our Core Values</h2>
+        <h2 class="section-title text-center">Nuestros Valores</h2>
         <div class="values-grid">
           <div class="value-card glass-card">
             <div class="value-icon">💡</div>
-            <h3>Innovation</h3>
-            <p>Constantly seeking new ways to improve educational management and delivery.</p>
+            <h3>Innovación</h3>
+            <p>Buscamos constantemente soluciones pedagógicas innovadoras orientadas al empleo.</p>
           </div>
           <div class="value-card glass-card">
-            <div class="value-icon">🎯</div>
-            <h3>Excellence</h3>
-            <p>Striving for the highest quality in every feature and service we provide.</p>
+            <div class="value-icon">🤝</div>
+            <h3>Inclusión y Diversidad</h3>
+            <p>
+              Creemos en el potencial y talento de cada persona sin importar su punto de partida.
+            </p>
           </div>
           <div class="value-card glass-card">
             <div class="value-icon">🌍</div>
-            <h3>Accessibility</h3>
-            <p>Ensuring our platform is usable and beneficial for everyone, everywhere.</p>
+            <h3>Accesibilidad</h3>
+            <p>
+              Garantizamos educación tecnológica gratuita y de alta calidad para colectivos
+              diversos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact Data -->
+    <section class="impact section-padding bg-soft">
+      <div class="container">
+        <h2 class="section-title text-center">Nuestros Datos de Impacto</h2>
+        <div class="values-grid">
+          <div class="value-card glass-card">
+            <div class="value-icon">👥</div>
+            <h3>+1.200</h3>
+            <p>Personas formadas y acompañadas en su inserción laboral digital.</p>
+          </div>
+          <div class="value-card glass-card">
+            <div class="value-icon">📈</div>
+            <h3>63%</h3>
+            <p>Tasa de inserción y éxito laboral en empresas aliadas.</p>
+          </div>
+          <div class="value-card glass-card">
+            <div class="value-icon">🏢</div>
+            <h3>+400</h3>
+            <p>Empresas colaboradoras y partners que confían en nuestro talento.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Our Story -->
-    <section class="story section-padding bg-soft">
+    <section class="story section-padding">
       <div class="container max-w-md text-center">
-        <h2 class="section-title">Our Story</h2>
+        <h2 class="section-title">Nuestra Historia</h2>
         <p>
-          Founded in 2024, Course Flow emerged from the need for a more cohesive and user-friendly
-          way to handle pedagogical workflows. What started as a small project has grown into a
-          robust platform designed to meet the evolving needs of modern education.
+          Fundada en 2024, Course Flow nació de la necesidad de ofrecer un entorno de aprendizaje
+          más accesible y solidario en el ámbito del desarrollo tecnológico. Lo que comenzó como un
+          proyecto local de inclusión digital se ha consolidado en una plataforma robusta diseñada
+          para conectar la formación de calidad con el empleo del futuro.
         </p>
       </div>
     </section>

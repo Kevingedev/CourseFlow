@@ -6,14 +6,16 @@
   <section class="hero section-padding">
     <div class="container hero-grid">
       <div class="hero-content">
-        <h1 class="hero-title">Elevate Your <span class="text-accent">Learning Journey.</span></h1>
+        <h1 class="hero-title">
+          Abrimos rutas <span class="text-accent">inclusivas al talento digital.</span>
+        </h1>
         <p class="hero-subtitle">
-          Discover a new way to manage and participate in pedagogical courses. Expertly designed for
-          educators and learners alike.
+          Descubre una nueva forma de aprender y participar en formaciones tecnológicas. Diseñado
+          para impulsar el talento diverso y fomentar una sociedad inclusiva.
         </p>
         <div class="hero-actions">
-          <router-link to="/courses" class="btn-primary">Explore Courses</router-link>
-          <router-link to="/about" class="btn-secondary">Learn More</router-link>
+          <router-link to="/courses" class="btn-primary">Explorar Formaciones</router-link>
+          <router-link to="/about" class="btn-secondary">Conócenos</router-link>
         </div>
       </div>
       <div class="hero-image-container">

@@ -11,23 +11,24 @@ import logoUrl from '@/assets/logo.svg'
           <img :src="logoUrl" alt="CourseFlow Logo" class="footer-logo" />
         </div>
         <p class="footer-desc">
-          Professional pedagogical management platform. Empowering educators and learners worldwide.
+          Plataforma de gestión pedagógica profesional. Impulsando el talento digital y la
+          inclusión.
         </p>
       </div>
 
       <!-- Column 2: Quick Links -->
       <div class="footer-col">
-        <h4 class="footer-title">Quick Links</h4>
+        <h4 class="footer-title">Enlaces rápidos</h4>
         <ul class="footer-links">
-          <li><router-link to="/about">About Us</router-link></li>
-          <li><router-link to="/courses">Courses</router-link></li>
-          <li><router-link to="/contact">Contact</router-link></li>
+          <li><router-link to="/about">Conócenos</router-link></li>
+          <li><router-link to="/courses">Formaciones</router-link></li>
+          <li><router-link to="/contact">Contacto</router-link></li>
         </ul>
       </div>
 
       <!-- Column 3: Contact -->
       <div class="footer-col">
-        <h4 class="footer-title">Contact</h4>
+        <h4 class="footer-title">Contacto</h4>
         <ul class="footer-links">
           <li>+34 900 123 456</li>
           <li>info@courseflow.com</li>
@@ -36,7 +37,7 @@ import logoUrl from '@/assets/logo.svg'
 
       <!-- Column 4: Socials -->
       <div class="footer-col">
-        <h4 class="footer-title">Socials</h4>
+        <h4 class="footer-title">Redes sociales</h4>
         <div class="social-icons">
           <a href="#" class="social-icon" aria-label="Facebook">FB</a>
           <a href="#" class="social-icon" aria-label="Instagram">IG</a>
@@ -47,10 +48,10 @@ import logoUrl from '@/assets/logo.svg'
     </div>
 
     <div class="container footer-bottom">
-      <p>© 2024 CourseFlow. All rights reserved.</p>
+      <p>© 2024 CourseFlow. Todos los derechos reservados.</p>
       <div class="legal-links">
-        <router-link to="/">Privacy Policy</router-link>
-        <router-link to="/">Terms & Conditions</router-link>
+        <router-link to="/">Política de privacidad</router-link>
+        <router-link to="/">Términos y condiciones</router-link>
       </div>
     </div>
   </footer>

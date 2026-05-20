@@ -10,9 +10,10 @@
     <!-- Contact Hero -->
     <section class="contact-hero section-padding">
       <div class="container text-center">
-        <h1 class="hero-title">Get in <span class="text-accent">Touch</span></h1>
+        <h1 class="hero-title">¡Súmate al <span class="text-accent">cambio!</span></h1>
         <p class="hero-subtitle mx-auto">
-          Have questions about our courses or the platform? Our team is here to help you.
+          ¿Tienes dudas sobre nuestras formaciones o quieres colaborar con nosotros? Nuestro equipo
+          está listo para ayudarte.
         </p>
       </div>
     </section>
@@ -22,30 +23,30 @@
       <div class="container grid-2">
         <!-- Contact Info -->
         <div class="contact-info">
-          <h2 class="section-title">Contact Information</h2>
+          <h2 class="section-title">Información de contacto</h2>
           <div class="info-items">
             <div class="info-item">
               <div class="info-icon">📧</div>
               <div class="info-text">
-                <h3>Email Us</h3>
-                <p>info@courseflow.com</p>
+                <h3>Escríbenos</h3>
+                <p>info@somosf5.org</p>
                 <p>support@courseflow.com</p>
               </div>
             </div>
             <div class="info-item">
               <div class="info-icon">📞</div>
               <div class="info-text">
-                <h3>Call Us</h3>
+                <h3>Llámanos</h3>
                 <p>+34 900 123 456</p>
-                <p>Mon - Fri, 9:00 - 18:00</p>
+                <p>Lunes a Viernes, 9:00 - 18:00</p>
               </div>
             </div>
             <div class="info-item">
               <div class="info-icon">📍</div>
               <div class="info-text">
-                <h3>Visit Us</h3>
+                <h3>Visítanos</h3>
                 <p>Calle Ficticia 123, 28001</p>
-                <p>Madrid, Spain</p>
+                <p>Madrid, España</p>
               </div>
             </div>
           </div>
@@ -55,27 +56,27 @@
         <div class="contact-form-container glass-card">
           <form class="contact-form" @submit.prevent>
             <div class="form-group">
-              <label for="name">Full Name</label>
+              <label for="name">Nombre completo</label>
               <input type="text" id="name" placeholder="John Doe" required />
             </div>
             <div class="form-group">
-              <label for="email">Email Address</label>
+              <label for="email">Correo electrónico</label>
               <input type="email" id="email" placeholder="john@example.com" required />
             </div>
             <div class="form-group">
-              <label for="subject">Subject</label>
-              <input type="text" id="subject" placeholder="How can we help?" required />
+              <label for="subject">Asunto</label>
+              <input type="text" id="subject" placeholder="¿En qué te podemos ayudar?" required />
             </div>
             <div class="form-group">
-              <label for="message">Message</label>
+              <label for="message">Mensaje</label>
               <textarea
                 id="message"
                 rows="5"
-                placeholder="Your message here..."
+                placeholder="Escribe tu mensaje aquí..."
                 required
               ></textarea>
             </div>
-            <button type="submit" class="btn-primary w-full">Send Message</button>
+            <button type="submit" class="btn-primary w-full">Enviar mensaje</button>
           </form>
         </div>
       </div>

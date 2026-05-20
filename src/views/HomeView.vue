@@ -8,19 +8,25 @@ import HomeHero from '@/components/home/HomeHero.vue'
 
     <section class="features section-padding">
       <div class="container">
-        <h2 class="section-title">Why Choose <span class="text-accent">Course Flow?</span></h2>
+        <h2 class="section-title">¿Por qué elegir <span class="text-accent">Course Flow?</span></h2>
         <div class="features-grid">
           <div class="feature-card glass-card">
-            <h3>Expert Instructors</h3>
-            <p>Learn from industry leaders and experienced educators in various fields.</p>
+            <h3>Formación y Acompañamiento</h3>
+            <p>
+              Aprende de profesionales del sector tecnológico y docentes con amplia experiencia.
+            </p>
           </div>
           <div class="feature-card glass-card">
-            <h3>Flexible Learning</h3>
-            <p>Access your courses anytime, anywhere, and at your own pace.</p>
+            <h3>Metodología Flexible e Inclusiva</h3>
+            <p>
+              Accede a las formaciones en cualquier momento, desde cualquier lugar y a tu ritmo.
+            </p>
           </div>
           <div class="feature-card glass-card">
-            <h3>Interactive Content</h3>
-            <p>Engage with dynamic materials designed to enhance your pedagogical experience.</p>
+            <h3>Aprendizaje Práctico</h3>
+            <p>
+              Participa con proyectos reales y dinámicos diseñados para impulsar tu carrera digital.
+            </p>
           </div>
         </div>
       </div>
