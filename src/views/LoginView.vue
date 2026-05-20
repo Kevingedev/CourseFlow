@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '../stores/auth'
 import { useRouter, useRoute } from 'vue-router'
 
 const authStore = useAuthStore()
@@ -324,14 +324,14 @@ input.has-error:focus {
 }
 
 .alert-info {
-  background-color: rgba(84, 24, 193, 0.08);
-  border: 1px solid rgba(84, 24, 193, 0.15);
+  background-color: rgba(67, 17, 185, 0.08);
+  border: 1px solid rgba(67, 17, 185, 0.15);
   color: var(--primary-color);
 }
 
 .alert-error {
-  background-color: rgba(255, 87, 34, 0.08);
-  border: 1px solid rgba(255, 87, 34, 0.15);
+  background-color: rgba(236, 86, 32, 0.08);
+  border: 1px solid rgba(236, 86, 32, 0.15);
   color: var(--secondary-color);
 }
 
@@ -395,7 +395,7 @@ input.has-error:focus {
 
 .demo-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(84, 24, 193, 0.05);
+  box-shadow: 0 2px 8px rgba(67, 17, 185, 0.05);
 }
 
 .demo-btn.role-suadmin:hover {

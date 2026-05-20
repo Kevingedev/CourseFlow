@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '../../stores/auth'
 
 const authStore = useAuthStore()
 </script>
@@ -220,7 +220,7 @@ h1 {
 .action-btn:hover {
   border-color: var(--primary-color);
   transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(84, 24, 193, 0.08);
+  box-shadow: 0 4px 15px rgba(67, 17, 185, 0.08);
 }
 
 .action-btn.span-2 {

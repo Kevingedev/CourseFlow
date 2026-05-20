@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
-import logoUrl from '@/assets/logo.svg'
+import logoUrl from '../assets/logo.svg'
 
 const isMenuOpen = ref(false)
 const authStore = useAuthStore()
@@ -156,7 +156,7 @@ const handleLogout = () => {
   border-radius: 6px;
   font-weight: 600;
   font-size: 0.9rem;
-  border: 1px solid rgba(255, 87, 34, 0.2);
+  border: 1px solid rgba(236, 86, 32, 0.2);
   transition: all 0.2s ease;
 }
 

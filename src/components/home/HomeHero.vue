@@ -93,7 +93,7 @@
   background-color: var(--primary-color-soft);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(84, 24, 193, 0.1);
+  box-shadow: 0 20px 40px rgba(67, 17, 185, 0.1);
 }
 
 .decor-blob {
