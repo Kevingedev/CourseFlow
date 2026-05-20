@@ -84,9 +84,9 @@ const currentRouteTitle = computed(() => {
     <!-- Sidebar Navigation -->
     <aside class="admin-sidebar glass-card" :class="{ 'is-open': isSidebarOpen }">
       <div class="sidebar-header">
-        <router-link to="/" class="logo" @click="closeSidebar">
+        <!-- <router-link to="/" class="logo" @click="closeSidebar">
           <img :src="logoUrl" alt="CourseFlow Logo" class="admin-logo" />
-        </router-link>
+        </router-link> -->
       </div>
 
       <div class="user-profile-section">
@@ -200,7 +200,7 @@ const currentRouteTitle = computed(() => {
 }
 
 .admin-logo-mobile {
-  height: 32px;
+  height: 52px;
   width: auto;
 }
 
@@ -237,7 +237,7 @@ const currentRouteTitle = computed(() => {
 }
 
 .admin-logo {
-  height: 40px;
+  height: 52px;
   width: auto;
   object-fit: contain;
 }
@@ -293,8 +293,8 @@ const currentRouteTitle = computed(() => {
 }
 
 .profile-role.suadmin {
-  background-color: #ffe6e6;
-  color: #d32f2f;
+  background-color: var(--primary-20);
+  color: var(--primary-80);
 }
 
 .profile-role.admin {
@@ -352,13 +352,13 @@ const currentRouteTitle = computed(() => {
 }
 
 .external-link {
-  color: var(--secondary-color);
+  color: var(--primary-color-50);
   background-color: var(--secondary-color-soft);
   border: 1px solid rgba(255, 87, 34, 0.1);
 }
 
 .external-link:hover {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   color: var(--white);
 }
 
@@ -443,8 +443,8 @@ const currentRouteTitle = computed(() => {
 }
 
 .workspace-role-badge.suadmin {
-  background-color: #ffe6e6;
-  color: #d32f2f;
+  background-color: var(--primary-20);
+  color: var(--primary-80);
 }
 
 .workspace-role-badge.admin {

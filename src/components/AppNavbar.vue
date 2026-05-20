@@ -21,7 +21,7 @@ const handleLogout = () => {
 
 <template>
   <nav class="navbar glass-card">
-    <div class="container navbar-content">
+    <div class="navbar-content">
       <router-link to="/" class="logo">
         <img :src="logoUrl" alt="CourseFlow Logo" class="navbar-logo" />
       </router-link>
@@ -118,6 +118,7 @@ const handleLogout = () => {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 0 1rem;
 }
 
 .logo {
@@ -127,7 +128,7 @@ const handleLogout = () => {
 }
 
 .navbar-logo {
-  height: 40px; /* Adjust height as needed */
+  height: 52px;
   width: auto;
   object-fit: contain;
 }

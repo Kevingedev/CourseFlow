@@ -2,15 +2,46 @@
 
 :root {
   /* Color Palette */
-  --primary-color: #5418c1;
-  --primary-color-soft: rgba(84, 24, 193, 0.1);
-  --secondary-color: #ff5722;
-  --secondary-color-soft: rgba(255, 87, 34, 0.1);
-  --text-dark: #1a0b2e;
-  --text-muted: rgba(26, 11, 46, 0.6);
-  --bg-color: #f8f7ff;
-  --white: #ffffff;
-  --border-color: rgba(84, 24, 193, 0.1);
+  --primary-100: #21006C;
+  --primary-90:  #2E0490;
+  --primary-80:  #32059B;
+  --primary-70:  #3B0BAC;
+  --primary-60:  #4311B9;  /* ⭐ Principal */
+  --primary-50:  #724CCA;
+  --primary-40:  #A188DC;
+  --primary-30:  #CBBFE8;
+  --primary-20:  #E5DFF3;
+  --primary-10:  #F5F2FA;
+
+  /* ══ Secundarios (Naranja / Coral) ══ */
+  --secondary-100: #6F1A00;
+  --secondary-90:  #B22A01;
+  --secondary-80:  #CA3A0F;
+  --secondary-70:  #E24C1F;
+  --secondary-60:  #EC5629;  /* ⭐ Principal */
+  --secondary-50:  #F1805E;
+  --secondary-40:  #F5AA94;
+  --secondary-30:  #F9CCBF;
+  --secondary-20:  #FBDDD4;
+  --secondary-10:  #FDEEEA;
+
+  /* ══ Acentos y Neutros ══ */
+  --accent-orange: #FF4700;
+  --accent-teal:   #0A4749;
+  --neutral-white: #FFFFFF;
+  --neutral-black: #000000;
+  --neutral-gray:  #F6F6F6;
+
+  /* Semantic mappings using the new palette */
+  --primary-color: var(--primary-60);
+  --primary-color-soft: var(--primary-10);
+  --secondary-color: var(--secondary-60);
+  --secondary-color-soft: var(--secondary-10);
+  --text-dark: var(--primary-100);
+  --text-muted: rgba(33, 0, 108, 0.6);
+  --bg-color: var(--neutral-gray);
+  --white: var(--neutral-white);
+  --border-color: var(--primary-20);
 
   /* Typography */
   --font-main: 'Inter', sans-serif;
@@ -102,11 +133,11 @@ h3 {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(84, 24, 193, 0.05);
+  box-shadow: 0 8px 32px rgba(67, 17, 185, 0.05);
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
+  background-color: var(--primary-100);
   color: var(--white);
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -126,7 +157,7 @@ h3 {
 }
 
 .btn-secondary {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-100);
   color: var(--white);
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -222,8 +253,8 @@ h3 {
   padding: 3rem 2.5rem;
   border-radius: 20px;
   background: var(--white);
-  box-shadow: 0 10px 30px rgba(84, 24, 193, 0.05);
-  border: 1px solid rgba(84, 24, 193, 0.08);
+  box-shadow: 0 10px 30px rgba(67, 17, 185, 0.05);
+  border: 1px solid rgba(67, 17, 185, 0.08);
 }
 
 .auth-title {
@@ -275,7 +306,7 @@ h3 {
 .form-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px rgba(84, 24, 193, 0.08);
+  box-shadow: 0 0 0 4px rgba(67, 17, 185, 0.08);
 }
 
 .form-input:disabled {

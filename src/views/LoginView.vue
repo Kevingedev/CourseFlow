@@ -400,9 +400,9 @@ input.has-error:focus {
 }
 
 .demo-btn.role-suadmin:hover {
-  border-color: #d32f2f;
-  background-color: #ffe6e6;
-  color: #d32f2f;
+  border-color: var(--primary-60);
+  background-color: var(--primary-20);
+  color: var(--primary-80);
 }
 
 .demo-btn.role-admin:hover {

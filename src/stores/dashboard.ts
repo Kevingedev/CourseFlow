@@ -53,8 +53,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
       datasets: [
         {
           label: 'Estado de Solicitudes',
-          backgroundColor: ['#FFC107', '#4CAF50', '#F44336'],
-          hoverBackgroundColor: ['#FFD54F', '#81C784', '#E57373'],
+          backgroundColor: ['#FFC107', '#4CAF50', '#64748B'],
+          hoverBackgroundColor: ['#FFD54F', '#81C784', '#94A3B8'],
           borderWidth: 2,
           borderColor: '#ffffff',
           data: [statusCounts.Pending, statusCounts.Approved, statusCounts.Rejected]
@@ -101,15 +101,15 @@ export const useDashboardStore = defineStore('dashboard', () => {
       datasets: [
         {
           label: 'Alumnos Admitidos',
-          backgroundColor: '#5418C1',
-          hoverBackgroundColor: '#6523D4',
+          backgroundColor: '#4311B9',
+          hoverBackgroundColor: '#724CCA',
           borderRadius: 6,
           data: enrolledData
         },
         {
           label: 'Capacidad del Curso',
-          backgroundColor: '#E0D4F7',
-          hoverBackgroundColor: '#ECE5FA',
+          backgroundColor: '#E5DFF3',
+          hoverBackgroundColor: '#F5F2FA',
           borderRadius: 6,
           data: capacityData
         }
