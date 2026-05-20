@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import api from '../services/api';
+import { Lock, PartyPopper, Ban, Calendar, OctagonX, TriangleAlert } from '@lucide/vue';
 
 interface Course {
   id: number;
@@ -305,7 +306,7 @@ async function submitForm() {
           <div class="glass-card aside-card enroll-form-container">
             <!-- 1. Not Authenticated State -->
             <div v-if="!authStore.isAuthenticated" class="status-prompt-box text-center">
-              <div class="status-icon">🔒</div>
+              <div class="status-icon"><Lock :size="56" /></div>
               <h3 class="form-title">Inscripción Privada</h3>
               <p class="form-subtitle">Debes estar registrado e iniciar sesión para poder postular a este curso.</p>
               <router-link to="/login" class="full-width btn-primary-link text-center" style="display: block; margin-top: 1.5rem; text-decoration: none;">
@@ -315,28 +316,28 @@ async function submitForm() {
 
             <!-- 2. Already Enrolled State -->
             <div v-else-if="isEnrolled" class="status-prompt-box text-center">
-              <div class="status-icon">🎉</div>
+              <div class="status-icon"><PartyPopper :size="56" /></div>
               <h3 class="form-title">¡Ya estás inscrito!</h3>
               <p class="form-subtitle">Tu solicitud para este curso ya ha sido registrada y está en estado <strong>Pendiente de revisión</strong>.</p>
             </div>
 
             <!-- 3. Course Inactive State -->
             <div v-else-if="course && !course.is_active" class="status-prompt-box text-center">
-              <div class="status-icon">🚫</div>
+              <div class="status-icon"><Ban :size="56" /></div>
               <h3 class="form-title">Curso Inactivo</h3>
               <p class="form-subtitle">Este curso no está recibiendo nuevas solicitudes de inscripción en este momento.</p>
             </div>
 
             <!-- 4. Course Already Started State -->
             <div v-else-if="isPastStartDate" class="status-prompt-box text-center">
-              <div class="status-icon">📅</div>
+              <div class="status-icon"><Calendar :size="56" /></div>
               <h3 class="form-title">Inscripciones Cerradas</h3>
               <p class="form-subtitle">Este curso comenzó el <strong>{{ course?.start_date }}</strong> y ya no acepta nuevos alumnos.</p>
             </div>
 
             <!-- 5. Blocked by Over-booking (>120% capacity) State -->
             <div v-else-if="isBlockedByCapacity" class="status-prompt-box text-center">
-              <div class="status-icon">🛑</div>
+              <div class="status-icon"><OctagonX :size="56" /></div>
               <h3 class="form-title">Cupo Agotado</h3>
               <p class="form-subtitle">Lo sentimos, este curso ha superado el aforo y el cupo máximo para la lista de espera.</p>
             </div>
@@ -347,7 +348,7 @@ async function submitForm() {
               
               <!-- Warning Badge if Capacity Reached but pending (over-booking) is allowed -->
               <div v-if="isCourseFull" class="warning-badge">
-                ⚠️ Aforo completo. Tu solicitud entrará en lista de espera (Pendiente).
+                <TriangleAlert :size="16" style="vertical-align: middle; margin-right: 4px;" /> Aforo completo. Tu solicitud entrará en lista de espera (Pendiente).
               </div>
               <p v-else class="form-subtitle">Completa este formulario y nos pondremos en contacto contigo en breve.</p>
 
@@ -387,12 +388,12 @@ async function submitForm() {
                     <label class="form-label">Teléfono *</label>
                     <div class="phone-input-group">
                       <select class="phone-country">
-                        <option selected>🇪🇸 +34</option>
-                        <option>🇲🇽 +52</option>
-                        <option>🇦🇷 +54</option>
-                        <option>🇨🇴 +57</option>
-                        <option>🇨🇱 +56</option>
-                        <option>🇵🇪 +51</option>
+                        <option selected>ES +34</option>
+                        <option>MX +52</option>
+                        <option>AR +54</option>
+                        <option>CO +57</option>
+                        <option>CL +56</option>
+                        <option>PE +51</option>
                       </select>
                       <input v-model="form.phone" class="form-input" type="tel" placeholder="123456789" required />
                     </div>
@@ -528,7 +529,7 @@ async function submitForm() {
                 </div>
 
                 <div v-if="submitError" class="submit-error-msg">
-                  ⚠️ {{ submitError }}
+                  <TriangleAlert :size="16" style="vertical-align: middle; margin-right: 4px;" /> {{ submitError }}
                 </div>
 
                 <!-- Botón -->

@@ -3,6 +3,7 @@
  * AboutView.vue
  * Information about the Course Flow platform.
  */
+import { Lightbulb, Handshake, Globe, Users, TrendingUp, Building2 } from '@lucide/vue';
 </script>
 
 <template>
@@ -45,19 +46,19 @@
         <h2 class="section-title text-center">Nuestros Valores</h2>
         <div class="values-grid">
           <div class="value-card glass-card">
-            <div class="value-icon">💡</div>
+            <div class="value-icon"><Lightbulb :size="40" /></div>
             <h3>Innovación</h3>
             <p>Buscamos constantemente soluciones pedagógicas innovadoras orientadas al empleo.</p>
           </div>
           <div class="value-card glass-card">
-            <div class="value-icon">🤝</div>
+            <div class="value-icon"><Handshake :size="40" /></div>
             <h3>Inclusión y Diversidad</h3>
             <p>
               Creemos en el potencial y talento de cada persona sin importar su punto de partida.
             </p>
           </div>
           <div class="value-card glass-card">
-            <div class="value-icon">🌍</div>
+            <div class="value-icon"><Globe :size="40" /></div>
             <h3>Accesibilidad</h3>
             <p>
               Garantizamos educación tecnológica gratuita y de alta calidad para colectivos
@@ -74,17 +75,17 @@
         <h2 class="section-title text-center">Nuestros Datos de Impacto</h2>
         <div class="values-grid">
           <div class="value-card glass-card">
-            <div class="value-icon">👥</div>
+            <div class="value-icon"><Users :size="40" /></div>
             <h3>+1.200</h3>
             <p>Personas formadas y acompañadas en su inserción laboral digital.</p>
           </div>
           <div class="value-card glass-card">
-            <div class="value-icon">📈</div>
+            <div class="value-icon"><TrendingUp :size="40" /></div>
             <h3>63%</h3>
             <p>Tasa de inserción y éxito laboral en empresas aliadas.</p>
           </div>
           <div class="value-card glass-card">
-            <div class="value-icon">🏢</div>
+            <div class="value-icon"><Building2 :size="40" /></div>
             <h3>+400</h3>
             <p>Empresas colaboradoras y partners que confían en nuestro talento.</p>
           </div>

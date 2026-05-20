@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../services/api';
+import { Monitor, ChartBar, Settings } from '@lucide/vue';
 
 interface Course {
   id: number;
@@ -88,7 +89,7 @@ onMounted(() => {
         <h2 class="section-title text-center">Explora por especialidad</h2>
         <div class="categories-grid">
           <div class="category-card glass-card">
-            <div class="category-icon">💻</div>
+            <div class="category-icon"><Monitor :size="40" /></div>
             <h3>Desarrollo Web y Apps</h3>
             <p>
               Adquiere las competencias técnicas en front-end y back-end más demandadas del sector
@@ -96,7 +97,7 @@ onMounted(() => {
             </p>
           </div>
           <div class="category-card glass-card">
-            <div class="category-icon">📊</div>
+            <div class="category-icon"><ChartBar :size="40" /></div>
             <h3>Datos e Inteligencia Artificial</h3>
             <p>
               Domina el análisis de datos y aprende a aplicar soluciones de inteligencia artificial
@@ -104,7 +105,7 @@ onMounted(() => {
             </p>
           </div>
           <div class="category-card glass-card">
-            <div class="category-icon">⚙️</div>
+            <div class="category-icon"><Settings :size="40" /></div>
             <h3>Soporte y Sistemas</h3>
             <p>
               Especialízate en infraestructuras de red, sistemas cloud y soporte informático

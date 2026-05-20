@@ -3,6 +3,7 @@
  * ContactView.vue
  * Placeholder for the Contact page.
  */
+import { Mail, Phone, MapPin } from '@lucide/vue';
 </script>
 
 <template>
@@ -26,7 +27,7 @@
           <h2 class="section-title">Información de contacto</h2>
           <div class="info-items">
             <div class="info-item">
-              <div class="info-icon">📧</div>
+              <div class="info-icon"><Mail :size="32" /></div>
               <div class="info-text">
                 <h3>Escríbenos</h3>
                 <p>info@somosf5.org</p>
@@ -34,7 +35,7 @@
               </div>
             </div>
             <div class="info-item">
-              <div class="info-icon">📞</div>
+              <div class="info-icon"><Phone :size="32" /></div>
               <div class="info-text">
                 <h3>Llámanos</h3>
                 <p>+34 900 123 456</p>
@@ -42,7 +43,7 @@
               </div>
             </div>
             <div class="info-item">
-              <div class="info-icon">📍</div>
+              <div class="info-icon"><MapPin :size="32" /></div>
               <div class="info-text">
                 <h3>Visítanos</h3>
                 <p>Calle Ficticia 123, 28001</p>

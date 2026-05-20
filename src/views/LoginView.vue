@@ -2,6 +2,7 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter, useRoute } from 'vue-router'
+import { Info, TriangleAlert, Star, Shield, GraduationCap } from '@lucide/vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -133,14 +134,14 @@ const handleSubmit = async () => {
       <!-- Feedback Alerts -->
       <Transition name="fade">
         <div v-if="sessionExpiredMsg" class="alert alert-info">
-          <span class="alert-icon">ℹ️</span>
+          <span class="alert-icon"><Info :size="18" /></span>
           <span class="alert-text">{{ sessionExpiredMsg }}</span>
         </div>
       </Transition>
 
       <Transition name="fade">
         <div v-if="errors.general" class="alert alert-error">
-          <span class="alert-icon">⚠️</span>
+          <span class="alert-icon"><TriangleAlert :size="18" /></span>
           <span class="alert-text">{{ errors.general }}</span>
         </div>
       </Transition>
@@ -191,7 +192,7 @@ const handleSubmit = async () => {
             @click="fillCredentials('suadmin')"
             :disabled="isLoading"
           >
-            ⭐ Super Admin
+            <Star :size="14" /> Super Admin
           </button>
           <button
             type="button"
@@ -199,7 +200,7 @@ const handleSubmit = async () => {
             @click="fillCredentials('admin')"
             :disabled="isLoading"
           >
-            🛡️ Admin
+            <Shield :size="14" /> Admin
           </button>
           <button
             type="button"
@@ -207,7 +208,7 @@ const handleSubmit = async () => {
             @click="fillCredentials('user')"
             :disabled="isLoading"
           >
-            🎓 Estudiante
+            <GraduationCap :size="14" /> Estudiante
           </button>
         </div>
       </div>
