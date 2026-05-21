@@ -44,7 +44,8 @@ const navLinks = [
   {
     name: 'Gestión de Usuarios',
     route: 'admin-users',
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
+    roles: ['suadmin']
   },
   {
     name: 'Lista de Espera',
@@ -53,9 +54,13 @@ const navLinks = [
   }
 ]
 
+const availableNavLinks = computed(() =>
+  navLinks.filter((link) => !link.roles || link.roles.includes(authStore.user?.role || '')),
+)
+
 const currentRouteTitle = computed(() => {
   const matchedLink = navLinks.find(link => link.route === route.name)
-  return matchedLink ? matchedLink.name : 'Panel Administrativo'
+  return (route.meta.title as string) || matchedLink?.name || 'Panel Administrativo'
 })
 </script>
 
@@ -103,7 +108,7 @@ const currentRouteTitle = computed(() => {
 
       <nav class="sidebar-nav">
         <router-link
-          v-for="link in navLinks"
+          v-for="link in availableNavLinks"
           :key="link.route"
           :to="{ name: link.route }"
           class="sidebar-link"

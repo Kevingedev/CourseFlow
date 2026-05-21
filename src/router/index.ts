@@ -69,8 +69,8 @@ const router = createRouter({
         {
           path: 'users',
           name: 'admin-users',
-          component: () => import('../views/admin/PlaceholderView.vue'),
-          meta: { title: 'Gestión de Usuarios' }
+          component: () => import('../views/admin/AdminUsersView.vue'),
+          meta: { title: 'Gestión de Administradores', roles: ['suadmin'] }
         }
       ]
     },
