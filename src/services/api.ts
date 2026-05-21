@@ -2,25 +2,12 @@ import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8001',
+  withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
+    Accept: 'application/json',
   },
 })
-
-// Request Interceptor to inject the access token
-api.interceptors.request.use(
-  (config) => {
-    const authStore = useAuthStore()
-    if (authStore.token) {
-      config.headers.Authorization = `Bearer ${authStore.token}`
-    }
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
-)
 
 // Response Interceptor to handle 401 Unauthorized globally
 api.interceptors.response.use(
@@ -28,7 +15,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       const authStore = useAuthStore()
-      authStore.logout()
+      authStore.clearSession()
 
       // Dispatch custom event so the UI can notify the user
       window.dispatchEvent(new CustomEvent('auth:expired', {

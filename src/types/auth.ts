@@ -6,10 +6,20 @@ export interface User {
   name: string
   email: string
   role: UserRole
+  dniNie?: string | null
+  birthDate?: string | null
   createdAt?: string
 }
 
 export interface AuthResponse {
   user: User
   token: string
+}
+
+export interface RegisterInput {
+  fullName: string
+  email: string
+  password: string
+  dniNie?: string
+  birthDate?: string
 }

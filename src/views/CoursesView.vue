@@ -56,10 +56,22 @@ async function loadCourses() {
   loading.value = true;
   error.value = null;
   try {
-    const res = await api.get('/courses');
+    const res = await api.get('/api/v1/courses/');
     courses.value = res.data;
   } catch (err: unknown) {
-    error.value = (err as { response?: { data?: string }; message?: string }).response?.data || (err as { message?: string }).message || 'Error cargando cursos';
+    const apiError = err as {
+      response?: { status?: number; data?: { detail?: string } };
+      message?: string;
+    };
+
+    if (apiError.response?.status === 401) {
+      error.value = 'Debes iniciar sesión para ver el catálogo de cursos.';
+    } else {
+      error.value =
+        apiError.response?.data?.detail ||
+        apiError.message ||
+        'Error cargando cursos';
+    }
   } finally {
     loading.value = false;
   }
