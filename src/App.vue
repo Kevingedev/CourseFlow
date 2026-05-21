@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import { computed } from 'vue'
+
+const route = useRoute()
+const isAdminRoute = computed(() => route.path.startsWith('/admin'))
 </script>
 
 <template>
-  <DefaultLayout>
+  <template v-if="isAdminRoute">
     <RouterView />
-  </DefaultLayout>
+  </template>
+  <template v-else>
+    <DefaultLayout>
+      <RouterView />
+    </DefaultLayout>
+  </template>
 </template>
 
 <style>
