@@ -3,16 +3,17 @@ import { useAuthStore } from '@/stores/auth'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Request Interceptor to inject the access token
+// Request Interceptor to inject the access token (only for mock token)
 api.interceptors.request.use(
   (config) => {
     const authStore = useAuthStore()
-    if (authStore.token) {
+    if (authStore.token && !authStore.token.startsWith('cookie_session')) {
       config.headers.Authorization = `Bearer ${authStore.token}`
     }
     return config

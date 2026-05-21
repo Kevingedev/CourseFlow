@@ -1,43 +1,129 @@
-import api from './api';
-import type { User, AuthResponse } from '@/types/auth';
+import api from './api'
+import type { User } from '@/types/auth'
 
-const MOCK_TOKEN = import.meta.env.VITE_MOCK_TOKEN;
+const isMock = !import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL.includes('3000')
+const MOCK_TOKEN = import.meta.env.VITE_MOCK_TOKEN || 'mock-jwt-token-xyz123'
 
 export const authService = {
   /**
    * Registers a new user.
-   * In a mock environment, it saves to JSON Server.
-   * In production, it will hit the Python API.
    */
-  async register(userData: User): Promise<AuthResponse> {
-    const response = await api.post('/users', {
-      ...userData,
-      createdAt: new Date().toISOString()
-    });
+  async register(name: string, email: string, password: string): Promise<User> {
+    if (isMock) {
+      // 1. Check if user already exists
+      const checkResponse = await api.get<any[]>('/users', {
+        params: { email }
+      })
 
-    return {
-      user: response.data,
-      token: MOCK_TOKEN
-    };
+      if (checkResponse.data.length > 0) {
+        throw new Error('El correo electrónico ya está registrado.')
+      }
+
+      // 2. Create the new user
+      const response = await api.post<any>('/users', {
+        fullName: name,
+        name,
+        email,
+        password,
+        role: 'user',
+        createdAt: new Date().toISOString()
+      })
+
+      return {
+        id: String(response.data.id),
+        name: response.data.name || response.data.fullName,
+        fullName: response.data.fullName || response.data.name,
+        email: response.data.email,
+        role: response.data.role,
+        createdAt: response.data.createdAt
+      }
+    } else {
+      const response = await api.post<any>('/api/v1/auth/register', {
+        name,
+        email,
+        password,
+        dni_nie: null,
+        birth_date: null,
+        role: 'user'
+      })
+
+      const data = response.data
+      return {
+        id: String(data.id),
+        name: data.name,
+        fullName: data.name,
+        email: data.email,
+        role: data.role === 'superadmin' ? 'suadmin' : data.role,
+        createdAt: data.createdAt
+      }
+    }
   },
 
   /**
    * Logs in a user.
-   * In mock, it checks by email.
-   * In production, it will return a real JWT.
    */
-  async login(email: string): Promise<AuthResponse> {
-    // Mock login logic: find user by email
-    const response = await api.get(`/users?email=${email}`);
-    const user = response.data[0];
+  async login(email: string, password: string): Promise<{ user: User; token: string }> {
+    if (isMock) {
+      const response = await api.get<any[]>('/users', {
+        params: { email }
+      })
+      const foundUser = response.data.find(u => u.password === password)
 
-    if (!user) {
-      throw new Error('User not found');
+      if (!foundUser) {
+        throw new Error('Correo o contraseña incorrectos.')
+      }
+
+      const user: User = {
+        id: String(foundUser.id),
+        name: foundUser.name || foundUser.fullName || 'Usuario',
+        fullName: foundUser.fullName || foundUser.name || 'Usuario',
+        email: foundUser.email,
+        role: foundUser.role,
+        createdAt: foundUser.createdAt
+      }
+
+      return { user, token: MOCK_TOKEN }
+    } else {
+      // 1. Post credentials to establish the HttpOnly cookie session
+      await api.post('/api/v1/auth/login', { email, password })
+
+      // 2. Fetch the authenticated user profile using GET /api/v1/users/me
+      const user = await this.getCurrentUser()
+
+      // Return user details and a placeholder token for frontend compatibility
+      return { user, token: 'cookie_session_active' }
     }
+  },
 
+  /**
+   * Fetches the current authenticated user's profile.
+   */
+  async getCurrentUser(): Promise<User> {
+    if (isMock) {
+      throw new Error('getCurrentUser is not supported in mock mode')
+    }
+    const response = await api.get<any>('/api/v1/users/me')
+    const data = response.data
     return {
-      user,
-      token: MOCK_TOKEN
-    };
+      id: String(data.id),
+      name: data.name,
+      fullName: data.name,
+      email: data.email,
+      role: data.role === 'superadmin' ? 'suadmin' : data.role,
+      createdAt: data.createdAt
+    }
+  },
+
+  /**
+   * Logs out the user.
+   */
+  async logout(): Promise<void> {
+    if (!isMock) {
+      try {
+        await api.post('/api/v1/auth/logout')
+      } catch (err) {
+        console.error('API logout failed, cleaning up frontend anyway:', err)
+      }
+    }
   }
-};
+}
