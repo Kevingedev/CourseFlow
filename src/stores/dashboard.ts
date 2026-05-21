@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { dashboardService } from '@/services/dashboardService'
 import type { Course, Application, WaitingListEntry } from '@/types/dashboard'
 import type { User } from '@/types/auth'
+import axios from 'axios'
 
 export const useDashboardStore = defineStore('dashboard', () => {
   const courses = ref<Course[]>([])
@@ -12,17 +13,39 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
 
+  const getRequestErrorMessage = (err: unknown) => {
+    if (axios.isAxiosError(err)) {
+      if (err.response?.status === 401) {
+        return 'Tu sesión no es válida o ha expirado. Vuelve a iniciar sesión.'
+      }
+
+      if (err.response?.status === 403) {
+        return 'Tu rol no tiene permisos para consultar algunos datos del dashboard.'
+      }
+
+      if (typeof err.response?.data?.detail === 'string') {
+        return err.response.data.detail
+      }
+
+      if (err.message === 'Network Error') {
+        return 'No se pudo conectar con el backend. Revisa que el servidor esté levantado y que CORS permita http://localhost:5173.'
+      }
+    }
+
+    return err instanceof Error ? err.message : 'Error al cargar los datos del panel.'
+  }
+
   // Live dynamic metrics calculated from collections
   const totalCourses = computed(() => {
     return courses.value.filter(c => c.is_active).length
   })
 
   const pendingApplications = computed(() => {
-    return applications.value.filter(a => a.status === 'Pending').length
+    return applications.value.filter(a => a.status === 'pending').length
   })
 
   const admittedStudents = computed(() => {
-    return applications.value.filter(a => a.status === 'Approved' || a.status === 'Admitted').length
+    return applications.value.filter(a => a.status === 'accepted').length
   })
 
   const waitingListCount = computed(() => {
@@ -32,19 +55,18 @@ export const useDashboardStore = defineStore('dashboard', () => {
   // Chart data selectors
   const applicationsStatusData = computed(() => {
     const statusCounts = {
-      Pending: 0,
-      Approved: 0,
-      Rejected: 0
+      pending: 0,
+      accepted: 0,
+      rejected: 0
     }
 
     applications.value.forEach(app => {
-      // Map both 'Approved' and 'Admitted' to the approved category
-      if (app.status === 'Approved' || app.status === 'Admitted') {
-        statusCounts.Approved++
-      } else if (app.status === 'Pending') {
-        statusCounts.Pending++
-      } else if (app.status === 'Rejected') {
-        statusCounts.Rejected++
+      if (app.status === 'accepted') {
+        statusCounts.accepted++
+      } else if (app.status === 'pending') {
+        statusCounts.pending++
+      } else if (app.status === 'rejected') {
+        statusCounts.rejected++
       }
     })
 
@@ -57,7 +79,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
           hoverBackgroundColor: ['#FFD54F', '#81C784', '#94A3B8'],
           borderWidth: 2,
           borderColor: '#ffffff',
-          data: [statusCounts.Pending, statusCounts.Approved, statusCounts.Rejected]
+          data: [statusCounts.pending, statusCounts.accepted, statusCounts.rejected]
         }
       ]
     }
@@ -72,13 +94,13 @@ export const useDashboardStore = defineStore('dashboard', () => {
       courseMap.set(course.id, {
         name: course.name,
         enrolled: 0,
-        capacity: course.capacity
+        capacity: course.capacity ?? 0
       })
     })
 
     // Count admitted students
     applications.value.forEach(app => {
-      if (app.status === 'Approved' || app.status === 'Admitted') {
+      if (app.status === 'accepted') {
         const courseData = courseMap.get(app.course_id)
         if (courseData) {
           courseData.enrolled++
@@ -121,20 +143,38 @@ export const useDashboardStore = defineStore('dashboard', () => {
     loading.value = true
     error.value = null
     try {
-      const [coursesRes, applicationsRes, waitingListRes, usersRes] = await Promise.all([
-        dashboardService.getCourses(),
-        dashboardService.getApplications(),
-        dashboardService.getWaitingList(),
-        dashboardService.getUsers()
+      const coursesRes = await dashboardService.getCourses()
+      courses.value = coursesRes
+
+      const courseIds = coursesRes.map((course) => course.id)
+
+      const [applicationsByCourse, waitingListByCourse] = await Promise.all([
+        Promise.allSettled(courseIds.map((courseId) => dashboardService.getCourseApplications(courseId))),
+        Promise.allSettled(courseIds.map((courseId) => dashboardService.getWaitingListByCourse(courseId))),
       ])
 
-      courses.value = coursesRes
-      applications.value = applicationsRes
-      waitingList.value = waitingListRes
-      users.value = usersRes
+      applications.value = applicationsByCourse.flatMap((result) => {
+        if (result.status === 'fulfilled') {
+          return result.value
+        }
+
+        console.warn('Dashboard applications request failed:', result.reason)
+        return []
+      })
+
+      waitingList.value = waitingListByCourse.flatMap((result) => {
+        if (result.status === 'fulfilled') {
+          return result.value
+        }
+
+        console.warn('Dashboard waiting list request failed:', result.reason)
+        return []
+      })
+
+      users.value = []
     } catch (err) {
       console.error('Error fetching dashboard data:', err)
-      error.value = err instanceof Error ? err.message : 'Error al cargar los datos del panel.'
+      error.value = getRequestErrorMessage(err)
     } finally {
       loading.value = false
     }
