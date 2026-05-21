@@ -68,7 +68,7 @@ export const authService = {
     birth_date?: string | null
   }): Promise<User> {
     try {
-      const response = await api.post<any>('/api/v1/auth/register', {
+      const response = await api.post<Record<string, unknown>>('/api/v1/auth/register', {
         ...payload,
         dni_nie: payload.dni_nie || null,
         birth_date: payload.birth_date || null,
@@ -86,7 +86,7 @@ export const authService = {
    */
   async login(email: string, password: string): Promise<{ user: User; token: string }> {
     try {
-      await api.post('/api/v1/auth/login', { email, password })
+      await api.post<Record<string, unknown>>('/api/v1/auth/login', { email, password })
       const user = await this.getCurrentUser()
 
       return { user, token: 'cookie_session_active' }
@@ -99,7 +99,7 @@ export const authService = {
    * Fetches the current authenticated user's profile.
    */
   async getCurrentUser(): Promise<User> {
-    const response = await api.get<any>('/api/v1/users/me')
+    const response = await api.get<Record<string, unknown>>('/api/v1/users/me')
     return mapUser(response.data)
   },
 
