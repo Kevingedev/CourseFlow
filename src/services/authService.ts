@@ -1,61 +1,83 @@
 import api from './api'
 import type { User } from '@/types/auth'
 
-const isMock = !import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL.includes('3000')
-const MOCK_TOKEN = import.meta.env.VITE_MOCK_TOKEN || 'mock-jwt-token-xyz123'
+const mapRole = (role: string): User['role'] => {
+  return role === 'superadmin' ? 'suadmin' : (role as User['role'])
+}
+
+const mapUser = (data: Record<string, unknown>): User => ({
+  id: String(data.id),
+  name: String(data.name),
+  fullName: String(data.name),
+  email: String(data.email),
+  role: mapRole(String(data.role)),
+  dniNie: typeof data.dni_nie === 'string' ? data.dni_nie : null,
+  birthDate: typeof data.birth_date === 'string' ? data.birth_date : null,
+  createdAt: typeof data.createdAt === 'string' ? data.createdAt : undefined,
+})
+
+const getApiErrorMessage = (error: unknown, fallbackMessage: string): string => {
+  if (
+    typeof error === 'object' &&
+    error !== null &&
+    'response' in error &&
+    typeof error.response === 'object' &&
+    error.response !== null &&
+    'data' in error.response
+  ) {
+    const data = error.response.data as { detail?: unknown }
+
+    if (typeof data.detail === 'string') {
+      return data.detail
+    }
+
+    if (Array.isArray(data.detail)) {
+      return data.detail
+        .map((item) => {
+          if (typeof item === 'string') {
+            return item
+          }
+
+          if (item && typeof item === 'object' && 'msg' in item && typeof item.msg === 'string') {
+            return item.msg
+          }
+
+          return null
+        })
+        .filter(Boolean)
+        .join(' ')
+    }
+  }
+
+  if (error instanceof Error && error.message) {
+    return error.message
+  }
+
+  return fallbackMessage
+}
 
 export const authService = {
   /**
    * Registers a new user.
    */
-  async register(name: string, email: string, password: string): Promise<User> {
-    if (isMock) {
-      // 1. Check if user already exists
-      const checkResponse = await api.get<any[]>('/users', {
-        params: { email }
-      })
-
-      if (checkResponse.data.length > 0) {
-        throw new Error('El correo electrónico ya está registrado.')
-      }
-
-      // 2. Create the new user
-      const response = await api.post<any>('/users', {
-        fullName: name,
-        name,
-        email,
-        password,
-        role: 'user',
-        createdAt: new Date().toISOString()
-      })
-
-      return {
-        id: String(response.data.id),
-        name: response.data.name || response.data.fullName,
-        fullName: response.data.fullName || response.data.name,
-        email: response.data.email,
-        role: response.data.role,
-        createdAt: response.data.createdAt
-      }
-    } else {
+  async register(payload: {
+    name: string
+    email: string
+    password: string
+    dni_nie?: string | null
+    birth_date?: string | null
+  }): Promise<User> {
+    try {
       const response = await api.post<any>('/api/v1/auth/register', {
-        name,
-        email,
-        password,
-        dni_nie: null,
-        birth_date: null,
+        ...payload,
+        dni_nie: payload.dni_nie || null,
+        birth_date: payload.birth_date || null,
         role: 'user'
       })
 
-      const data = response.data
-      return {
-        id: String(data.id),
-        name: data.name,
-        fullName: data.name,
-        email: data.email,
-        role: data.role === 'superadmin' ? 'suadmin' : data.role,
-        createdAt: data.createdAt
-      }
+      return mapUser(response.data)
+    } catch (error: unknown) {
+      throw new Error(getApiErrorMessage(error, 'No se pudo completar el registro.'))
     }
   },
 
@@ -63,35 +85,13 @@ export const authService = {
    * Logs in a user.
    */
   async login(email: string, password: string): Promise<{ user: User; token: string }> {
-    if (isMock) {
-      const response = await api.get<any[]>('/users', {
-        params: { email }
-      })
-      const foundUser = response.data.find(u => u.password === password)
-
-      if (!foundUser) {
-        throw new Error('Correo o contraseña incorrectos.')
-      }
-
-      const user: User = {
-        id: String(foundUser.id),
-        name: foundUser.name || foundUser.fullName || 'Usuario',
-        fullName: foundUser.fullName || foundUser.name || 'Usuario',
-        email: foundUser.email,
-        role: foundUser.role,
-        createdAt: foundUser.createdAt
-      }
-
-      return { user, token: MOCK_TOKEN }
-    } else {
-      // 1. Post credentials to establish the HttpOnly cookie session
+    try {
       await api.post('/api/v1/auth/login', { email, password })
-
-      // 2. Fetch the authenticated user profile using GET /api/v1/users/me
       const user = await this.getCurrentUser()
 
-      // Return user details and a placeholder token for frontend compatibility
       return { user, token: 'cookie_session_active' }
+    } catch (error: unknown) {
+      throw new Error(getApiErrorMessage(error, 'Correo o contraseña incorrectos.'))
     }
   },
 
@@ -99,31 +99,32 @@ export const authService = {
    * Fetches the current authenticated user's profile.
    */
   async getCurrentUser(): Promise<User> {
-    if (isMock) {
-      throw new Error('getCurrentUser is not supported in mock mode')
-    }
     const response = await api.get<any>('/api/v1/users/me')
-    const data = response.data
-    return {
-      id: String(data.id),
-      name: data.name,
-      fullName: data.name,
-      email: data.email,
-      role: data.role === 'superadmin' ? 'suadmin' : data.role,
-      createdAt: data.createdAt
-    }
+    return mapUser(response.data)
   },
 
   /**
    * Logs out the user.
    */
   async logout(): Promise<void> {
-    if (!isMock) {
-      try {
-        await api.post('/api/v1/auth/logout')
-      } catch (err) {
-        console.error('API logout failed, cleaning up frontend anyway:', err)
+    try {
+      await api.post('/api/v1/auth/logout')
+    } catch (error: unknown) {
+      const message = getApiErrorMessage(error, 'No se pudo cerrar la sesión.')
+
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'response' in error &&
+        typeof error.response === 'object' &&
+        error.response !== null &&
+        'status' in error.response &&
+        error.response.status === 401
+      ) {
+        return
       }
+
+      throw new Error(message)
     }
   }
 }

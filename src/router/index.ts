@@ -88,8 +88,9 @@ const router = createRouter({
 })
 
 // Global Navigation Guard
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
+  await authStore.initialize()
 
   // Find if any parent route requires auth
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
@@ -103,11 +104,11 @@ router.beforeEach((to, from, next) => {
   }, [])
 
   // If user is authenticated and tries to go to login, redirect back
-  if (to.name === 'login' && authStore.isAuthenticated) {
+  if ((to.name === 'login' || to.name === 'register') && authStore.isAuthenticated) {
     if (authStore.isAdminOrSuadmin) {
       return next({ name: 'admin-dashboard' })
     }
-    return next({ name: 'home' })
+    return next({ name: 'courses' })
   }
 
   if (requiresAuth) {

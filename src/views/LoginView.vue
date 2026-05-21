@@ -2,7 +2,7 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter, useRoute } from 'vue-router'
-import { Info, TriangleAlert, Star, Shield, GraduationCap } from '@lucide/vue'
+import { Info, TriangleAlert } from '@lucide/vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -47,25 +47,6 @@ onMounted(() => {
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
 })
-
-// Quick-fill credentials for testing
-const fillCredentials = (role: 'suadmin' | 'admin' | 'user') => {
-  sessionExpiredMsg.value = ''
-  errors.general = ''
-  errors.email = ''
-  errors.password = ''
-
-  if (role === 'suadmin') {
-    form.email = 'super@admin.com'
-    form.password = 'super123'
-  } else if (role === 'admin') {
-    form.email = 'admin@admin.com'
-    form.password = 'admin123'
-  } else {
-    form.email = 'test@gmail.com'
-    form.password = 'unodostres'
-  }
-}
 
 // Simple email regex validation
 const validateForm = (): boolean => {
@@ -182,36 +163,13 @@ const handleSubmit = async () => {
         </button>
       </form>
 
-      <!-- Helper / Quick Fill for testing -->
-      <div class="demo-accounts">
-        <span class="demo-title">Autocompletar cuentas de prueba:</span>
-        <div class="demo-buttons">
-          <button
-            type="button"
-            class="demo-btn role-suadmin"
-            @click="fillCredentials('suadmin')"
-            :disabled="isLoading"
-          >
-            <Star :size="14" /> Super Admin
-          </button>
-          <button
-            type="button"
-            class="demo-btn role-admin"
-            @click="fillCredentials('admin')"
-            :disabled="isLoading"
-          >
-            <Shield :size="14" /> Admin
-          </button>
-          <button
-            type="button"
-            class="demo-btn role-user"
-            @click="fillCredentials('user')"
-            :disabled="isLoading"
-          >
-            <GraduationCap :size="14" /> Estudiante
-          </button>
-        </div>
+      <div class="register-cta">
+        <p class="register-cta-text">¿Aún no tienes cuenta?</p>
+        <router-link to="/register" class="register-cta-link">
+          Crear cuenta
+        </router-link>
       </div>
+
     </div>
   </div>
 </template>
@@ -251,6 +209,40 @@ const handleSubmit = async () => {
 .card-header p {
   color: var(--text-muted);
   font-size: 0.95rem;
+}
+
+.register-cta {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.register-cta-text {
+  margin-bottom: 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.register-cta-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 121, 160, 0.2);
+  color: var(--primary-color);
+  font-weight: 700;
+  text-decoration: none;
+  background-color: rgba(34, 121, 160, 0.08);
+  transition: all 0.2s ease;
+}
+
+.register-cta-link:hover {
+  background-color: var(--primary-color);
+  color: var(--white);
+  transform: translateY(-1px);
 }
 
 .form-group {

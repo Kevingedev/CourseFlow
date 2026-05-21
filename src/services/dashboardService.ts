@@ -8,7 +8,7 @@ export const dashboardService = {
    * Fetches all courses
    */
   async getCourses(): Promise<Course[]> {
-    const response = await api.get<Course[]>('/courses')
+    const response = await api.get<Course[]>('/api/v1/courses/')
     return response.data
   },
 
