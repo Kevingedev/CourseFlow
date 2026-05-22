@@ -3,10 +3,12 @@ import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useRouter, useRoute } from 'vue-router'
 import { Info, TriangleAlert } from '@lucide/vue'
+import { useI18n } from '@/i18n'
 
 const authStore = useAuthStore()
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n()
 
 // Form states
 const form = reactive({
@@ -29,7 +31,7 @@ let unsubscribe: (() => void) | null = null
 onMounted(() => {
   const handleSessionExpired = (e: Event) => {
     const customEvent = e as CustomEvent
-    sessionExpiredMsg.value = customEvent.detail || 'Tu sesión ha expirado.'
+    sessionExpiredMsg.value = customEvent.detail || t('login.sessionExpired')
     errors.general = ''
   }
 
@@ -40,7 +42,7 @@ onMounted(() => {
 
   // Also check if there's a redirected query or parameter
   if (route.query.redirect) {
-    sessionExpiredMsg.value = 'Inicia sesión para acceder a esta sección protegida.'
+    sessionExpiredMsg.value = t('login.protected')
   }
 })
 
@@ -56,18 +58,18 @@ const validateForm = (): boolean => {
   errors.general = ''
 
   if (!form.email) {
-    errors.email = 'El correo electrónico es requerido.'
+    errors.email = t('login.emailRequired')
     isValid = false
   } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-    errors.email = 'Ingresa un formato de correo válido.'
+    errors.email = t('login.emailInvalid')
     isValid = false
   }
 
   if (!form.password) {
-    errors.password = 'La contraseña es requerida.'
+    errors.password = t('login.passwordRequired')
     isValid = false
   } else if (form.password.length < 4) {
-    errors.password = 'La contraseña debe tener al menos 4 caracteres.'
+    errors.password = t('login.passwordMin')
     isValid = false
   }
 
@@ -96,7 +98,7 @@ const handleSubmit = async () => {
       router.push({ name: 'courses' })
     }
   } catch (err: unknown) {
-    const errorMsg = err instanceof Error ? err.message : 'Error al iniciar sesión. Inténtalo de nuevo.'
+    const errorMsg = err instanceof Error ? err.message : t('login.error')
     errors.general = errorMsg
   } finally {
     isLoading.value = false
@@ -108,8 +110,8 @@ const handleSubmit = async () => {
   <div class="login-view container section-padding">
     <div class="login-card glass-card">
       <div class="card-header">
-        <h2>Bienvenido de Nuevo</h2>
-        <p>Inicia sesión para continuar en CourseFlow</p>
+        <h2>{{ t('login.title') }}</h2>
+        <p>{{ t('login.subtitle') }}</p>
       </div>
 
       <!-- Feedback Alerts -->
@@ -130,7 +132,7 @@ const handleSubmit = async () => {
       <!-- Form -->
       <form @submit.prevent="handleSubmit" novalidate>
         <div class="form-group">
-          <label for="email">Correo Electrónico</label>
+          <label for="email">{{ t('login.email') }}</label>
           <input
             type="email"
             id="email"
@@ -144,7 +146,7 @@ const handleSubmit = async () => {
         </div>
 
         <div class="form-group">
-          <label for="password">Contraseña</label>
+          <label for="password">{{ t('login.password') }}</label>
           <input
             type="password"
             id="password"
@@ -159,14 +161,14 @@ const handleSubmit = async () => {
 
         <button type="submit" class="btn-primary w-full submit-btn" :disabled="isLoading">
           <span v-if="isLoading" class="spinner"></span>
-          <span v-else>Iniciar Sesión</span>
+          <span v-else>{{ t('login.submit') }}</span>
         </button>
       </form>
 
       <div class="register-cta">
-        <p class="register-cta-text">¿Aún no tienes cuenta?</p>
+        <p class="register-cta-text">{{ t('login.noAccount') }}</p>
         <router-link to="/register" class="register-cta-link">
-          Crear cuenta
+          {{ t('login.createAccount') }}
         </router-link>
       </div>
 

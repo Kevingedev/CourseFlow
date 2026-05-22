@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import api from '../services/api';
 import { Lock, PartyPopper, Ban, Calendar, OctagonX, TriangleAlert } from '@lucide/vue';
+import { useI18n } from '@/i18n'
 
 interface Course {
   id: number;
@@ -29,6 +30,7 @@ const router = useRouter();
 const id = route.params.id as string;
 
 const authStore = useAuthStore();
+const { t } = useI18n()
 
 const course = ref<Course | null>(null);
 const loading = ref(false);
@@ -44,26 +46,53 @@ const isBlockedByCapacity = ref(false);
 const submitError = ref<string | null>(null);
 const submitting = ref(false);
 
+const getRequestErrorMessage = (err: unknown, fallback: string): string => {
+  if (
+    typeof err === 'object' &&
+    err !== null &&
+    'response' in err &&
+    typeof err.response === 'object' &&
+    err.response !== null &&
+    'data' in err.response
+  ) {
+    const data = err.response.data
+
+    if (typeof data === 'string') {
+      return data
+    }
+
+    if (data && typeof data === 'object' && 'detail' in data && typeof data.detail === 'string') {
+      return data.detail
+    }
+  }
+
+  if (err instanceof Error && err.message) {
+    return err.message
+  }
+
+  return fallback
+}
+
 function formatDuration(start?: string, end?: string) {
-  if (!start || !end) return 'TBD';
+  if (!start || !end) return t('courses.duration.tbd');
   const s = new Date(start);
   const e = new Date(end);
-  if (isNaN(s.getTime()) || isNaN(e.getTime()) || e <= s) return 'TBD';
+  if (isNaN(s.getTime()) || isNaN(e.getTime()) || e <= s) return t('courses.duration.tbd');
   const diffMs = e.getTime() - s.getTime();
   const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
   if (diffDays >= 365) {
     const years = Math.round(diffDays / 365);
-    return `${years} ${years === 1 ? 'año' : 'años'}`;
+    return `${years} ${years === 1 ? t('courses.duration.year') : t('courses.duration.years')}`;
   }
   if (diffDays >= 30) {
     const months = Math.round(diffDays / 30);
-    return `${months} ${months === 1 ? 'mes' : 'meses'}`;
+    return `${months} ${months === 1 ? t('courses.duration.month') : t('courses.duration.months')}`;
   }
   if (diffDays >= 7) {
     const weeks = Math.round(diffDays / 7);
-    return `${weeks} ${weeks === 1 ? 'semana' : 'semanas'}`;
+    return `${weeks} ${weeks === 1 ? t('courses.duration.week') : t('courses.duration.weeks')}`;
   }
-  return `${diffDays} ${diffDays === 1 ? 'día' : 'días'}`;
+  return `${diffDays} ${diffDays === 1 ? t('courses.duration.day') : t('courses.duration.days')}`;
 }
 
 const isPastStartDate = computed(() => {
@@ -120,8 +149,8 @@ async function loadCourse() {
     course.value = res.data;
     await checkEnrollment();
     await checkCourseCapacity();
-  } catch (err: any) {
-    error.value = err?.response?.data || err.message || 'Error cargando curso';
+  } catch (err: unknown) {
+    error.value = getRequestErrorMessage(err, t('courses.loadError'));
   } finally {
     loading.value = false;
   }
@@ -187,37 +216,37 @@ async function submitForm() {
   submitError.value = null;
 
   if (!authStore.isAuthenticated) {
-    alert('Debes iniciar sesión para inscribirte.');
+    alert(t('courseDetail.validation.login'));
     router.push('/login');
     return;
   }
 
   if (!form.value.agreeTerms) {
-    alert('Por favor, acepta los términos y condiciones.');
+    alert(t('courseDetail.validation.terms'));
     return;
   }
 
   // 1. DNI/NIE validation
   if (!validateDniNie(form.value.dni_nie)) {
-    submitError.value = 'El formato del DNI/NIE no es válido. Debe tener 8 números y 1 letra (ej. 12345678Z) o formato NIE válido (ej. X1234567Z).';
+    submitError.value = t('courseDetail.validation.dni');
     return;
   }
 
   // 2. Minimum Age validation
   if (calculateAge(form.value.birth_date) < 18) {
-    submitError.value = 'Debes tener al menos 18 años para inscribirte en este curso.';
+    submitError.value = t('courseDetail.validation.age');
     return;
   }
 
   // 3. DARDE check
   if (form.value.has_darde === '') {
-    submitError.value = 'Por favor, selecciona si estás desempleado con DARDE actualizado o no.';
+    submitError.value = t('courseDetail.validation.darde');
     return;
   }
 
   // 4. Previous education text limit validation
   if (form.value.previous_education.length > 250) {
-    submitError.value = 'La descripción de tu formación previa no puede superar los 250 caracteres.';
+    submitError.value = t('courseDetail.validation.previousEducation');
     return;
   }
 
@@ -245,11 +274,11 @@ async function submitForm() {
 
     await api.post('/applications', newApplication);
 
-    alert('¡Tu solicitud de inscripción se ha registrado con éxito! Estado: Pendiente de revisión.');
+    alert(t('courseDetail.validation.success'));
     isEnrolled.value = true;
     await checkCourseCapacity();
-  } catch (err: any) {
-    submitError.value = err?.response?.data || err.message || 'Error al enviar la inscripción. Inténtalo de nuevo.';
+  } catch (err: unknown) {
+    submitError.value = getRequestErrorMessage(err, t('courseDetail.validation.submitError'));
   } finally {
     submitting.value = false;
   }
@@ -261,7 +290,7 @@ async function submitForm() {
     <header class="course-hero" :style="course && course.banner ? `background-image: url(${course.banner})` : ''">
       <div class="container hero-inner">
         <div class="hero-text">
-          <h1 class="hero-title">{{ course?.name || 'Curso' }}</h1>
+          <h1 class="hero-title">{{ course?.name || t('courseDetail.fallbackTitle') }}</h1>
           <p class="hero-subtitle">{{ course?.summary || course?.description || '' }}</p>
         </div>
       </div>
@@ -270,31 +299,31 @@ async function submitForm() {
     <main class="container section-padding">
       <div class="detail-grid">
         <section class="detail-main">
-          <div v-if="loading" class="text-center">Cargando curso...</div>
-          <div v-else-if="error" class="text-center" style="color:var(--error-color)">Error: {{ error }}</div>
+          <div v-if="loading" class="text-center">{{ t('courseDetail.loading') }}</div>
+          <div v-else-if="error" class="text-center" style="color:var(--error-color)">{{ t('courseDetail.error', { message: error }) }}</div>
 
           <div v-else-if="course">
             <div class="glass-card detail-card">
               <div class="meta-row">
                 <div class="meta-left">
-                  <span class="course-tag">{{ course.is_active ? 'Open' : 'Closed' }}</span>
+                  <span class="course-tag">{{ course.is_active ? t('courses.status.open') : t('courses.status.closed') }}</span>
                 </div>
                 <div class="meta-right">
-                  <div>Inicio: <strong>{{ course.start_date || 'TBD' }}</strong></div>
-                  <div>Finalización: <strong>{{ course.end_date || 'TBD' }}</strong></div>
-                  <div>Duración: <strong>{{ formatDuration(course.start_date, course.end_date) }}</strong></div>
+                  <div>{{ t('courseDetail.start') }}: <strong>{{ course.start_date || t('courses.duration.tbd') }}</strong></div>
+                  <div>{{ t('courseDetail.end') }}: <strong>{{ course.end_date || t('courses.duration.tbd') }}</strong></div>
+                  <div>{{ t('courseDetail.duration') }}: <strong>{{ formatDuration(course.start_date, course.end_date) }}</strong></div>
                 </div>
               </div>
 
-              <h2 class="detail-heading">¿De qué trata este curso?</h2>
+              <h2 class="detail-heading">{{ t('courseDetail.about') }}</h2>
               <p class="detail-text">{{ course.summary || course.description }}</p>
 
-              <h3>Temario</h3>
+              <h3>{{ t('courseDetail.syllabus') }}</h3>
               <ul class="detail-list">
                 <li v-for="(item, idx) in (course.syllabus || [])" :key="idx">{{ item }}</li>
               </ul>
 
-              <h3>Qué aprenderás</h3>
+              <h3>{{ t('courseDetail.outcomes') }}</h3>
               <ul class="detail-list">
                 <li v-for="(lo, i) in (course.learning_outcomes || [])" :key="i">{{ lo }}</li>
               </ul>
@@ -307,85 +336,85 @@ async function submitForm() {
             <!-- 1. Not Authenticated State -->
             <div v-if="!authStore.isAuthenticated" class="status-prompt-box text-center">
               <div class="status-icon"><Lock :size="56" /></div>
-              <h3 class="form-title">Inscripción Privada</h3>
-              <p class="form-subtitle">Debes estar registrado e iniciar sesión para poder postular a este curso.</p>
+              <h3 class="form-title">{{ t('courseDetail.private.title') }}</h3>
+              <p class="form-subtitle">{{ t('courseDetail.private.text') }}</p>
               <router-link to="/login" class="full-width btn-primary-link text-center" style="display: block; margin-top: 1.5rem; text-decoration: none;">
-                Iniciar Sesión
+                {{ t('courseDetail.private.cta') }}
               </router-link>
             </div>
 
             <!-- 2. Already Enrolled State -->
             <div v-else-if="isEnrolled" class="status-prompt-box text-center">
               <div class="status-icon"><PartyPopper :size="56" /></div>
-              <h3 class="form-title">¡Ya estás inscrito!</h3>
-              <p class="form-subtitle">Tu solicitud para este curso ya ha sido registrada y está en estado <strong>Pendiente de revisión</strong>.</p>
+              <h3 class="form-title">{{ t('courseDetail.enrolled.title') }}</h3>
+              <p class="form-subtitle">{{ t('courseDetail.enrolled.text') }}</p>
             </div>
 
             <!-- 3. Course Inactive State -->
             <div v-else-if="course && !course.is_active" class="status-prompt-box text-center">
               <div class="status-icon"><Ban :size="56" /></div>
-              <h3 class="form-title">Curso Inactivo</h3>
-              <p class="form-subtitle">Este curso no está recibiendo nuevas solicitudes de inscripción en este momento.</p>
+              <h3 class="form-title">{{ t('courseDetail.inactive.title') }}</h3>
+              <p class="form-subtitle">{{ t('courseDetail.inactive.text') }}</p>
             </div>
 
             <!-- 4. Course Already Started State -->
             <div v-else-if="isPastStartDate" class="status-prompt-box text-center">
               <div class="status-icon"><Calendar :size="56" /></div>
-              <h3 class="form-title">Inscripciones Cerradas</h3>
-              <p class="form-subtitle">Este curso comenzó el <strong>{{ course?.start_date }}</strong> y ya no acepta nuevos alumnos.</p>
+              <h3 class="form-title">{{ t('courseDetail.closed.title') }}</h3>
+              <p class="form-subtitle">{{ t('courseDetail.closed.text', { date: course?.start_date || '' }) }}</p>
             </div>
 
             <!-- 5. Blocked by Over-booking (>120% capacity) State -->
             <div v-else-if="isBlockedByCapacity" class="status-prompt-box text-center">
               <div class="status-icon"><OctagonX :size="56" /></div>
-              <h3 class="form-title">Cupo Agotado</h3>
-              <p class="form-subtitle">Lo sentimos, este curso ha superado el aforo y el cupo máximo para la lista de espera.</p>
+              <h3 class="form-title">{{ t('courseDetail.full.title') }}</h3>
+              <p class="form-subtitle">{{ t('courseDetail.full.text') }}</p>
             </div>
 
             <!-- 6. Active Form State -->
             <div v-else>
-              <h3 class="form-title">¿Interesado en este curso?</h3>
+              <h3 class="form-title">{{ t('courseDetail.form.title') }}</h3>
               
               <!-- Warning Badge if Capacity Reached but pending (over-booking) is allowed -->
               <div v-if="isCourseFull" class="warning-badge">
-                <TriangleAlert :size="16" style="vertical-align: middle; margin-right: 4px;" /> Aforo completo. Tu solicitud entrará en lista de espera (Pendiente).
+                <TriangleAlert :size="16" style="vertical-align: middle; margin-right: 4px;" /> {{ t('courseDetail.form.warning') }}
               </div>
-              <p v-else class="form-subtitle">Completa este formulario y nos pondremos en contacto contigo en breve.</p>
+              <p v-else class="form-subtitle">{{ t('courseDetail.form.subtitle') }}</p>
 
               <form @submit.prevent="submitForm" class="enroll-form">
                 <!-- Información Personal -->
                 <fieldset class="form-section">
-                  <legend class="section-title">Tu Información</legend>
+                  <legend class="section-title">{{ t('courseDetail.form.personal') }}</legend>
 
                   <div class="form-row">
                     <div class="form-group">
-                      <label class="form-label">Nombre *</label>
-                      <input v-model="form.name" class="form-input" type="text" placeholder="Tu nombre" required />
+                      <label class="form-label">{{ t('courseDetail.form.name') }}</label>
+                      <input v-model="form.name" class="form-input" type="text" :placeholder="t('courseDetail.form.namePlaceholder')" required />
                     </div>
                     <div class="form-group">
-                      <label class="form-label">Apellido *</label>
-                      <input v-model="form.lastName" class="form-input" type="text" placeholder="Tu apellido" required />
+                      <label class="form-label">{{ t('courseDetail.form.lastName') }}</label>
+                      <input v-model="form.lastName" class="form-input" type="text" :placeholder="t('courseDetail.form.lastNamePlaceholder')" required />
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label class="form-label">Correo Electrónico *</label>
+                    <label class="form-label">{{ t('courseDetail.form.email') }}</label>
                     <input v-model="form.email" class="form-input" type="email" placeholder="tu@correo.com" required />
                   </div>
 
                   <div class="form-row">
                     <div class="form-group">
-                      <label class="form-label">DNI / NIE *</label>
+                      <label class="form-label">{{ t('courseDetail.form.dni') }}</label>
                       <input v-model="form.dni_nie" class="form-input" type="text" placeholder="12345678Z o X1234567Z" required />
                     </div>
                     <div class="form-group">
-                      <label class="form-label">Fecha de Nacimiento *</label>
+                      <label class="form-label">{{ t('courseDetail.form.birthDate') }}</label>
                       <input v-model="form.birth_date" class="form-input" type="date" required />
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label class="form-label">Teléfono *</label>
+                    <label class="form-label">{{ t('courseDetail.form.phone') }}</label>
                     <div class="phone-input-group">
                       <select class="phone-country">
                         <option selected>ES +34</option>
@@ -395,128 +424,128 @@ async function submitForm() {
                         <option>CL +56</option>
                         <option>PE +51</option>
                       </select>
-                      <input v-model="form.phone" class="form-input" type="tel" placeholder="123456789" required />
+                      <input v-model="form.phone" class="form-input" type="tel" :placeholder="t('courseDetail.form.phonePlaceholder')" required />
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label class="form-label">¿Estás desempleado con DARDE actualizado? *</label>
+                    <label class="form-label">{{ t('courseDetail.form.darde') }}</label>
                     <select v-model="form.has_darde" class="form-input" required>
-                      <option value="" disabled>Selecciona una opción</option>
-                      <option :value="true">Sí</option>
-                      <option :value="false">No</option>
+                      <option value="" disabled>{{ t('courseDetail.form.selectOption') }}</option>
+                      <option :value="true">{{ t('courseDetail.form.yes') }}</option>
+                      <option :value="false">{{ t('courseDetail.form.no') }}</option>
                     </select>
                   </div>
                 </fieldset>
 
                 <!-- Formación Previa (Solo si el curso requiere requisitos) -->
                 <fieldset v-if="course?.prerequisites" class="form-section">
-                  <legend class="section-title">Requisitos del Curso</legend>
+                  <legend class="section-title">{{ t('courseDetail.form.requirements') }}</legend>
                   <div class="prerequisites-box">
-                    <strong>Requisitos previos del curso:</strong>
+                    <strong>{{ t('courseDetail.form.requirementsLabel') }}</strong>
                     <p>{{ course.prerequisites }}</p>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Detalla tu formación previa relacionada (Opcional)</label>
-                    <textarea v-model="form.previous_education" class="form-input" rows="3" placeholder="Explica brevemente tus estudios o experiencia..." maxlength="250"></textarea>
-                    <p class="char-counter">{{ 250 - form.previous_education.length }} caracteres restantes</p>
+                    <label class="form-label">{{ t('courseDetail.form.previousEducation') }}</label>
+                    <textarea v-model="form.previous_education" class="form-input" rows="3" :placeholder="t('courseDetail.form.previousEducationPlaceholder')" maxlength="250"></textarea>
+                    <p class="char-counter">{{ t('courseDetail.form.remainingChars', { count: 250 - form.previous_education.length }) }}</p>
                   </div>
                 </fieldset>
 
                 <!-- Ubicación -->
                 <fieldset class="form-section">
-                  <legend class="section-title">Ubicación</legend>
+                  <legend class="section-title">{{ t('courseDetail.form.location') }}</legend>
 
                   <div class="form-group">
-                    <label class="form-label">Municipio</label>
+                    <label class="form-label">{{ t('courseDetail.form.municipality') }}</label>
                     <select v-model="form.municipality" class="form-input">
-                      <option value="">Selecciona tu municipio</option>
+                      <option value="">{{ t('courseDetail.form.selectMunicipality') }}</option>
                       <option>Madrid</option>
                       <option>Barcelona</option>
                       <option>Valencia</option>
                       <option>Sevilla</option>
                       <option>Bilbao</option>
-                      <option>Otro</option>
+                      <option>{{ t('courseDetail.form.other') }}</option>
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label class="form-label">Provincia</label>
+                    <label class="form-label">{{ t('courseDetail.form.province') }}</label>
                     <select v-model="form.province" class="form-input">
-                      <option value="">Selecciona tu provincia</option>
+                      <option value="">{{ t('courseDetail.form.selectProvince') }}</option>
                       <option>Madrid</option>
                       <option>Barcelona</option>
                       <option>Valencia</option>
                       <option>Sevilla</option>
                       <option>Bilbao</option>
-                      <option>Otro</option>
+                      <option>{{ t('courseDetail.form.other') }}</option>
                     </select>
                   </div>
                 </fieldset>
 
                 <!-- Discapacidad -->
                 <fieldset class="form-section">
-                  <legend class="section-title">Accesibilidad</legend>
+                  <legend class="section-title">{{ t('courseDetail.form.accessibility') }}</legend>
 
                   <div class="form-group">
-                    <label class="form-label">¿Tienes alguna situación especial?</label>
+                    <label class="form-label">{{ t('courseDetail.form.specialSituation') }}</label>
                     <select v-model="form.hasDisability" class="form-input">
-                      <option value="">Selecciona una opción</option>
-                      <option value="yes-certificate">Tengo certificado de discapacidad</option>
-                      <option value="no-certificate">No tengo certificado</option>
-                      <option value="in-process">Situación de vulnerabilidad</option>
-                      <option value="none">Ninguna</option>
+                      <option value="">{{ t('courseDetail.form.selectOption') }}</option>
+                      <option value="yes-certificate">{{ t('courseDetail.form.disabilityCertificate') }}</option>
+                      <option value="no-certificate">{{ t('courseDetail.form.noCertificate') }}</option>
+                      <option value="in-process">{{ t('courseDetail.form.vulnerable') }}</option>
+                      <option value="none">{{ t('courseDetail.form.none') }}</option>
                     </select>
                   </div>
 
                   <div v-if="form.hasDisability === 'yes-certificate'" class="form-group">
-                    <label class="form-label">Tipo de Certificado</label>
+                    <label class="form-label">{{ t('courseDetail.form.certificateType') }}</label>
                     <select v-model="form.disabilityCertificate" class="form-input">
-                      <option value="">Selecciona el tipo</option>
-                      <option>Física</option>
-                      <option>Sensorial</option>
-                      <option>Intelectual</option>
-                      <option>Otra</option>
+                      <option value="">{{ t('courseDetail.form.selectType') }}</option>
+                      <option>{{ t('courseDetail.form.physical') }}</option>
+                      <option>{{ t('courseDetail.form.sensory') }}</option>
+                      <option>{{ t('courseDetail.form.intellectual') }}</option>
+                      <option>{{ t('courseDetail.form.other') }}</option>
                     </select>
                   </div>
                 </fieldset>
 
                 <!-- Conectividad -->
                 <fieldset class="form-section">
-                  <legend class="section-title">Conectividad</legend>
+                  <legend class="section-title">{{ t('courseDetail.form.connectivity') }}</legend>
 
                   <div class="form-group">
-                    <label class="form-label">¿Cómo te conectas a internet?</label>
+                    <label class="form-label">{{ t('courseDetail.form.internet') }}</label>
                     <select v-model="form.internetExperience" class="form-input">
-                      <option value="">Selecciona una opción</option>
-                      <option>Banda ancha/WiFi</option>
-                      <option>Conexión móvil</option>
-                      <option>Conexión limitada</option>
-                      <option>No tengo conexión</option>
+                      <option value="">{{ t('courseDetail.form.selectOption') }}</option>
+                      <option>{{ t('courseDetail.form.wifi') }}</option>
+                      <option>{{ t('courseDetail.form.mobileConnection') }}</option>
+                      <option>{{ t('courseDetail.form.limitedConnection') }}</option>
+                      <option>{{ t('courseDetail.form.noConnection') }}</option>
                     </select>
                   </div>
 
                   <div class="form-group">
-                    <label class="form-label">¿Qué red social usas más?</label>
+                    <label class="form-label">{{ t('courseDetail.form.social') }}</label>
                     <select v-model="form.socialMedia" class="form-input">
-                      <option value="">Selecciona una red</option>
+                      <option value="">{{ t('courseDetail.form.selectNetwork') }}</option>
                       <option>Facebook</option>
                       <option>Instagram</option>
                       <option>WhatsApp</option>
                       <option>Twitter/X</option>
                       <option>LinkedIn</option>
-                      <option>Ninguna</option>
+                      <option>{{ t('courseDetail.form.none') }}</option>
                     </select>
                   </div>
                 </fieldset>
 
                 <!-- Comentarios -->
                 <fieldset class="form-section">
-                  <legend class="section-title">Comentarios</legend>
+                  <legend class="section-title">{{ t('courseDetail.form.comments') }}</legend>
 
                   <div class="form-group">
-                    <label class="form-label">¿Hay algo más que debamos saber?</label>
-                    <textarea v-model="form.additionalComments" class="form-input" rows="3" placeholder="Cuéntanos tus expectativas o dudas..."></textarea>
+                    <label class="form-label">{{ t('courseDetail.form.moreInfo') }}</label>
+                    <textarea v-model="form.additionalComments" class="form-input" rows="3" :placeholder="t('courseDetail.form.commentsPlaceholder')"></textarea>
                   </div>
                 </fieldset>
 
@@ -524,7 +553,7 @@ async function submitForm() {
                 <div class="form-section">
                   <label class="checkbox-label">
                     <input v-model="form.agreeTerms" type="checkbox" required />
-                    <span>Acepto los términos, privacidad y que se contacten conmigo *</span>
+                    <span>{{ t('courseDetail.form.terms') }}</span>
                   </label>
                 </div>
 
@@ -534,7 +563,7 @@ async function submitForm() {
 
                 <!-- Botón -->
                 <button type="submit" class="full-width btn-primary" :disabled="submitting">
-                  {{ submitting ? 'Enviando Inscripción...' : '¡Enviar Inscripción!' }}
+                  {{ submitting ? t('courseDetail.form.submitting') : t('courseDetail.form.submit') }}
                 </button>
               </form>
             </div>

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import HomeHero from '@/components/home/HomeHero.vue'
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -8,24 +11,24 @@ import HomeHero from '@/components/home/HomeHero.vue'
 
     <section class="features section-padding">
       <div class="container">
-        <h2 class="section-title">¿Por qué elegir <span class="text-accent">Course Flow?</span></h2>
+        <h2 class="section-title">{{ t('home.features.titlePrefix') }} <span class="text-accent">Course Flow?</span></h2>
         <div class="features-grid">
           <div class="feature-card glass-card">
-            <h3>Formación y Acompañamiento</h3>
+            <h3>{{ t('home.features.card1.title') }}</h3>
             <p>
-              Aprende de profesionales del sector tecnológico y docentes con amplia experiencia.
+              {{ t('home.features.card1.text') }}
             </p>
           </div>
           <div class="feature-card glass-card">
-            <h3>Metodología Flexible e Inclusiva</h3>
+            <h3>{{ t('home.features.card2.title') }}</h3>
             <p>
-              Accede a las formaciones en cualquier momento, desde cualquier lugar y a tu ritmo.
+              {{ t('home.features.card2.text') }}
             </p>
           </div>
           <div class="feature-card glass-card">
-            <h3>Aprendizaje Práctico</h3>
+            <h3>{{ t('home.features.card3.title') }}</h3>
             <p>
-              Participa con proyectos reales y dinámicos diseñados para impulsar tu carrera digital.
+              {{ t('home.features.card3.text') }}
             </p>
           </div>
         </div>

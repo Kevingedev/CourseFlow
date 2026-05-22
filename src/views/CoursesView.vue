@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../services/api';
 import { Monitor, ChartBar, Settings } from '@lucide/vue';
+import { useI18n } from '@/i18n'
 
 interface Course {
   id: number;
@@ -21,6 +22,7 @@ const courses = ref<Course[]>([]);
 const loading = ref(false);
 const error = ref<string | null>(null);
 const showAll = ref(false);
+const { t } = useI18n()
 
 const displayedCourses = computed(() => {
   if (showAll.value) return courses.value;
@@ -35,21 +37,21 @@ function goToCourse(id?: number) {
 }
 
 function formatDuration(start?: string, end?: string) {
-  if (!start || !end) return 'TBD';
+  if (!start || !end) return t('courses.duration.tbd');
   const s = new Date(start);
   const e = new Date(end);
-  if (isNaN(s.getTime()) || isNaN(e.getTime()) || e <= s) return 'TBD';
+  if (isNaN(s.getTime()) || isNaN(e.getTime()) || e <= s) return t('courses.duration.tbd');
   const diffMs = e.getTime() - s.getTime();
   const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
   if (diffDays >= 30) {
     const months = Math.round(diffDays / 30);
-    return `${months} ${months === 1 ? 'mes' : 'meses'}`;
+    return `${months} ${months === 1 ? t('courses.duration.month') : t('courses.duration.months')}`;
   }
   if (diffDays >= 7) {
     const weeks = Math.round(diffDays / 7);
-    return `${weeks} ${weeks === 1 ? 'semana' : 'semanas'}`;
+    return `${weeks} ${weeks === 1 ? t('courses.duration.week') : t('courses.duration.weeks')}`;
   }
-  return `${diffDays} ${diffDays === 1 ? 'día' : 'días'}`;
+  return `${diffDays} ${diffDays === 1 ? t('courses.duration.day') : t('courses.duration.days')}`;
 }
 
 async function loadCourses() {
@@ -65,12 +67,12 @@ async function loadCourses() {
     };
 
     if (apiError.response?.status === 401) {
-      error.value = 'Debes iniciar sesión para ver el catálogo de cursos.';
+      error.value = t('courses.authRequired');
     } else {
       error.value =
         apiError.response?.data?.detail ||
         apiError.message ||
-        'Error cargando cursos';
+        t('courses.loadError');
     }
   } finally {
     loading.value = false;
@@ -87,10 +89,9 @@ onMounted(() => {
     <!-- Courses Hero -->
     <section class="courses-hero section-padding">
       <div class="container text-center">
-        <h1 class="hero-title">Nuestros itinerarios <span class="text-accent">formativos</span></h1>
+        <h1 class="hero-title">{{ t('courses.hero.titlePrefix') }} <span class="text-accent">{{ t('courses.hero.titleAccent') }}</span></h1>
         <p class="hero-subtitle mx-auto">
-          Descubre y aprende con nuestros programas gratuitos diseñados para impulsar tu carrera en
-          tecnología.
+          {{ t('courses.hero.subtitle') }}
         </p>
       </div>
     </section>
@@ -98,30 +99,27 @@ onMounted(() => {
     <!-- Categories -->
     <section class="categories section-padding bg-soft">
       <div class="container">
-        <h2 class="section-title text-center">Explora por especialidad</h2>
+        <h2 class="section-title text-center">{{ t('courses.categories.title') }}</h2>
         <div class="categories-grid">
           <div class="category-card glass-card">
             <div class="category-icon"><Monitor :size="40" /></div>
-            <h3>Desarrollo Web y Apps</h3>
+            <h3>{{ t('courses.categories.web.title') }}</h3>
             <p>
-              Adquiere las competencias técnicas en front-end y back-end más demandadas del sector
-              digital.
+              {{ t('courses.categories.web.text') }}
             </p>
           </div>
           <div class="category-card glass-card">
             <div class="category-icon"><ChartBar :size="40" /></div>
-            <h3>Datos e Inteligencia Artificial</h3>
+            <h3>{{ t('courses.categories.data.title') }}</h3>
             <p>
-              Domina el análisis de datos y aprende a aplicar soluciones de inteligencia artificial
-              en proyectos reales.
+              {{ t('courses.categories.data.text') }}
             </p>
           </div>
           <div class="category-card glass-card">
             <div class="category-icon"><Settings :size="40" /></div>
-            <h3>Soporte y Sistemas</h3>
+            <h3>{{ t('courses.categories.systems.title') }}</h3>
             <p>
-              Especialízate en infraestructuras de red, sistemas cloud y soporte informático
-              profesional.
+              {{ t('courses.categories.systems.text') }}
             </p>
           </div>
         </div>
@@ -131,39 +129,39 @@ onMounted(() => {
     <!-- Courses Grid -->
     <section class="upcoming-courses section-padding">
       <div class="container">
-        <h2 class="section-title text-center">Catálogo de Cursos</h2>
+        <h2 class="section-title text-center">{{ t('courses.catalog.title') }}</h2>
 
         <div v-if="loading" class="text-center">
-          Cargando cursos...
+          {{ t('courses.loading') }}
         </div>
 
         <div v-else-if="error" class="text-center">
-          <p style="color: var(--error-color)">Error: {{ error }}</p>
+          <p style="color: var(--error-color)">{{ t('courses.error', { message: error }) }}</p>
         </div>
 
         <div v-else>
           <div class="courses-grid">
-            <div v-if="courses.length === 0" class="text-center">No hay cursos disponibles.</div>
+            <div v-if="courses.length === 0" class="text-center">{{ t('courses.empty') }}</div>
 
             <div v-for="course in displayedCourses" :key="course.id" class="course-card glass-card">
               <div class="course-image-placeholder">
-                <span>{{ course.category || 'Course' }}</span>
+                <span>{{ course.category || t('courses.fallbackCategory') }}</span>
               </div>
               <div class="course-content">
-                <span class="course-tag">{{ course.is_active ? 'Open' : 'Closed' }}</span>
+                <span class="course-tag">{{ course.is_active ? t('courses.status.open') : t('courses.status.closed') }}</span>
                 <h3>{{ course.name }}</h3>
                 <p>{{ course.description }}</p>
-                <p class="course-meta">Duración: <strong>{{ formatDuration(course.start_date, course.end_date) }}</strong></p>
+                <p class="course-meta">{{ t('courses.duration') }}: <strong>{{ formatDuration(course.start_date, course.end_date) }}</strong></p>
                 <div class="course-footer">
-                  <span class="course-price">Capacidad: {{ course.capacity ?? '–' }}</span>
-                  <button class="btn-primary-small" :disabled="!course.is_active" @click="goToCourse(course.id)">¡Inscríbete ya!</button>
+                  <span class="course-price">{{ t('courses.capacity') }}: {{ course.capacity ?? '–' }}</span>
+                  <button class="btn-primary-small" :disabled="!course.is_active" @click="goToCourse(course.id)">{{ t('courses.apply') }}</button>
                 </div>
               </div>
             </div>
           </div>
 
           <div v-if="courses.length > 6" class="text-center" style="margin-top: 1.5rem">
-            <button class="btn-primary" @click="showAll = !showAll">{{ showAll ? 'Mostrar menos' : 'Ver más' }}</button>
+            <button class="btn-primary" @click="showAll = !showAll">{{ showAll ? t('courses.showLess') : t('courses.showMore') }}</button>
           </div>
         </div>
       </div>
@@ -173,10 +171,9 @@ onMounted(() => {
     <section class="coming-soon section-padding bg-soft">
       <div class="container text-center max-w-md">
         <div class="provisional-banner glass-card">
-          <h2 class="section-title">Catálogo completo en desarrollo</h2>
+          <h2 class="section-title">{{ t('courses.comingSoon.title') }}</h2>
           <p>
-            Estamos preparando un catálogo interactivo de cursos. Muy pronto podrás buscar, filtrar
-            e inscribirte directamente en nuestras formaciones de calidad.
+            {{ t('courses.comingSoon.text') }}
           </p>
         </div>
       </div>

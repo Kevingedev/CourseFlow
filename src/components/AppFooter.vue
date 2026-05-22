@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useI18n } from '@/i18n'
 import logoUrl from '../assets/logo.svg'
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -11,24 +14,23 @@ import logoUrl from '../assets/logo.svg'
           <img :src="logoUrl" alt="CourseFlow Logo" class="footer-logo" />
         </div>
         <p class="footer-desc">
-          Plataforma de gestión pedagógica profesional. Impulsando el talento digital y la
-          inclusión.
+          {{ t('footer.description') }}
         </p>
       </div>
 
       <!-- Column 2: Quick Links -->
       <div class="footer-col">
-        <h4 class="footer-title">Enlaces rápidos</h4>
+        <h4 class="footer-title">{{ t('footer.quickLinks') }}</h4>
         <ul class="footer-links">
-          <li><router-link to="/about">Conócenos</router-link></li>
-          <li><router-link to="/courses">Formaciones</router-link></li>
-          <li><router-link to="/contact">Contacto</router-link></li>
+          <li><router-link to="/about">{{ t('footer.about') }}</router-link></li>
+          <li><router-link to="/courses">{{ t('footer.courses') }}</router-link></li>
+          <li><router-link to="/contact">{{ t('footer.contact') }}</router-link></li>
         </ul>
       </div>
 
       <!-- Column 3: Contact -->
       <div class="footer-col">
-        <h4 class="footer-title">Contacto</h4>
+        <h4 class="footer-title">{{ t('footer.contactTitle') }}</h4>
         <ul class="footer-links">
           <li>+34 900 123 456</li>
           <li>info@courseflow.com</li>
@@ -37,7 +39,7 @@ import logoUrl from '../assets/logo.svg'
 
       <!-- Column 4: Socials -->
       <div class="footer-col">
-        <h4 class="footer-title">Redes sociales</h4>
+        <h4 class="footer-title">{{ t('footer.social') }}</h4>
         <div class="social-icons">
           <a href="#" class="social-icon" aria-label="Facebook">FB</a>
           <a href="#" class="social-icon" aria-label="Instagram">IG</a>
@@ -48,10 +50,10 @@ import logoUrl from '../assets/logo.svg'
     </div>
 
     <div class="container footer-bottom">
-      <p>© 2024 CourseFlow. Todos los derechos reservados.</p>
+      <p>{{ t('footer.rights') }}</p>
       <div class="legal-links">
-        <router-link to="/">Política de privacidad</router-link>
-        <router-link to="/">Términos y condiciones</router-link>
+        <router-link to="/">{{ t('footer.privacy') }}</router-link>
+        <router-link to="/">{{ t('footer.terms') }}</router-link>
       </div>
     </div>
   </footer>

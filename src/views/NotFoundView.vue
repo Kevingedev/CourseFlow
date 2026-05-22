@@ -3,13 +3,16 @@
  * NotFoundView.vue
  * Displayed when the user navigates to a non-existent route.
  */
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
 </script>
 
 <template>
   <div class="not-found-view">
-    <h1>404 - Página no encontrada</h1>
-    <p>Lo sentimos, la página que estás buscando no existe.</p>
-    <router-link to="/" class="back-home">Volver al inicio</router-link>
+    <h1>{{ t('notFound.title') }}</h1>
+    <p>{{ t('notFound.text') }}</p>
+    <router-link to="/" class="back-home">{{ t('notFound.back') }}</router-link>
   </div>
 </template>
 

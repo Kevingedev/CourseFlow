@@ -4,6 +4,9 @@
  * Information about the Course Flow platform.
  */
 import { Lightbulb, Handshake, Globe, Users, TrendingUp, Building2 } from '@lucide/vue';
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -11,10 +14,9 @@ import { Lightbulb, Handshake, Globe, Users, TrendingUp, Building2 } from '@luci
     <!-- About Hero -->
     <section class="about-hero section-padding">
       <div class="container text-center">
-        <h1 class="hero-title">Conoce <span class="text-accent">Course Flow</span></h1>
+        <h1 class="hero-title">{{ t('about.hero.titlePrefix') }} <span class="text-accent">Course Flow</span></h1>
         <p class="hero-subtitle mx-auto">
-          Construimos un entorno de aprendizaje tecnológico, equitativo y accesible para todas y
-          todos.
+          {{ t('about.hero.subtitle') }}
         </p>
       </div>
     </section>
@@ -23,18 +25,15 @@ import { Lightbulb, Handshake, Globe, Users, TrendingUp, Building2 } from '@luci
     <section class="mission-vision section-padding bg-soft">
       <div class="container grid-2">
         <div class="mission-content">
-          <h2 class="section-title">Nuestra Misión</h2>
+          <h2 class="section-title">{{ t('about.mission.title') }}</h2>
           <p>
-            Acompañar a las personas en su desarrollo digital ofreciendo formación tecnológica
-            inclusiva para reducir la brecha digital y fomentar la diversidad en el sector
-            tecnológico.
+            {{ t('about.mission.text') }}
           </p>
         </div>
         <div class="vision-content">
-          <h2 class="section-title">Nuestra Visión</h2>
+          <h2 class="section-title">{{ t('about.vision.title') }}</h2>
           <p>
-            Ser la red de aprendizaje de referencia que conecta el talento diverso con las
-            oportunidades laborales y de crecimiento profesional en el sector digital.
+            {{ t('about.vision.text') }}
           </p>
         </div>
       </div>
@@ -43,26 +42,25 @@ import { Lightbulb, Handshake, Globe, Users, TrendingUp, Building2 } from '@luci
     <!-- Core Values -->
     <section class="values section-padding">
       <div class="container">
-        <h2 class="section-title text-center">Nuestros Valores</h2>
+        <h2 class="section-title text-center">{{ t('about.values.title') }}</h2>
         <div class="values-grid">
           <div class="value-card glass-card">
             <div class="value-icon"><Lightbulb :size="40" /></div>
-            <h3>Innovación</h3>
-            <p>Buscamos constantemente soluciones pedagógicas innovadoras orientadas al empleo.</p>
+            <h3>{{ t('about.values.innovation.title') }}</h3>
+            <p>{{ t('about.values.innovation.text') }}</p>
           </div>
           <div class="value-card glass-card">
             <div class="value-icon"><Handshake :size="40" /></div>
-            <h3>Inclusión y Diversidad</h3>
+            <h3>{{ t('about.values.inclusion.title') }}</h3>
             <p>
-              Creemos en el potencial y talento de cada persona sin importar su punto de partida.
+              {{ t('about.values.inclusion.text') }}
             </p>
           </div>
           <div class="value-card glass-card">
             <div class="value-icon"><Globe :size="40" /></div>
-            <h3>Accesibilidad</h3>
+            <h3>{{ t('about.values.accessibility.title') }}</h3>
             <p>
-              Garantizamos educación tecnológica gratuita y de alta calidad para colectivos
-              diversos.
+              {{ t('about.values.accessibility.text') }}
             </p>
           </div>
         </div>
@@ -72,22 +70,22 @@ import { Lightbulb, Handshake, Globe, Users, TrendingUp, Building2 } from '@luci
     <!-- Impact Data -->
     <section class="impact section-padding bg-soft">
       <div class="container">
-        <h2 class="section-title text-center">Nuestros Datos de Impacto</h2>
+        <h2 class="section-title text-center">{{ t('about.impact.title') }}</h2>
         <div class="values-grid">
           <div class="value-card glass-card">
             <div class="value-icon"><Users :size="40" /></div>
             <h3>+1.200</h3>
-            <p>Personas formadas y acompañadas en su inserción laboral digital.</p>
+            <p>{{ t('about.impact.people') }}</p>
           </div>
           <div class="value-card glass-card">
             <div class="value-icon"><TrendingUp :size="40" /></div>
             <h3>63%</h3>
-            <p>Tasa de inserción y éxito laboral en empresas aliadas.</p>
+            <p>{{ t('about.impact.rate') }}</p>
           </div>
           <div class="value-card glass-card">
             <div class="value-icon"><Building2 :size="40" /></div>
             <h3>+400</h3>
-            <p>Empresas colaboradoras y partners que confían en nuestro talento.</p>
+            <p>{{ t('about.impact.partners') }}</p>
           </div>
         </div>
       </div>
@@ -96,12 +94,9 @@ import { Lightbulb, Handshake, Globe, Users, TrendingUp, Building2 } from '@luci
     <!-- Our Story -->
     <section class="story section-padding">
       <div class="container max-w-md text-center">
-        <h2 class="section-title">Nuestra Historia</h2>
+        <h2 class="section-title">{{ t('about.story.title') }}</h2>
         <p>
-          Fundada en 2024, Course Flow nació de la necesidad de ofrecer un entorno de aprendizaje
-          más accesible y solidario en el ámbito del desarrollo tecnológico. Lo que comenzó como un
-          proyecto local de inclusión digital se ha consolidado en una plataforma robusta diseñada
-          para conectar la formación de calidad con el empleo del futuro.
+          {{ t('about.story.text') }}
         </p>
       </div>
     </section>

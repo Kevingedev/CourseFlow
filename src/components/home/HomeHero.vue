@@ -1,5 +1,7 @@
 <script setup lang="ts">
-// Hero content component
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -7,20 +9,19 @@
     <div class="container hero-grid">
       <div class="hero-content">
         <h1 class="hero-title">
-          Abrimos rutas <span class="text-accent">inclusivas al talento digital.</span>
+          {{ t('home.hero.titlePrefix') }} <span class="text-accent">{{ t('home.hero.titleAccent') }}</span>
         </h1>
         <p class="hero-subtitle">
-          Descubre una nueva forma de aprender y participar en formaciones tecnológicas. Diseñado
-          para impulsar el talento diverso y fomentar una sociedad inclusiva.
+          {{ t('home.hero.subtitle') }}
         </p>
         <div class="hero-actions">
-          <router-link to="/courses" class="btn-primary">Explorar Formaciones</router-link>
-          <router-link to="/about" class="btn-secondary">Conócenos</router-link>
+          <router-link to="/courses" class="btn-primary">{{ t('home.hero.primary') }}</router-link>
+          <router-link to="/about" class="btn-secondary">{{ t('home.hero.secondary') }}</router-link>
         </div>
       </div>
       <div class="hero-image-container">
         <div class="hero-image-placeholder">
-          <img src="/home_hero.png" alt="Talento digital inclusivo" class="hero-img" />
+          <img src="/home_hero.png" :alt="t('home.hero.imageAlt')" class="hero-img" />
         </div>
         <div class="decor-blob blob-1"></div>
         <div class="decor-blob blob-2"></div>

@@ -4,6 +4,9 @@
  * Placeholder for the Contact page.
  */
 import { Mail, Phone, MapPin } from '@lucide/vue';
+import { useI18n } from '@/i18n'
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -11,10 +14,9 @@ import { Mail, Phone, MapPin } from '@lucide/vue';
     <!-- Contact Hero -->
     <section class="contact-hero section-padding">
       <div class="container text-center">
-        <h1 class="hero-title">¡Súmate al <span class="text-accent">cambio!</span></h1>
+        <h1 class="hero-title">{{ t('contact.hero.titlePrefix') }} <span class="text-accent">{{ t('contact.hero.titleAccent') }}</span>!</h1>
         <p class="hero-subtitle mx-auto">
-          ¿Tienes dudas sobre nuestras formaciones o quieres colaborar con nosotros? Nuestro equipo
-          está listo para ayudarte.
+          {{ t('contact.hero.subtitle') }}
         </p>
       </div>
     </section>
@@ -24,12 +26,12 @@ import { Mail, Phone, MapPin } from '@lucide/vue';
       <div class="container grid-2">
         <!-- Contact Info -->
         <div class="contact-info">
-          <h2 class="section-title">Información de contacto</h2>
+          <h2 class="section-title">{{ t('contact.info.title') }}</h2>
           <div class="info-items">
             <div class="info-item">
               <div class="info-icon"><Mail :size="32" /></div>
               <div class="info-text">
-                <h3>Escríbenos</h3>
+                <h3>{{ t('contact.write.title') }}</h3>
                 <p>info@somosf5.org</p>
                 <p>support@courseflow.com</p>
               </div>
@@ -37,15 +39,15 @@ import { Mail, Phone, MapPin } from '@lucide/vue';
             <div class="info-item">
               <div class="info-icon"><Phone :size="32" /></div>
               <div class="info-text">
-                <h3>Llámanos</h3>
+                <h3>{{ t('contact.call.title') }}</h3>
                 <p>+34 900 123 456</p>
-                <p>Lunes a Viernes, 9:00 - 18:00</p>
+                <p>{{ t('contact.call.hours') }}</p>
               </div>
             </div>
             <div class="info-item">
               <div class="info-icon"><MapPin :size="32" /></div>
               <div class="info-text">
-                <h3>Visítanos</h3>
+                <h3>{{ t('contact.visit.title') }}</h3>
                 <p>Calle Ficticia 123, 28001</p>
                 <p>Madrid, España</p>
               </div>
@@ -57,27 +59,27 @@ import { Mail, Phone, MapPin } from '@lucide/vue';
         <div class="contact-form-container glass-card">
           <form class="contact-form" @submit.prevent>
             <div class="form-group">
-              <label for="name">Nombre completo</label>
+              <label for="name">{{ t('contact.name') }}</label>
               <input type="text" id="name" placeholder="John Doe" required />
             </div>
             <div class="form-group">
-              <label for="email">Correo electrónico</label>
+              <label for="email">{{ t('contact.email') }}</label>
               <input type="email" id="email" placeholder="john@example.com" required />
             </div>
             <div class="form-group">
-              <label for="subject">Asunto</label>
-              <input type="text" id="subject" placeholder="¿En qué te podemos ayudar?" required />
+              <label for="subject">{{ t('contact.subject') }}</label>
+              <input type="text" id="subject" :placeholder="t('contact.subjectPlaceholder')" required />
             </div>
             <div class="form-group">
-              <label for="message">Mensaje</label>
+              <label for="message">{{ t('contact.message') }}</label>
               <textarea
                 id="message"
                 rows="5"
-                placeholder="Escribe tu mensaje aquí..."
+                :placeholder="t('contact.messagePlaceholder')"
                 required
               ></textarea>
             </div>
-            <button type="submit" class="btn-primary w-full">Enviar mensaje</button>
+            <button type="submit" class="btn-primary w-full">{{ t('contact.submit') }}</button>
           </form>
         </div>
       </div>

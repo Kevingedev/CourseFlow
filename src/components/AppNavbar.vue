@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Languages } from '@lucide/vue'
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
+import { useI18n, type LocaleCode } from '@/i18n'
 import logoUrl from '../assets/logo.svg'
 
 const isMenuOpen = ref(false)
 const authStore = useAuthStore()
 const router = useRouter()
+const { locale, localeOptions, setLocale, t } = useI18n()
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
@@ -16,6 +19,10 @@ const handleLogout = () => {
   authStore.logout()
   router.push({ name: 'home' })
   isMenuOpen.value = false
+}
+
+const handleLocaleChange = (value: string) => {
+  setLocale(value as LocaleCode)
 }
 </script>
 
@@ -28,19 +35,33 @@ const handleLogout = () => {
 
       <!-- Desktop Links -->
       <div class="nav-links-desktop">
-        <router-link to="/about" class="nav-link">About Us</router-link>
-        <router-link to="/courses" class="nav-link">Courses</router-link>
-        <router-link to="/contact" class="nav-link">Contact</router-link>
+        <router-link to="/about" class="nav-link">{{ t('nav.about') }}</router-link>
+        <router-link to="/courses" class="nav-link">{{ t('nav.courses') }}</router-link>
+        <router-link to="/contact" class="nav-link">{{ t('nav.contact') }}</router-link>
         <router-link v-if="authStore.isAdminOrSuadmin" to="/admin/dashboard" class="nav-link admin-link">
-          Admin Panel
+          {{ t('nav.admin') }}
         </router-link>
 
+        <label class="language-select">
+          <Languages :size="16" aria-hidden="true" />
+          <span class="sr-only">{{ t('nav.language') }}</span>
+          <select
+            :value="locale"
+            :aria-label="t('nav.language')"
+            @change="handleLocaleChange(($event.target as HTMLSelectElement).value)"
+          >
+            <option v-for="option in localeOptions" :key="option.code" :value="option.code">
+              {{ option.shortLabel }}
+            </option>
+          </select>
+        </label>
+
         <template v-if="authStore.isAuthenticated">
-          <span class="user-greeting">Hola, {{ authStore.user?.fullName }}</span>
-          <button class="btn-logout" @click="handleLogout">Log Out</button>
+          <span class="user-greeting">{{ t('nav.greeting', { name: authStore.user?.fullName || '' }) }}</span>
+          <button class="btn-logout" @click="handleLogout">{{ t('nav.logout') }}</button>
         </template>
         <template v-else>
-          <router-link to="/login" class="btn-primary">Log In</router-link>
+          <router-link to="/login" class="btn-primary">{{ t('nav.login') }}</router-link>
         </template>
       </div>
 
@@ -81,21 +102,34 @@ const handleLogout = () => {
     <!-- Mobile Menu Overlay -->
     <Transition name="slide">
       <div v-if="isMenuOpen" class="mobile-menu">
-        <router-link to="/about" class="mobile-link" @click="isMenuOpen = false">About Us</router-link>
-        <router-link to="/courses" class="mobile-link" @click="isMenuOpen = false">Courses</router-link>
-        <router-link to="/contact" class="mobile-link" @click="isMenuOpen = false">Contact</router-link>
+        <router-link to="/about" class="mobile-link" @click="isMenuOpen = false">{{ t('nav.about') }}</router-link>
+        <router-link to="/courses" class="mobile-link" @click="isMenuOpen = false">{{ t('nav.courses') }}</router-link>
+        <router-link to="/contact" class="mobile-link" @click="isMenuOpen = false">{{ t('nav.contact') }}</router-link>
         <router-link v-if="authStore.isAdminOrSuadmin" to="/admin/dashboard" class="mobile-link admin-link" @click="isMenuOpen = false">
-          Admin Panel
+          {{ t('nav.admin') }}
         </router-link>
+
+        <label class="mobile-language-select">
+          <span>{{ t('nav.language') }}</span>
+          <select
+            :value="locale"
+            :aria-label="t('nav.language')"
+            @change="handleLocaleChange(($event.target as HTMLSelectElement).value)"
+          >
+            <option v-for="option in localeOptions" :key="option.code" :value="option.code">
+              {{ option.label }}
+            </option>
+          </select>
+        </label>
 
         <div class="mobile-divider"></div>
 
         <template v-if="authStore.isAuthenticated">
-          <div class="mobile-user-greeting">Hola, {{ authStore.user?.fullName }}</div>
-          <button class="btn-logout w-full" @click="handleLogout">Log Out</button>
+          <div class="mobile-user-greeting">{{ t('nav.greeting', { name: authStore.user?.fullName || '' }) }}</div>
+          <button class="btn-logout w-full" @click="handleLogout">{{ t('nav.logout') }}</button>
         </template>
         <template v-else>
-          <router-link to="/login" class="btn-primary w-full text-center" @click="isMenuOpen = false">Log In</router-link>
+          <router-link to="/login" class="btn-primary w-full text-center" @click="isMenuOpen = false">{{ t('nav.login') }}</router-link>
         </template>
       </div>
     </Transition>
@@ -137,6 +171,47 @@ const handleLogout = () => {
   display: flex;
   align-items: center;
   gap: 2.5rem;
+}
+
+.language-select,
+.mobile-language-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.language-select select,
+.mobile-language-select select {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--text-dark);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.35rem 0.55rem;
+  cursor: pointer;
+}
+
+.language-select select:focus,
+.mobile-language-select select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 17, 185, 0.08);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .admin-link {
@@ -206,6 +281,11 @@ const handleLogout = () => {
   font-size: 1.125rem;
   font-weight: 500;
   color: var(--text-dark);
+}
+
+.mobile-language-select {
+  justify-content: space-between;
+  width: 100%;
 }
 
 .mobile-divider {

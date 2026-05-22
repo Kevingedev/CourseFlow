@@ -3,9 +3,11 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { CalendarDays, CircleAlert, IdCard, Mail, ShieldCheck, UserRound } from '@lucide/vue'
 import { useAuthStore } from '@/stores/auth'
+import { useI18n } from '@/i18n'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const formData = reactive({
   fullName: '',
@@ -58,41 +60,41 @@ const validate = () => {
   let isValid = true
 
   if (!formData.fullName.trim()) {
-    errors.fullName = 'El nombre completo es obligatorio.'
+    errors.fullName = t('register.fullNameRequired')
     isValid = false
   }
 
   if (!formData.email.trim()) {
-    errors.email = 'El correo electrónico es obligatorio.'
+    errors.email = t('register.emailRequired')
     isValid = false
   } else if (!emailPattern.test(formData.email)) {
-    errors.email = 'Introduce un correo válido.'
+    errors.email = t('register.emailInvalid')
     isValid = false
   }
 
   if (!formData.password) {
-    errors.password = 'La contraseña es obligatoria.'
+    errors.password = t('register.passwordRequired')
     isValid = false
   } else if (formData.password.length < 8) {
-    errors.password = 'La contraseña debe tener al menos 8 caracteres.'
+    errors.password = t('register.passwordMin')
     isValid = false
   }
 
   if (!formData.confirmPassword) {
-    errors.confirmPassword = 'Confirma tu contraseña.'
+    errors.confirmPassword = t('register.confirmRequired')
     isValid = false
   } else if (formData.password !== formData.confirmPassword) {
-    errors.confirmPassword = 'Las contraseñas no coinciden.'
+    errors.confirmPassword = t('register.passwordMismatch')
     isValid = false
   }
 
   if (formData.dniNie && !dniNiePattern.test(formData.dniNie.trim().toUpperCase())) {
-    errors.dniNie = 'Introduce un DNI o NIE válido.'
+    errors.dniNie = t('register.dniInvalid')
     isValid = false
   }
 
   if (formData.birthDate && !isAdult(formData.birthDate)) {
-    errors.birthDate = 'Debes ser mayor de 18 años para registrarte.'
+    errors.birthDate = t('register.ageInvalid')
     isValid = false
   }
 
@@ -117,7 +119,7 @@ const handleSubmit = async () => {
     router.push(role === 'admin' || role === 'suadmin' ? '/admin/dashboard' : '/courses')
   } catch (error: unknown) {
     errors.general =
-      error instanceof Error ? error.message : 'No se pudo completar el registro. Inténtalo de nuevo.'
+      error instanceof Error ? error.message : t('register.generalError')
   } finally {
     isLoading.value = false
   }
@@ -126,19 +128,19 @@ const handleSubmit = async () => {
 
 <template>
   <div class="auth-card">
-    <h1 class="auth-title">Crea tu cuenta</h1>
-    <p class="auth-subtitle">Regístrate con tus datos y activa tu sesión en CourseFlow.</p>
+    <h1 class="auth-title">{{ t('register.title') }}</h1>
+    <p class="auth-subtitle">{{ t('register.subtitle') }}</p>
 
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
-        <label class="form-label">Nombre Completo</label>
+        <label class="form-label">{{ t('register.fullName') }}</label>
         <div class="input-shell">
           <UserRound :size="18" class="input-icon" />
           <input
           v-model="formData.fullName"
           type="text"
           class="form-input"
-          placeholder="Tu nombre y apellidos"
+          :placeholder="t('register.fullNamePlaceholder')"
           :disabled="isLoading"
           autocomplete="name"
         />
@@ -147,7 +149,7 @@ const handleSubmit = async () => {
       </div>
 
       <div class="form-group">
-        <label class="form-label">Correo Electrónico</label>
+        <label class="form-label">{{ t('register.email') }}</label>
         <div class="input-shell">
           <Mail :size="18" class="input-icon" />
           <input
@@ -163,7 +165,7 @@ const handleSubmit = async () => {
       </div>
 
       <div class="form-group">
-        <label class="form-label">Contraseña</label>
+        <label class="form-label">{{ t('register.password') }}</label>
         <div class="input-shell">
           <ShieldCheck :size="18" class="input-icon" />
           <input
@@ -179,7 +181,7 @@ const handleSubmit = async () => {
       </div>
 
       <div class="form-group">
-        <label class="form-label">Confirmar Contraseña</label>
+        <label class="form-label">{{ t('register.confirmPassword') }}</label>
         <div class="input-shell">
           <ShieldCheck :size="18" class="input-icon" />
           <input
@@ -196,7 +198,7 @@ const handleSubmit = async () => {
 
       <div class="form-grid">
         <div class="form-group">
-          <label class="form-label">DNI o NIE</label>
+          <label class="form-label">{{ t('register.dni') }}</label>
           <div class="input-shell">
             <IdCard :size="18" class="input-icon" />
             <input
@@ -212,7 +214,7 @@ const handleSubmit = async () => {
         </div>
 
         <div class="form-group">
-          <label class="form-label">Fecha de nacimiento</label>
+          <label class="form-label">{{ t('register.birthDate') }}</label>
           <div class="input-shell">
             <CalendarDays :size="18" class="input-icon" />
             <input
@@ -234,12 +236,12 @@ const handleSubmit = async () => {
       </div>
 
       <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem;" :disabled="isLoading">
-        {{ isLoading ? 'Registrando...' : 'Registrarse' }}
+        {{ isLoading ? t('register.loading') : t('register.submit') }}
       </button>
     </form>
 
     <p class="auth-footer">
-      ¿Ya eres miembro? <router-link to="/login" class="auth-link">Inicia sesión</router-link>
+      {{ t('register.hasAccount') }} <router-link to="/login" class="auth-link">{{ t('register.login') }}</router-link>
     </p>
   </div>
 </template>
