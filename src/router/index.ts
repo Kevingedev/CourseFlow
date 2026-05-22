@@ -51,13 +51,13 @@ const router = createRouter({
         {
           path: 'requests',
           name: 'admin-requests',
-          component: () => import('../views/admin/PlaceholderView.vue'),
+          component: () => import('../views/admin/AdminRequestsView.vue'),
           meta: { title: 'Gestión de Solicitudes' }
         },
         {
           path: 'courses',
           name: 'admin-courses',
-          component: () => import('../views/admin/PlaceholderView.vue'),
+          component: () => import('../views/admin/AdminCoursesView.vue'),
           meta: { title: 'Gestión de Cursos' }
         },
         {

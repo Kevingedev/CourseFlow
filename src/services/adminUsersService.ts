@@ -12,6 +12,7 @@ interface RawAdminUser {
   role: string
   dni_nie?: string | null
   birth_date?: string | null
+  is_active?: boolean
 }
 
 const mapAdminRole = (role: string): AdminUserRecord['role'] => {
@@ -26,6 +27,7 @@ const mapAdminUser = (user: RawAdminUser): AdminUserRecord => ({
   role: mapAdminRole(user.role),
   dniNie: user.dni_nie ?? null,
   birthDate: user.birth_date ?? null,
+  isActive: user.is_active ?? true,
 })
 
 const getApiErrorMessage = (error: unknown, fallbackMessage: string): string => {
@@ -98,6 +100,22 @@ export const adminUsersService = {
       return mapAdminUser(response.data)
     } catch (error: unknown) {
       throw new Error(getApiErrorMessage(error, 'No se pudo actualizar el administrador.'))
+    }
+  },
+
+  async updateAdminUserStatus(
+    userId: string,
+    isActive: boolean,
+  ): Promise<AdminUserRecord> {
+    try {
+      const response = await api.patch<RawAdminUser>(`/api/admin/users/${userId}`, {
+        is_active: isActive,
+      })
+      return mapAdminUser(response.data)
+    } catch (error: unknown) {
+      throw new Error(
+        getApiErrorMessage(error, 'No se pudo actualizar el estado del administrador.'),
+      )
     }
   },
 

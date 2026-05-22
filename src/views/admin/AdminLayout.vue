@@ -358,7 +358,7 @@ const currentRouteTitle = computed(() => {
 
 .external-link {
   color: var(--primary-color-50);
-  background-color: var(--secondary-color-soft);
+  background-color: var(--primary-color-soft);
   border: 1px solid rgba(255, 87, 34, 0.1);
 }
 

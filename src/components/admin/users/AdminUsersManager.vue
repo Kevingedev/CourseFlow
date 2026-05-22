@@ -16,9 +16,11 @@ const {
   loading,
   selectedUser,
   submitting,
+  togglingUserId,
   hydrateFormForEdit,
   loadAdminUsers,
   removeAdminUser,
+  toggleUserActive,
   resetForm,
   submitForm,
 } = useAdminUsers(authStore.user?.id)
@@ -36,26 +38,7 @@ const handleDelete = async (user: AdminUserRecord) => {
 
 <template>
   <div class="admin-users-manager">
-    <section class="hero-card glass-card">
-      <div>
-        <p class="hero-eyebrow">Superadmin</p>
-        <h2>Administración de usuarios con rol admin</h2>
-        <p class="hero-copy">
-          Gestiona altas, cambios y bajas de administradores desde el panel interno, usando el endpoint dedicado de
-          `/api/admin/users`.
-        </p>
-      </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <strong>{{ adminUsers.length }}</strong>
-          <span>admins activos</span>
-        </div>
-        <div class="hero-stat current-user">
-          <strong>{{ authStore.user?.fullName }}</strong>
-          <span>sesión actual</span>
-        </div>
-      </div>
-    </section>
+    
 
     <section class="content-grid">
       <AdminUserFormCard
@@ -73,10 +56,12 @@ const handleDelete = async (user: AdminUserRecord) => {
         :admin-users="adminUsers"
         :current-user-id="authStore.user?.id"
         :deleting-user-id="deletingUserId"
+        :toggling-user-id="togglingUserId"
         :loading="loading"
         @edit="hydrateFormForEdit"
         @refresh="loadAdminUsers"
         @remove="handleDelete"
+        @toggle="toggleUserActive"
       />
     </section>
   </div>

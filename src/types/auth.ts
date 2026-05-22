@@ -9,6 +9,7 @@ export interface User {
   dniNie?: string | null
   birthDate?: string | null
   createdAt?: string
+  isActive?: boolean
 }
 
 export interface AuthResponse {

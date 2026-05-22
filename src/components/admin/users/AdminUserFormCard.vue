@@ -80,9 +80,7 @@ const emit = defineEmits<{
         />
       </label>
 
-      <p v-else class="field-hint">
-        La actualización usa el endpoint de edición y no modifica la contraseña.
-      </p>
+      
 
       <div class="form-actions">
         <button type="submit" class="btn-primary" :disabled="submitting || !canSubmit">
@@ -118,7 +116,7 @@ const emit = defineEmits<{
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--secondary-color);
+  color: var(--primary-50);
   margin-bottom: 0.4rem;
 }
 

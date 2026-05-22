@@ -1,42 +1,78 @@
 <script setup lang="ts">
 import { computed, shallowRef, reactive, onMounted, onUnmounted, watch } from 'vue'
-import { ChevronLeft, ChevronRight } from '@lucide/vue'
-import type { AdminUserRecord } from '@/types/adminUsers'
+import { ChevronLeft, ChevronRight, RefreshCcw, Search } from '@lucide/vue'
+import type { ApplicationRecord, ApplicationStatus } from '@/types/applications'
 
 const props = defineProps<{
-  adminUsers: AdminUserRecord[]
-  currentUserId?: string
-  deletingUserId: string | null
-  togglingUserId: string | null
+  applications: ApplicationRecord[]
+  searchQuery: string
+  statusFilter: ApplicationStatus | 'all'
+  deletingApplicationId: number | null
+  updatingStatusId: number | null
   loading: boolean
 }>()
 
 const emit = defineEmits<{
-  edit: [user: AdminUserRecord]
-  remove: [user: AdminUserRecord]
-  toggle: [user: AdminUserRecord]
+  remove: [application: ApplicationRecord]
   refresh: []
+  statusChange: [application: ApplicationRecord, status: ApplicationStatus]
+  'update:searchQuery': [value: string]
+  'update:statusFilter': [value: ApplicationStatus | 'all']
 }>()
+
+const statuses: Array<{ value: ApplicationStatus | 'all'; label: string }> = [
+  { value: 'all', label: 'Todos' },
+  { value: 'pending', label: 'Pendientes' },
+  { value: 'accepted', label: 'Aceptadas' },
+  { value: 'rejected', label: 'Rechazadas' },
+  { value: 'cancelled', label: 'Canceladas' },
+]
+
+const getStatusLabel = (status: ApplicationStatus): string => {
+  const labels: Record<ApplicationStatus, string> = {
+    pending: 'Pendiente',
+    accepted: 'Aceptada',
+    rejected: 'Rechazada',
+    cancelled: 'Cancelada',
+  }
+
+  return labels[status]
+}
+
+const formatDarde = (value: boolean | null): string => {
+  if (value === null) return 'Sin informar'
+  return value ? 'Sí' : 'No'
+}
+
+const availableActions = (
+  currentStatus: ApplicationStatus,
+): Array<{ value: ApplicationStatus; label: string }> => {
+  const all = [
+    { value: 'pending' as ApplicationStatus, label: 'Pendiente' },
+    { value: 'accepted' as ApplicationStatus, label: 'Aceptar' },
+    { value: 'rejected' as ApplicationStatus, label: 'Rechazar' },
+  ]
+  return all.filter((a) => a.value !== currentStatus)
+}
 
 const itemsPerPage = 5
 const currentPage = shallowRef(1)
-const totalUsers = computed(() => props.adminUsers.length)
-const totalPages = computed(() => Math.max(1, Math.ceil(totalUsers.value / itemsPerPage)))
+const totalApplications = computed(() => props.applications.length)
+const totalPages = computed(() => Math.max(1, Math.ceil(totalApplications.value / itemsPerPage)))
 const pageStartIndex = computed(() => (currentPage.value - 1) * itemsPerPage)
 const pageEndIndex = computed(() =>
-  Math.min(pageStartIndex.value + itemsPerPage, totalUsers.value),
+  Math.min(pageStartIndex.value + itemsPerPage, totalApplications.value),
 )
-const paginatedUsers = computed(() =>
-  props.adminUsers.slice(pageStartIndex.value, pageEndIndex.value),
+const paginatedApplications = computed(() =>
+  props.applications.slice(pageStartIndex.value, pageEndIndex.value),
 )
 const paginationSummary = computed(() => {
-  if (totalUsers.value === 0) {
+  if (totalApplications.value === 0) {
     return 'Sin registros'
   }
 
-  return `Mostrando ${pageStartIndex.value + 1}-${pageEndIndex.value} de ${totalUsers.value}`
+  return `Mostrando ${pageStartIndex.value + 1}-${pageEndIndex.value} de ${totalApplications.value}`
 })
-
 type PaginationItem = number | 'start-ellipsis' | 'end-ellipsis'
 
 const paginationItems = computed<PaginationItem[]>(() => {
@@ -70,32 +106,39 @@ const setPage = (page: number) => {
   closeDropdown()
 }
 
+watch(
+  () => [props.searchQuery, props.statusFilter],
+  () => {
+    currentPage.value = 1
+    closeDropdown()
+  },
+)
+
 watch(totalPages, (nextTotalPages) => {
   if (currentPage.value > nextTotalPages) {
     currentPage.value = nextTotalPages
   }
 })
 
-const openDropdownId = shallowRef<string | null>(null)
+const openDropdownId = shallowRef<number | null>(null)
 const menuPosition = reactive({ top: 0, left: 0 })
-const activeUserRef = shallowRef<AdminUserRecord | null>(null)
-
+const activeAppRef = shallowRef<ApplicationRecord | null>(null)
 const isMenuVisible = shallowRef(false)
 
-const openDropdown = (userId: string, user: AdminUserRecord, event: MouseEvent) => {
+const openDropdown = (app: ApplicationRecord, event: MouseEvent) => {
   const button = event.currentTarget as HTMLElement
   const rect = button.getBoundingClientRect()
   menuPosition.top = rect.bottom + 4
-  menuPosition.left = Math.max(8, rect.right - 180)
-  activeUserRef.value = user
-  openDropdownId.value = userId
+  menuPosition.left = Math.max(8, rect.right - 200)
+  activeAppRef.value = app
+  openDropdownId.value = app.id
   isMenuVisible.value = true
 }
 
 const closeDropdown = () => {
   openDropdownId.value = null
   isMenuVisible.value = false
-  activeUserRef.value = null
+  activeAppRef.value = null
 }
 
 const handleClickOutside = (e: MouseEvent) => {
@@ -115,104 +158,99 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="glass-card admin-users-table-card">
+  <section class="glass-card applications-table-card">
     <div class="table-header">
       <div>
-        <p class="eyebrow">Directorio</p>
-        <h3>Administradores registrados</h3>
+        <p class="eyebrow">Administración</p>
+        <h3>Solicitudes registradas</h3>
       </div>
-      <button type="button" class="btn-outline" :disabled="loading" @click="emit('refresh')">
-        {{ loading ? 'Actualizando...' : 'Recargar lista' }}
-      </button>
-    </div>
-
-    <Teleport to="body">
-      <Transition name="dropdown">
-        <div
-          v-if="isMenuVisible && activeUserRef"
-          class="dropdown-menu-global"
-          :style="{ top: menuPosition.top + 'px', left: menuPosition.left + 'px' }"
-          @click.stop
-        >
-          <button
-            type="button"
-            class="dropdown-item edit"
-            @click="emit('edit', activeUserRef); closeDropdown()"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-            Editar
-          </button>
-
-          <button
-            v-if="activeUserRef.id !== currentUserId"
-            type="button"
-            class="dropdown-item toggle"
-            :disabled="togglingUserId === activeUserRef.id"
-            @click="emit('toggle', activeUserRef); closeDropdown()"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="5" width="22" height="14" rx="7" ry="7"></rect><circle cx="8" cy="12" r="3.5" :fill="activeUserRef.isActive ? 'currentColor' : 'none'" :stroke="activeUserRef.isActive ? 'currentColor' : 'currentColor'"></circle></svg>
-            {{ activeUserRef.isActive === false ? 'Activar' : 'Desactivar' }}
-          </button>
-
-          <button
-            type="button"
-            class="dropdown-item delete"
-            :disabled="deletingUserId === activeUserRef.id || activeUserRef.id === currentUserId"
-            @click="emit('remove', activeUserRef); closeDropdown()"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            {{ deletingUserId === activeUserRef.id ? 'Eliminando...' : 'Eliminar' }}
-          </button>
+      <div class="table-header-actions">
+        <div class="search-wrapper">
+          <Search class="search-icon" :size="16" aria-hidden="true" />
+          <input
+            :value="searchQuery"
+            type="text"
+            class="search-input"
+            placeholder="Buscar solicitud..."
+            @input="emit('update:searchQuery', ($event.target as HTMLInputElement).value)"
+          />
         </div>
-      </Transition>
-    </Teleport>
+        <select
+          :value="statusFilter"
+          class="status-filter"
+          @change="emit('update:statusFilter', ($event.target as HTMLSelectElement).value as ApplicationStatus | 'all')"
+        >
+          <option v-for="status in statuses" :key="status.value" :value="status.value">
+            {{ status.label }}
+          </option>
+        </select>
+        <button type="button" class="btn-outline" :disabled="loading" @click="emit('refresh')">
+          <RefreshCcw :size="16" aria-hidden="true" />
+          {{ loading ? 'Actualizando...' : 'Recargar' }}
+        </button>
+      </div>
+    </div>
 
     <div v-if="loading" class="state-panel">
       <div class="spinner"></div>
-      <p>Cargando administradores...</p>
+      <p>Cargando solicitudes...</p>
     </div>
 
-    <div v-else-if="adminUsers.length === 0" class="state-panel empty">
-      <h4>No hay administradores creados</h4>
-      <p>Cuando registres el primero aparecerá aquí con sus acciones de edición y borrado.</p>
+    <div v-else-if="applications.length === 0" class="state-panel empty">
+      <template v-if="searchQuery.trim() || statusFilter !== 'all'">
+        <h4>Sin resultados</h4>
+        <p>No se encontraron solicitudes con los filtros actuales.</p>
+      </template>
+      <template v-else>
+        <h4>No hay solicitudes registradas</h4>
+        <p>Cuando el endpoint devuelva solicitudes, aparecerán aquí con acciones de edición, estado y eliminación.</p>
+      </template>
     </div>
 
     <div v-else class="table-shell">
-      <table class="users-table">
+      <table class="applications-table">
         <thead>
           <tr>
-            <th>Administrador</th>
-            <th>Rol</th>
+            <th>Solicitud</th>
+            <th>Curso</th>
+            <th>DARDE</th>
             <th>Estado</th>
             <th class="actions-column">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in paginatedUsers" :key="user.id">
+          <tr v-for="application in paginatedApplications" :key="application.id">
             <td>
-              <div class="identity-cell">
-                <div class="avatar">{{ user.fullName.charAt(0) }}</div>
-                <div>
-                  <p class="user-name">{{ user.fullName }}</p>
-                  <p class="user-email">{{ user.email }}</p>
-                </div>
+              <div class="request-cell">
+                <p class="request-name">
+                  {{ application.user?.name || `Usuario #${application.user_id}` }}
+                </p>
+                <p class="request-email">
+                  {{ application.user?.email || `ID usuario: ${application.user_id}` }}
+                </p>
+                <p v-if="application.previous_education" class="request-education">
+                  {{ application.previous_education }}
+                </p>
               </div>
             </td>
             <td>
-              <span class="role-pill">Admin</span>
+              <span class="course-pill">Curso #{{ application.course_id }}</span>
             </td>
             <td>
-              <span v-if="user.id === currentUserId" class="status-pill current">Tu sesión</span>
-              <span v-else-if="user.isActive === false" class="status-pill inactive">Inactivo</span>
-              <span v-else class="status-pill active">Activo</span>
+              <span class="darde-value">{{ formatDarde(application.has_darde) }}</span>
+            </td>
+            <td>
+              <span class="status-pill" :class="application.status">
+                {{ getStatusLabel(application.status) }}
+              </span>
             </td>
             <td class="actions-column">
               <div class="dropdown-container">
                 <button
                   type="button"
                   class="dropdown-trigger"
-                  :disabled="deletingUserId === user.id || togglingUserId === user.id"
-                  @click="openDropdown(user.id, user, $event)"
+                  :disabled="deletingApplicationId === application.id || updatingStatusId === application.id"
+                  @click="openDropdown(application, $event)"
                   aria-label="Acciones"
                 >
                   <svg
@@ -237,7 +275,7 @@ onUnmounted(() => {
         </tbody>
       </table>
 
-      <div class="pagination-bar" aria-label="Paginación de administradores">
+      <div class="pagination-bar" aria-label="Paginación de solicitudes">
         <p class="pagination-summary">{{ paginationSummary }}</p>
 
         <nav class="pagination-controls" aria-label="Páginas">
@@ -278,10 +316,53 @@ onUnmounted(() => {
       </div>
     </div>
   </section>
+
+  <Teleport to="body">
+    <Transition name="dropdown">
+      <div
+        v-if="isMenuVisible && activeAppRef"
+        class="dropdown-menu-global"
+        :style="{ top: menuPosition.top + 'px', left: menuPosition.left + 'px' }"
+        @click.stop
+      >
+        <button
+          v-for="action in availableActions(activeAppRef.status)"
+          :key="action.value"
+          type="button"
+          class="dropdown-item status"
+          :disabled="updatingStatusId === activeAppRef.id"
+          @click="emit('statusChange', activeAppRef, action.value); closeDropdown()"
+        >
+          <template v-if="action.value === 'accepted'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </template>
+          <template v-else-if="action.value === 'rejected'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </template>
+          <template v-else>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </template>
+          {{ action.label }}
+        </button>
+
+        <div class="dropdown-divider"></div>
+
+        <button
+          type="button"
+          class="dropdown-item delete"
+          :disabled="deletingApplicationId === activeAppRef.id"
+          @click="emit('remove', activeAppRef); closeDropdown()"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          {{ deletingApplicationId === activeAppRef.id ? 'Eliminando...' : 'Eliminar' }}
+        </button>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped>
-.admin-users-table-card {
+.applications-table-card {
   padding: 2rem;
   border-radius: 20px;
   border: 1px solid var(--border-color);
@@ -296,6 +377,53 @@ onUnmounted(() => {
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.table-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-input,
+.status-filter {
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+}
+
+.search-input {
+  padding: 0.6rem 0.85rem 0.6rem 2.35rem;
+  width: 210px;
+}
+
+.status-filter {
+  padding: 0.6rem 0.85rem;
+}
+
+.search-input:focus,
+.status-filter:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 17, 185, 0.08);
 }
 
 .eyebrow {
@@ -317,20 +445,20 @@ onUnmounted(() => {
   overflow-x: auto;
 }
 
-.users-table {
+.applications-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.users-table th,
-.users-table td {
+.applications-table th,
+.applications-table td {
   padding: 1rem 0.75rem;
   border-bottom: 1px solid rgba(67, 17, 185, 0.08);
   text-align: left;
   vertical-align: middle;
 }
 
-.users-table th {
+.applications-table th {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -414,39 +542,31 @@ onUnmounted(() => {
   font-weight: 700;
 }
 
-.identity-cell {
-  display: flex;
-  align-items: center;
-  gap: 0.9rem;
+.request-cell {
+  max-width: 340px;
 }
 
-.avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-80));
-  color: var(--white);
-  font-weight: 700;
-}
-
-.user-name,
-.user-email {
-  margin: 0;
-}
-
-.user-name {
+.request-name {
+  margin: 0 0 0.25rem 0;
   font-weight: 700;
   color: var(--text-dark);
 }
 
-.user-email {
-  font-size: 0.9rem;
+.request-email,
+.request-education,
+.darde-value {
+  margin: 0;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
-.role-pill,
+.request-education {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.course-pill,
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -457,24 +577,25 @@ onUnmounted(() => {
   font-weight: 700;
 }
 
-.role-pill {
-  background: rgba(67, 17, 185, 0.1);
+.course-pill {
+  background: rgba(67, 17, 185, 0.08);
   color: var(--primary-color);
 }
 
-.status-pill.active {
+.status-pill.pending {
+  background: rgba(255, 193, 7, 0.14);
+  color: #8a5b00;
+}
+
+.status-pill.accepted {
   background: rgba(10, 71, 73, 0.08);
   color: var(--accent-teal);
 }
 
-.status-pill.current {
-  background: rgba(236, 86, 41, 0.12);
+.status-pill.rejected,
+.status-pill.cancelled {
+  background: rgba(236, 86, 41, 0.1);
   color: var(--secondary-90);
-}
-
-.status-pill.inactive {
-  background: rgba(100, 100, 100, 0.1);
-  color: var(--text-muted);
 }
 
 .actions-column {
@@ -514,7 +635,7 @@ onUnmounted(() => {
 .dropdown-menu-global {
   position: fixed;
   z-index: 9999;
-  min-width: 180px;
+  min-width: 190px;
   background: var(--white);
   border: 1px solid var(--border-color);
   border-radius: 12px;
@@ -546,11 +667,7 @@ onUnmounted(() => {
   background: rgba(67, 17, 185, 0.06);
 }
 
-.dropdown-item.edit:hover {
-  color: var(--primary-color);
-}
-
-.dropdown-item.toggle:hover {
+.dropdown-item.status:hover {
   color: var(--primary-color);
 }
 
@@ -568,7 +685,16 @@ onUnmounted(() => {
   cursor: not-allowed;
 }
 
+.dropdown-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.25rem 0.5rem;
+}
+
 .btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   padding: 0.75rem 1.25rem;
   border: 1px solid var(--border-color);
   border-radius: 12px;
@@ -626,7 +752,7 @@ onUnmounted(() => {
 
 .state-panel p {
   color: var(--text-muted);
-  max-width: 420px;
+  max-width: 440px;
 }
 
 .spinner {
@@ -648,17 +774,22 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 768px) {
-  .admin-users-table-card {
-    padding: 1.5rem;
-  }
-
-  .table-header {
+@media (max-width: 900px) {
+  .table-header,
+  .table-header-actions {
     flex-direction: column;
   }
 
-  .actions-column {
-    width: auto;
+  .table-header-actions,
+  .search-wrapper,
+  .search-input,
+  .status-filter,
+  .btn-outline {
+    width: 100%;
+  }
+
+  .btn-outline {
+    justify-content: center;
   }
 
   .pagination-bar {
@@ -669,6 +800,16 @@ onUnmounted(() => {
   .pagination-controls {
     justify-content: center;
     flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .applications-table-card {
+    padding: 1.5rem;
+  }
+
+  .actions-column {
+    width: auto;
   }
 }
 </style>

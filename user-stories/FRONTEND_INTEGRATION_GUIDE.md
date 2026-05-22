@@ -2,11 +2,11 @@
 
 > **Propósito**: Documentar todos los endpoints de la API REST de CourseFlow para que el equipo de frontend pueda consumirlos de manera óptima y profesional.
 >
-> **Backend Base URL**: `http://localhost:8001`  
+> **Backend Base URL**: `http://localhost:8002`  
 > **API v1 Prefix**: `/api/v1`  
 > **Admin Prefix**: `/api/admin`  
-> **Swagger UI**: `http://localhost:8001/docs`  
-> **ReDoc**: `http://localhost:8001/redoc`
+> **Swagger UI**: `http://localhost:8002/docs`  
+> **ReDoc**: `http://localhost:8002/redoc`
 
 ---
 
@@ -847,7 +847,7 @@ Obtiene la lista de espera de un curso específico, ordenada por posición ascen
 ### fetch — with credentials
 
 ```javascript
-const API_BASE = "http://localhost:8001/api/v1";
+const API_BASE = "http://localhost:8002/api/v1";
 
 // Login
 const login = async (email, password) => {
@@ -875,7 +875,7 @@ const getProfile = async () => {
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8001/api/v1",
+  baseURL: "http://localhost:8002/api/v1",
   withCredentials: true,          // ← Habilita cookies cross-origin
   headers: { "Content-Type": "application/json" },
 });
@@ -947,8 +947,8 @@ api.interceptors.response.use(
 
 ```env
 # .env del frontend
-VITE_API_URL=http://localhost:8001/api/v1
-VITE_ADMIN_API_URL=http://localhost:8001/api/admin
+VITE_API_URL=http://localhost:8002/api/v1
+VITE_ADMIN_API_URL=http://localhost:8002/api/admin
 ```
 
 ---

@@ -17,6 +17,7 @@ export const useAdminUsers = (currentUserId: string | undefined) => {
   const loading = ref(false)
   const submitting = ref(false)
   const deletingUserId = ref<string | null>(null)
+  const togglingUserId = ref<string | null>(null)
   const selectedUserId = ref<string | null>(null)
   const feedback = ref<AdminUsersFeedback | null>(null)
   const form = reactive<AdminUserFormValues>(createInitialForm())
@@ -160,6 +161,35 @@ export const useAdminUsers = (currentUserId: string | undefined) => {
     }
   }
 
+  const toggleUserActive = async (user: AdminUserRecord) => {
+    const newStatus = !user.isActive
+    const actionLabel = newStatus ? 'activar' : 'desactivar'
+
+    togglingUserId.value = user.id
+    resetFeedback()
+
+    try {
+      const updatedUser = await adminUsersService.updateAdminUserStatus(user.id, newStatus)
+      adminUsers.value = adminUsers.value.map((u) =>
+        u.id === updatedUser.id ? updatedUser : u,
+      )
+      feedback.value = {
+        type: 'success',
+        message: `Administrador ${actionLabel}do correctamente.`,
+      }
+    } catch (error: unknown) {
+      feedback.value = {
+        type: 'error',
+        message:
+          error instanceof Error
+            ? error.message
+            : `No se pudo ${actionLabel} el administrador.`,
+      }
+    } finally {
+      togglingUserId.value = null
+    }
+  }
+
   onMounted(loadAdminUsers)
 
   return {
@@ -172,9 +202,11 @@ export const useAdminUsers = (currentUserId: string | undefined) => {
     loading,
     selectedUser,
     submitting,
+    togglingUserId,
     hydrateFormForEdit,
     loadAdminUsers,
     removeAdminUser,
+    toggleUserActive,
     resetFeedback,
     resetForm,
     submitForm,
