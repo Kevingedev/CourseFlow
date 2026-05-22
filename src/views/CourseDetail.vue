@@ -156,18 +156,10 @@ const form = ref({
   name: names.first,
   lastName: names.last,
   email: authStore.user?.email || '',
-  phone: '',
   birth_date: '',
   dni_nie: '',
   has_darde: '' as boolean | '',
   previous_education: '',
-  municipality: '',
-  province: '',
-  hasDisability: '',
-  disabilityCertificate: '',
-  socialMedia: '',
-  internetExperience: '',
-  additionalComments: '',
   agreeTerms: false
 });
 
@@ -284,6 +276,20 @@ async function submitForm() {
           <h1 class="hero-title">{{ course?.name || 'Curso' }}</h1>
           <p class="hero-subtitle">{{ course?.summary || course?.description || '' }}</p>
         </div>
+        <div v-if="course" >
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Inicio:</span>
+            <strong>{{ course.start_date || 'TBD' }}</strong>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Finalización:</span>
+            <strong>{{ course.end_date || 'TBD' }}</strong>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Duración:</span>
+            <strong>{{ formatDuration(course.start_date, course.end_date) }}</strong>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -293,31 +299,8 @@ async function submitForm() {
           <div v-if="loading" class="text-center">Cargando curso...</div>
           <div v-else-if="error" class="text-center" style="color:var(--error-color)">Error: {{ error }}</div>
 
-          <div v-else-if="course">
-            <div class="glass-card detail-card">
-              <div class="meta-row">
-                <div class="meta-left">
-                  <span class="course-tag">{{ course.is_active ? 'Open' : 'Closed' }}</span>
-                </div>
-                <div class="meta-right">
-                  <div>Inicio: <strong>{{ course.start_date || 'TBD' }}</strong></div>
-                  <div>Finalización: <strong>{{ course.end_date || 'TBD' }}</strong></div>
-                  <div>Duración: <strong>{{ formatDuration(course.start_date, course.end_date) }}</strong></div>
-                </div>
-              </div>
-
-              <h2 class="detail-heading">¿De qué trata este curso?</h2>
-              <p class="detail-text">{{ course.summary || course.description }}</p>
-
-              <h3>Temario</h3>
-              <ul class="detail-list">
-                <li v-for="(item, idx) in (course.syllabus || [])" :key="idx">{{ item }}</li>
-              </ul>
-
-              <h3>Qué aprenderás</h3>
-              <ul class="detail-list">
-                <li v-for="(lo, i) in (course.learning_outcomes || [])" :key="i">{{ lo }}</li>
-              </ul>
+          <div>
+            <div>
             </div>
           </div>
         </section>
@@ -405,21 +388,6 @@ async function submitForm() {
                   </div>
 
                   <div class="form-group">
-                    <label class="form-label">Teléfono *</label>
-                    <div class="phone-input-group">
-                      <select class="phone-country">
-                        <option selected>ES +34</option>
-                        <option>MX +52</option>
-                        <option>AR +54</option>
-                        <option>CO +57</option>
-                        <option>CL +56</option>
-                        <option>PE +51</option>
-                      </select>
-                      <input v-model="form.phone" class="form-input" type="tel" placeholder="123456789" required />
-                    </div>
-                  </div>
-
-                  <div class="form-group">
                     <label class="form-label">¿Estás desempleado con DARDE actualizado? *</label>
                     <select v-model="form.has_darde" class="form-input" required>
                       <option value="" disabled>Selecciona una opción</option>
@@ -440,103 +408,6 @@ async function submitForm() {
                     <label class="form-label">Detalla tu formación previa relacionada (Opcional)</label>
                     <textarea v-model="form.previous_education" class="form-input" rows="3" placeholder="Explica brevemente tus estudios o experiencia..." maxlength="250"></textarea>
                     <p class="char-counter">{{ 250 - form.previous_education.length }} caracteres restantes</p>
-                  </div>
-                </fieldset>
-
-                <!-- Ubicación -->
-                <fieldset class="form-section">
-                  <legend class="section-title">Ubicación</legend>
-
-                  <div class="form-group">
-                    <label class="form-label">Municipio</label>
-                    <select v-model="form.municipality" class="form-input">
-                      <option value="">Selecciona tu municipio</option>
-                      <option>Madrid</option>
-                      <option>Barcelona</option>
-                      <option>Valencia</option>
-                      <option>Sevilla</option>
-                      <option>Bilbao</option>
-                      <option>Otro</option>
-                    </select>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label">Provincia</label>
-                    <select v-model="form.province" class="form-input">
-                      <option value="">Selecciona tu provincia</option>
-                      <option>Madrid</option>
-                      <option>Barcelona</option>
-                      <option>Valencia</option>
-                      <option>Sevilla</option>
-                      <option>Bilbao</option>
-                      <option>Otro</option>
-                    </select>
-                  </div>
-                </fieldset>
-
-                <!-- Discapacidad -->
-                <fieldset class="form-section">
-                  <legend class="section-title">Accesibilidad</legend>
-
-                  <div class="form-group">
-                    <label class="form-label">¿Tienes alguna situación especial?</label>
-                    <select v-model="form.hasDisability" class="form-input">
-                      <option value="">Selecciona una opción</option>
-                      <option value="yes-certificate">Tengo certificado de discapacidad</option>
-                      <option value="no-certificate">No tengo certificado</option>
-                      <option value="in-process">Situación de vulnerabilidad</option>
-                      <option value="none">Ninguna</option>
-                    </select>
-                  </div>
-
-                  <div v-if="form.hasDisability === 'yes-certificate'" class="form-group">
-                    <label class="form-label">Tipo de Certificado</label>
-                    <select v-model="form.disabilityCertificate" class="form-input">
-                      <option value="">Selecciona el tipo</option>
-                      <option>Física</option>
-                      <option>Sensorial</option>
-                      <option>Intelectual</option>
-                      <option>Otra</option>
-                    </select>
-                  </div>
-                </fieldset>
-
-                <!-- Conectividad -->
-                <fieldset class="form-section">
-                  <legend class="section-title">Conectividad</legend>
-
-                  <div class="form-group">
-                    <label class="form-label">¿Cómo te conectas a internet?</label>
-                    <select v-model="form.internetExperience" class="form-input">
-                      <option value="">Selecciona una opción</option>
-                      <option>Banda ancha/WiFi</option>
-                      <option>Conexión móvil</option>
-                      <option>Conexión limitada</option>
-                      <option>No tengo conexión</option>
-                    </select>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label">¿Qué red social usas más?</label>
-                    <select v-model="form.socialMedia" class="form-input">
-                      <option value="">Selecciona una red</option>
-                      <option>Facebook</option>
-                      <option>Instagram</option>
-                      <option>WhatsApp</option>
-                      <option>Twitter/X</option>
-                      <option>LinkedIn</option>
-                      <option>Ninguna</option>
-                    </select>
-                  </div>
-                </fieldset>
-
-                <!-- Comentarios -->
-                <fieldset class="form-section">
-                  <legend class="section-title">Comentarios</legend>
-
-                  <div class="form-group">
-                    <label class="form-label">¿Hay algo más que debamos saber?</label>
-                    <textarea v-model="form.additionalComments" class="form-input" rows="3" placeholder="Cuéntanos tus expectativas o dudas..."></textarea>
                   </div>
                 </fieldset>
 
@@ -577,7 +448,42 @@ async function submitForm() {
 
 .hero-inner {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
+  gap: 2rem;
+}
+
+.hero-meta {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 1.5rem;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 260px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+}
+
+.hero-meta-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.hero-meta-label {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.hero-meta-item strong {
+  color: var(--text-dark);
+  font-weight: 700;
 }
 
 .hero-text {
@@ -968,6 +874,18 @@ select.form-input {
 @media (max-width: 900px) {
   .course-hero {
     min-height: 250px;
+    padding: 2rem 0;
+  }
+
+  .hero-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .hero-meta {
+    width: 100%;
+    min-width: unset;
   }
 
   .hero-title {
