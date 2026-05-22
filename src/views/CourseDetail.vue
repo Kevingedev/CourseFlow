@@ -757,7 +757,7 @@ async function submitForm() {
 .form-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px rgba(84, 24, 193, 0.08);
+  box-shadow: 0 0 0 4px rgba(67, 17, 185, 0.08);
 }
 
 textarea.form-input {
@@ -807,7 +807,7 @@ select.form-input {
 .phone-country:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 4px rgba(84, 24, 193, 0.08);
+  box-shadow: 0 0 0 4px rgba(67, 17, 185, 0.08);
 }
 
 .phone-input-group .form-input {
@@ -856,7 +856,7 @@ select.form-input {
 
 .full-width:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(84, 24, 193, 0.2);
+  box-shadow: 0 8px 16px rgba(67, 17, 185, 0.2);
 }
 
 .full-width:active:not(:disabled) {
@@ -883,7 +883,7 @@ select.form-input {
 
 .btn-primary-link:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(84, 24, 193, 0.2);
+  box-shadow: 0 8px 16px rgba(67, 17, 185, 0.2);
 }
 
 .prerequisites-box {
@@ -911,7 +911,7 @@ select.form-input {
 .warning-badge {
   background-color: var(--secondary-color-soft);
   color: var(--secondary-color);
-  border: 1px solid rgba(255, 87, 34, 0.2);
+  border: 1px solid rgba(236, 86, 32, 0.2);
   border-radius: 8px;
   padding: 0.75rem 1rem;
   font-size: 0.85rem;

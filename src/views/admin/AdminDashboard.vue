@@ -225,6 +225,42 @@ onMounted(async () => {
   }
 }
 
+.action-btn {
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(67, 17, 185, 0.08);
+}
+
+.action-btn.span-2 {
+  grid-column: span 2;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 1.2rem;
+}
+
+@media (max-width: 576px) {
+  .action-btn.span-2 {
+    grid-column: span 1;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .lower-info-grid {
     grid-template-columns: 1fr;

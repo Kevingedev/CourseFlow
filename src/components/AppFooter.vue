@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import logoUrl from '@/assets/logo.svg'
+import logoUrl from '../assets/logo.svg'
 </script>
 
 <template>
@@ -152,7 +152,7 @@ import logoUrl from '@/assets/logo.svg'
 
 .footer-bottom {
   padding-top: 2rem;
-  border-top: 1px solid rgba(84, 24, 193, 0.05);
+  border-top: 1px solid rgba(67, 17, 185, 0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;

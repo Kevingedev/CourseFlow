@@ -20,7 +20,7 @@
       </div>
       <div class="hero-image-container">
         <div class="hero-image-placeholder">
-          <!-- Image placeholder -->
+          <img src="/home_hero.png" alt="Talento digital inclusivo" class="hero-img" />
         </div>
         <div class="decor-blob blob-1"></div>
         <div class="decor-blob blob-2"></div>
@@ -45,7 +45,8 @@
 }
 
 .hero-title {
-  font-size: 4.5rem;
+  font-size: clamp(2.5rem, 4.5vw, 4rem);
+  line-height: 1.15;
   margin-bottom: 1.5rem;
   color: var(--text-dark);
 }
@@ -87,15 +88,31 @@
 
 .hero-image-container {
   position: relative;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
 }
 
 .hero-image-placeholder {
   width: 100%;
-  aspect-ratio: 4/3;
-  background-color: var(--primary-color-soft);
-  border-radius: 20px;
+  aspect-ratio: 4 / 3;
+  background-color: #f9eeee;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(84, 24, 193, 0.1);
+  box-shadow: 0 20px 40px rgba(67, 17, 185, 0.1);
+  border: 1px solid rgba(67, 17, 185, 0.08);
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.hero-img:hover {
+  transform: scale(1.03);
 }
 
 .decor-blob {
