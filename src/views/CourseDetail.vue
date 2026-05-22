@@ -79,10 +79,11 @@ async function checkEnrollment() {
   if (!id || !authStore.isAuthenticated || !authStore.user?.id) return;
   checkingEnrollment.value = true;
   try {
-    const res = await api.get(`/applications?user_id=${authStore.user.id}&course_id=${id}`);
-    if (res.data && res.data.length > 0) {
-      isEnrolled.value = true;
-    }
+    const res = await api.get('/api/v1/applications/me');
+    const userApps = res.data;
+    const courseIdNum = Number(id);
+    const found = userApps.find((app: any) => app.course_id === courseIdNum && app.status !== 'cancelled');
+    isEnrolled.value = !!found;
   } catch (err) {
     console.error('Error checking enrollment:', err);
   } finally {
@@ -92,20 +93,25 @@ async function checkEnrollment() {
 
 async function checkCourseCapacity() {
   if (!id || !course.value) return;
+  const capacity = course.value.capacity || 20;
+  acceptedCount.value = 0;
+  totalApplicationsCount.value = 0;
+  isCourseFull.value = false;
+  isBlockedByCapacity.value = false;
+
   try {
-    const acceptedRes = await api.get(`/applications?course_id=${id}&status=aceptado`);
-    acceptedCount.value = acceptedRes.data.length;
-
-    const allRes = await api.get(`/applications?course_id=${id}`);
-    totalApplicationsCount.value = allRes.data.length;
-
-    const capacity = course.value.capacity || 20;
-    
-    // Full if accepted applications equal capacity
-    isCourseFull.value = acceptedCount.value >= capacity;
-    
-    // Blocked if total applications equal or exceed 120% of capacity
-    isBlockedByCapacity.value = totalApplicationsCount.value >= Math.floor(capacity * 1.2);
+    if (authStore.isAuthenticated && authStore.isAdminOrSuadmin) {
+      const res = await api.get(`/api/v1/courses/${id}/applications`);
+      const apps = res.data;
+      acceptedCount.value = apps.filter((app: any) => app.status === 'accepted' || app.status === 'admitted').length;
+      totalApplicationsCount.value = apps.length;
+      
+      isCourseFull.value = acceptedCount.value >= capacity;
+      isBlockedByCapacity.value = totalApplicationsCount.value >= Math.floor(capacity * 1.2);
+    } else {
+      const waitlistRes = await api.get(`/api/v1/waiting-list/${id}`);
+      totalApplicationsCount.value = waitlistRes.data.length;
+    }
   } catch (err) {
     console.error('Error checking capacity:', err);
   }
@@ -116,12 +122,12 @@ async function loadCourse() {
   loading.value = true;
   error.value = null;
   try {
-    const res = await api.get(`/courses/${id}`);
+    const res = await api.get(`/api/v1/courses/${id}`);
     course.value = res.data;
     await checkEnrollment();
     await checkCourseCapacity();
   } catch (err: any) {
-    error.value = err?.response?.data || err.message || 'Error cargando curso';
+    error.value = err?.response?.data?.detail || err.message || 'Error cargando curso';
   } finally {
     loading.value = false;
   }
@@ -197,25 +203,21 @@ async function submitForm() {
     return;
   }
 
-  // 1. DNI/NIE validation
   if (!validateDniNie(form.value.dni_nie)) {
     submitError.value = 'El formato del DNI/NIE no es válido. Debe tener 8 números y 1 letra (ej. 12345678Z) o formato NIE válido (ej. X1234567Z).';
     return;
   }
 
-  // 2. Minimum Age validation
   if (calculateAge(form.value.birth_date) < 18) {
     submitError.value = 'Debes tener al menos 18 años para inscribirte en este curso.';
     return;
   }
 
-  // 3. DARDE check
   if (form.value.has_darde === '') {
     submitError.value = 'Por favor, selecciona si estás desempleado con DARDE actualizado o no.';
     return;
   }
 
-  // 4. Previous education text limit validation
   if (form.value.previous_education.length > 250) {
     submitError.value = 'La descripción de tu formación previa no puede superar los 250 caracteres.';
     return;
@@ -224,32 +226,50 @@ async function submitForm() {
   submitting.value = true;
 
   try {
-    const newApplication = {
-      user_id: authStore.user?.id,
-      course_id: Number(id),
-      status: 'pendiente', // standard initial status
-      created_at: new Date().toISOString(),
+    // 1. Actualizar el perfil del usuario autenticado en FastAPI (Requisito legal)
+    await api.patch('/api/v1/users/me', {
+      name: `${form.value.name} ${form.value.lastName}`.trim(),
+      email: form.value.email,
       dni_nie: form.value.dni_nie.trim().toUpperCase(),
-      birth_date: form.value.birth_date,
+      birth_date: form.value.birth_date
+    });
+
+    // 2. Intentar crear la solicitud de inscripción en FastAPI
+    const payload = {
+      course_id: Number(id),
       has_darde: form.value.has_darde === true,
-      previous_education: form.value.previous_education ? form.value.previous_education.trim() : null,
-      phone: form.value.phone,
-      municipality: form.value.municipality,
-      province: form.value.province,
-      hasDisability: form.value.hasDisability,
-      disabilityCertificate: form.value.disabilityCertificate,
-      socialMedia: form.value.socialMedia,
-      internetExperience: form.value.internetExperience,
-      additionalComments: form.value.additionalComments
+      previous_education: form.value.previous_education ? form.value.previous_education.trim() : null
     };
 
-    await api.post('/applications', newApplication);
+    await api.post('/api/v1/applications/', payload);
 
     alert('¡Tu solicitud de inscripción se ha registrado con éxito! Estado: Pendiente de revisión.');
     isEnrolled.value = true;
     await checkCourseCapacity();
+
   } catch (err: any) {
-    submitError.value = err?.response?.data || err.message || 'Error al enviar la inscripción. Inténtalo de nuevo.';
+    const errorDetail = err?.response?.data?.detail;
+
+    // 3. Manejo inteligente si el aforo está completo ("Course is full")
+    if (errorDetail === "Course is full") {
+      if (confirm('El cupo para este curso está lleno. ¿Deseas inscribirte en la lista de espera?')) {
+        try {
+          await api.post('/api/v1/waiting-list/', null, {
+            params: {
+              user_id: Number(authStore.user?.id),
+              course_id: Number(id)
+            }
+          });
+          alert('¡Te has registrado con éxito en la lista de espera!');
+          isEnrolled.value = true;
+          await checkCourseCapacity();
+        } catch (waitErr: any) {
+          submitError.value = waitErr?.response?.data?.detail || 'Error al unirse a la lista de espera.';
+        }
+      }
+    } else {
+      submitError.value = errorDetail || err.message || 'Error al procesar la inscripción.';
+    }
   } finally {
     submitting.value = false;
   }
