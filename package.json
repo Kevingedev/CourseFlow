@@ -4,9 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "vite": "vite",
     "server": "json-server --watch api/db.json --port 3000",
-    "dev": "concurrently \"pnpm run vite\" \"pnpm run server\"",
+    "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
