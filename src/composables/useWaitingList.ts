@@ -6,12 +6,14 @@ import type { WaitingListEntry } from '@/types/waitingList'
 
 export const useWaitingList = () => {
   const courses = ref<CourseRecord[]>([])
-  const selectedCourseId = ref<string>('')
+  const selectedCourseId = ref<string>('all')
   const entries = ref<WaitingListEntry[]>([])
   const loadingCourses = ref(false)
   const loadingEntries = ref(false)
   const error = ref<string | null>(null)
   const searchQuery = ref('')
+
+  const isAllCoursesSelected = computed(() => selectedCourseId.value === 'all')
 
   const courseNameById = computed(() => {
     const map = new Map<string, string>()
@@ -57,12 +59,6 @@ export const useWaitingList = () => {
     try {
       const loaded = await coursesService.getCourses()
       courses.value = loaded
-      if (!selectedCourseId.value && loaded.length > 0) {
-        const firstCourse = loaded[0]
-        if (firstCourse) {
-          selectedCourseId.value = String(firstCourse.id)
-        }
-      }
     } catch (err: unknown) {
       error.value = err instanceof Error ? err.message : 'No se pudieron cargar los cursos.'
     } finally {
@@ -71,16 +67,22 @@ export const useWaitingList = () => {
   }
 
   const loadEntries = async () => {
-    if (!selectedCourseId.value) {
-      entries.value = []
-      return
-    }
-
     loadingEntries.value = true
     error.value = null
 
     try {
-      entries.value = await waitingListService.getWaitingListByCourse(selectedCourseId.value)
+      if (isAllCoursesSelected.value) {
+        const all = await Promise.allSettled(
+          courses.value.map((course) =>
+            waitingListService.getWaitingListByCourse(course.id),
+          ),
+        )
+        entries.value = all.flatMap((result) =>
+          result.status === 'fulfilled' ? result.value : [],
+        )
+      } else {
+        entries.value = await waitingListService.getWaitingListByCourse(selectedCourseId.value)
+      }
     } catch (err: unknown) {
       error.value =
         err instanceof Error ? err.message : 'No se pudo cargar la lista de espera.'

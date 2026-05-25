@@ -78,8 +78,32 @@ export const dashboardService = {
    * Fetches waiting list for a specific course
    */
   async getWaitingListByCourse(courseId: string | number): Promise<WaitingListEntry[]> {
-    const response = await api.get<RawWaitingListEntry[]>(`/api/v1/waiting-list/${courseId}`)
-    return response.data
+    const response = await api.get<unknown>(`/api/v1/waiting-list/${courseId}`)
+    const payload = response.data
+
+    if (Array.isArray(payload)) {
+      return payload as WaitingListEntry[]
+    }
+
+    if (payload && typeof payload === 'object') {
+      const record = payload as Record<string, unknown>
+      const candidates = [
+        record.entries,
+        record.items,
+        record.results,
+        record.data,
+        record.waiting_list,
+        record.waitingList,
+      ]
+
+      for (const candidate of candidates) {
+        if (Array.isArray(candidate)) {
+          return candidate as WaitingListEntry[]
+        }
+      }
+    }
+
+    return []
   },
 
   /**

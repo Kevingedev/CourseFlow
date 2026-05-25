@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RefreshCcw, Search } from '@lucide/vue'
+import { Search } from '@lucide/vue'
 import WaitingListTable from './WaitingListTable.vue'
 import { useWaitingList } from '@/composables/useWaitingList'
 
@@ -48,7 +48,8 @@ const handleRefresh = async () => {
           </div>
 
           <select v-model="selectedCourseId" class="course-filter" :disabled="loadingCourses">
-            <option v-if="loadingCourses" value="">Cargando cursos...</option>
+            <option value="all">Todos los cursos</option>
+            <option v-if="loadingCourses" value="all" disabled>Cargando cursos...</option>
             <option
               v-for="course in courses"
               :key="String(course.id)"
@@ -64,7 +65,6 @@ const handleRefresh = async () => {
             :disabled="loadingCourses || loadingEntries"
             @click="handleRefresh"
           >
-            <RefreshCcw :size="16" aria-hidden="true" />
             {{ loadingEntries ? 'Actualizando...' : 'Recargar' }}
           </button>
         </div>
@@ -75,11 +75,6 @@ const handleRefresh = async () => {
         <p>Cargando lista de espera...</p>
       </div>
 
-      <div v-else-if="!selectedCourseId" class="state-panel empty">
-        <h4>Selecciona un curso</h4>
-        <p>Elige un curso para consultar su lista de espera.</p>
-      </div>
-
       <div v-else-if="entries.length === 0" class="state-panel empty">
         <template v-if="searchQuery.trim()">
           <h4>Sin resultados</h4>
@@ -88,12 +83,22 @@ const handleRefresh = async () => {
         <template v-else>
           <h4>Sin usuarios en espera</h4>
           <p>
-            {{ selectedCourse?.name ? `El curso "${selectedCourse.name}" no tiene registros en lista de espera.` : 'Este curso no tiene registros en lista de espera.' }}
+            {{
+              selectedCourseId === 'all'
+                ? 'No hay registros en lista de espera actualmente.'
+                : selectedCourse?.name
+                  ? `El curso "${selectedCourse.name}" no tiene registros en lista de espera.`
+                  : 'Este curso no tiene registros en lista de espera.'
+            }}
           </p>
         </template>
       </div>
 
-      <WaitingListTable v-else :entries="entries" :course-name-by-id="courseNameById" />
+      <WaitingListTable
+        v-else
+        :entries="entries"
+        :course-name-by-id="courseNameById"
+      />
     </section>
   </div>
 </template>
@@ -106,22 +111,26 @@ const handleRefresh = async () => {
 }
 
 .waiting-list-card {
-  padding: 1.25rem 1.35rem;
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-height: 100%;
 }
 
 .table-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1.25rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  gap: 1rem;
 }
 
 .table-header h3 {
-  margin: 0.25rem 0 0;
+  margin: 0;
   color: var(--text-dark);
-  font-size: 1.25rem;
+  font-size: 1.4rem;
 }
 
 .eyebrow {
@@ -130,62 +139,95 @@ const handleRefresh = async () => {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--primary-50);
-  margin: 0;
+  margin: 0 0 0.4rem;
 }
 
 .table-header-actions {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+  flex-shrink: 0;
 }
 
 .search-wrapper {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .search-icon {
   position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
+  left: 0.85rem;
   color: var(--text-muted);
+  pointer-events: none;
 }
 
 .search-input {
   border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 0.7rem 0.9rem 0.7rem 2.25rem;
-  min-width: 260px;
-  background: rgba(255, 255, 255, 0.85);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem 0.6rem 2.35rem;
+  width: 240px;
+  background: rgba(255, 255, 255, 0.9);
   outline: none;
   font-weight: 600;
   color: var(--text-dark);
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
 }
 
 .search-input:focus {
-  border-color: rgba(67, 17, 185, 0.35);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 17, 185, 0.08);
 }
 
 .course-filter {
   border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 0.7rem 0.9rem;
-  min-width: 240px;
-  background: rgba(255, 255, 255, 0.85);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  background: rgba(255, 255, 255, 0.9);
   font-weight: 700;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-outline {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.7);
   color: var(--text-dark);
 }
 
+.btn-outline:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.course-filter:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 17, 185, 0.08);
+}
+
 .state-panel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 2.25rem 1rem;
-  color: var(--text-muted);
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 1rem;
+  border: 1px dashed rgba(67, 17, 185, 0.18);
+  border-radius: 18px;
+  padding: 2rem;
 }
 
 .state-panel.empty h4 {
@@ -195,17 +237,17 @@ const handleRefresh = async () => {
 
 .state-panel.empty p {
   margin: 0;
-  max-width: 540px;
-  text-align: center;
+  color: var(--text-muted);
+  max-width: 420px;
 }
 
 .spinner {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  border: 3px solid rgba(100, 116, 139, 0.2);
-  border-top-color: rgba(67, 17, 185, 0.75);
-  animation: spin 0.8s linear infinite;
+  width: 36px;
+  height: 36px;
+  border: 4px solid var(--primary-color-soft);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 .feedback-banner {
@@ -234,12 +276,12 @@ const handleRefresh = async () => {
 
   .table-header-actions {
     justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .search-input,
   .course-filter {
     width: 100%;
-    min-width: 0;
   }
 }
 </style>

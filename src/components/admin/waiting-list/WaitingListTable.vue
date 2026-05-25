@@ -7,8 +7,9 @@ defineProps<{
 }>()
 
 const formatDate = (iso: string): string => {
+  if (!iso) return '—'
   const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return iso
+  if (Number.isNaN(date.getTime())) return '—'
   return date.toLocaleString('es-ES', {
     year: 'numeric',
     month: '2-digit',
@@ -17,6 +18,7 @@ const formatDate = (iso: string): string => {
     minute: '2-digit',
   })
 }
+
 </script>
 
 <template>
@@ -25,7 +27,7 @@ const formatDate = (iso: string): string => {
       <thead>
         <tr>
           <th>Posición</th>
-          <th>Usuario</th>
+          <th>Solicitud</th>
           <th>Curso</th>
           <th>Registro</th>
         </tr>
@@ -36,15 +38,20 @@ const formatDate = (iso: string): string => {
             <span class="pill">{{ entry.position }}</span>
           </td>
           <td>
-            <div class="cell-main">
-              <strong>{{ entry.user?.name || `Usuario #${entry.user_id}` }}</strong>
+            <div class="request-cell">
+              <p class="request-name">
+                {{ entry.user?.name || `Usuario #${entry.user_id}` }}
+              </p>
+              <p class="request-email">
+                {{ entry.user?.email || `ID usuario: ${entry.user_id}` }}
+              </p>
             </div>
           </td>
           <td>
-            <span class="cell-muted">{{
+            <span class="course-pill">{{
               courseNameById.get(String(entry.course_id)) ||
-              entry.course?.name ||
-              `Curso #${entry.course_id}`
+                entry.course?.name ||
+                `Curso #${entry.course_id}`
             }}</span>
           </td>
           <td>
@@ -59,7 +66,6 @@ const formatDate = (iso: string): string => {
 <style scoped>
 .table-shell {
   overflow-x: auto;
-  padding-top: 1rem;
 }
 
 .waiting-table {
@@ -70,16 +76,17 @@ const formatDate = (iso: string): string => {
 
 .waiting-table th {
   text-align: left;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 0.9rem 0.75rem;
+  letter-spacing: 0.06em;
+  padding: 1rem 0.75rem;
   color: var(--text-muted);
 }
 
 .waiting-table td {
-  padding: 0.95rem 0.75rem;
-  border-top: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 1rem 0.75rem;
+  border-bottom: 1px solid rgba(67, 17, 185, 0.08);
+  text-align: left;
   vertical-align: middle;
 }
 
@@ -96,18 +103,40 @@ const formatDate = (iso: string): string => {
   border: 1px solid rgba(67, 17, 185, 0.18);
 }
 
-.cell-main {
+.request-cell {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.2rem;
 }
 
-.cell-main strong {
+.request-name {
+  margin: 0;
+  font-weight: 800;
   color: var(--text-dark);
+}
+
+.request-email {
+  margin: 0;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .cell-muted {
   color: var(--text-muted);
   font-weight: 600;
 }
+
+.course-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(67, 17, 185, 0.08);
+  color: var(--primary-color);
+}
+
 </style>

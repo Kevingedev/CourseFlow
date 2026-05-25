@@ -24,7 +24,6 @@ const statuses: Array<{ value: ApplicationStatus | 'all'; label: string }> = [
   { value: 'all', label: 'Todos' },
   { value: 'pending', label: 'Pendientes' },
   { value: 'accepted', label: 'Aceptadas' },
-  { value: 'rejected', label: 'Rechazadas' },
   { value: 'cancelled', label: 'Canceladas' },
 ]
 

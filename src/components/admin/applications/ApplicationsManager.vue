@@ -63,7 +63,7 @@ const handleConfirmDelete = async () => {
         <strong>{{ stats.accepted }}</strong>
       </article>
       <article class="stat-card rejected">
-        <span>Rechazadas</span>
+        <span>En lista de espera</span>
         <strong>{{ stats.rejected }}</strong>
       </article>
     </section>

@@ -1,5 +1,6 @@
 import { computed, onMounted, ref } from 'vue'
 import { applicationsService } from '@/services/applicationsService'
+import { waitingListService } from '@/services/waitingListService'
 import type {
   ApplicationRecord,
   ApplicationsFeedback,
@@ -7,7 +8,7 @@ import type {
 } from '@/types/applications'
 
 export const useApplications = () => {
-  const applications = ref<ApplicationRecord[]>([])
+  const applicationsRaw = ref<ApplicationRecord[]>([])
   const loading = ref(false)
   const deletingApplicationId = ref<number | null>(null)
   const updatingStatusId = ref<number | null>(null)
@@ -16,13 +17,17 @@ export const useApplications = () => {
   const statusFilter = ref<ApplicationStatus | 'all'>('all')
 
   const sortedApplications = computed(() =>
-    [...applications.value].sort((left, right) => right.id - left.id),
+    [...applicationsRaw.value].sort((left, right) => right.id - left.id),
   )
 
   const filteredApplications = computed(() => {
     const query = searchQuery.value.toLowerCase().trim()
 
     return sortedApplications.value.filter((application) => {
+      if (application.status === 'rejected') {
+        return false
+      }
+
       const matchesStatus = statusFilter.value === 'all' || application.status === statusFilter.value
       const searchableText = [
         application.id,
@@ -41,10 +46,10 @@ export const useApplications = () => {
   })
 
   const stats = computed(() => ({
-    total: applications.value.length,
-    pending: applications.value.filter((application) => application.status === 'pending').length,
-    accepted: applications.value.filter((application) => application.status === 'accepted').length,
-    rejected: applications.value.filter((application) => application.status === 'rejected').length,
+    total: applicationsRaw.value.length,
+    pending: applicationsRaw.value.filter((application) => application.status === 'pending').length,
+    accepted: applicationsRaw.value.filter((application) => application.status === 'accepted').length,
+    rejected: applicationsRaw.value.filter((application) => application.status === 'rejected').length,
   }))
 
   const resetFeedback = () => {
@@ -55,7 +60,7 @@ export const useApplications = () => {
     loading.value = true
 
     try {
-      applications.value = await applicationsService.getApplications()
+      applicationsRaw.value = await applicationsService.getApplications()
     } catch (error: unknown) {
       feedback.value = {
         type: 'error',
@@ -82,9 +87,27 @@ export const useApplications = () => {
         application.id,
         status,
       )
-      applications.value = applications.value.map((item) =>
-        item.id === updatedApplication.id ? updatedApplication : item,
-      )
+
+      if (updatedApplication.status === 'rejected') {
+        try {
+          await waitingListService.addToWaitingList({
+            user_id: updatedApplication.user_id,
+            course_id: updatedApplication.course_id,
+          })
+        } catch (waitingListError) {
+          console.warn('[applications] Failed to enqueue waiting list entry:', waitingListError)
+        }
+      }
+
+      if (updatedApplication.status === 'rejected') {
+        applicationsRaw.value = applicationsRaw.value.map((item) =>
+          item.id === updatedApplication.id ? updatedApplication : item,
+        )
+      } else {
+        applicationsRaw.value = applicationsRaw.value.map((item) =>
+          item.id === updatedApplication.id ? updatedApplication : item,
+        )
+      }
       feedback.value = {
         type: 'success',
         message: 'Estado de solicitud actualizado correctamente.',
@@ -106,7 +129,7 @@ export const useApplications = () => {
 
     try {
       await applicationsService.deleteApplication(application.id)
-      applications.value = applications.value.filter((item) => item.id !== application.id)
+      applicationsRaw.value = applicationsRaw.value.filter((item) => item.id !== application.id)
 
       feedback.value = {
         type: 'success',
@@ -127,6 +150,7 @@ export const useApplications = () => {
 
   return {
     applications: filteredApplications,
+    applicationsRaw,
     deletingApplicationId,
     feedback,
     loading,

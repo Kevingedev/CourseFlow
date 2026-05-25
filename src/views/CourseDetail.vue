@@ -139,7 +139,14 @@ async function checkCourseCapacity() {
       isBlockedByCapacity.value = totalApplicationsCount.value >= Math.floor(capacity * 1.2);
     } else {
       const waitlistRes = await api.get(`/api/v1/waiting-list/${id}`);
-      totalApplicationsCount.value = waitlistRes.data.length;
+      const payload = waitlistRes.data;
+      const list =
+        Array.isArray(payload)
+          ? payload
+          : payload && typeof payload === 'object'
+            ? (payload.entries || payload.items || payload.results || payload.data || payload.waiting_list || payload.waitingList)
+            : null;
+      totalApplicationsCount.value = Array.isArray(list) ? list.length : 0;
     }
   } catch (err) {
     console.error('Error checking capacity:', err);
