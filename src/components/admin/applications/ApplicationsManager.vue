@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useApplications } from '@/composables/useApplications'
 import ApplicationsTable from './ApplicationsTable.vue'
+import CustomConfirmModal from '@/components/common/CustomConfirmModal.vue'
 import type { ApplicationRecord } from '@/types/applications'
 
 const {
@@ -17,16 +19,20 @@ const {
   updateStatus,
 } = useApplications()
 
-const handleDelete = async (application: ApplicationRecord) => {
-  const confirmed = window.confirm(
-    `Vas a eliminar la solicitud #${application.id}. Esta acción no se puede deshacer.`,
-  )
+const confirmOpen = ref(false)
+const applicationToDelete = ref<ApplicationRecord | null>(null)
 
-  if (!confirmed) {
-    return
+const handleDelete = (application: ApplicationRecord) => {
+  applicationToDelete.value = application
+  confirmOpen.value = true
+}
+
+const handleConfirmDelete = async () => {
+  if (applicationToDelete.value) {
+    await removeApplication(applicationToDelete.value)
   }
-
-  await removeApplication(application)
+  confirmOpen.value = false
+  applicationToDelete.value = null
 }
 </script>
 
@@ -74,6 +80,18 @@ const handleDelete = async (application: ApplicationRecord) => {
       @status-change="updateStatus"
       @update:search-query="searchQuery = $event"
       @update:status-filter="statusFilter = $event"
+    />
+
+    <CustomConfirmModal
+      :open="confirmOpen"
+      title="Eliminar solicitud"
+      :message="applicationToDelete ? `Vas a eliminar la solicitud #${applicationToDelete.id}. Esta acción no se puede deshacer.` : ''"
+      confirm-text="Eliminar"
+      cancel-text="Cancelar"
+      type="danger"
+      :loading="deletingApplicationId !== null"
+      @close="confirmOpen = false"
+      @confirm="handleConfirmDelete"
     />
   </div>
 </template>
