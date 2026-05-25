@@ -1,6 +1,7 @@
 import { computed, shallowRef, watch } from 'vue'
 import { es } from './locales/es'
 import { en } from './locales/en'
+import { eu } from './locales/eu'
 import type { LocaleCode, LocaleOption, TranslationDictionary } from './types'
 
 const storageKey = 'courseflow.locale'
@@ -8,6 +9,7 @@ const storageKey = 'courseflow.locale'
 const dictionaries: Record<LocaleCode, TranslationDictionary> = {
   es,
   en,
+  eu,
 }
 
 export const localeOptions: LocaleOption[] = [

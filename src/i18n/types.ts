@@ -1,4 +1,4 @@
-export type LocaleCode = 'es' | 'en'
+export type LocaleCode = 'es' | 'en' | 'eu'
 
 export type TranslationDictionary = Record<string, string>
 
