@@ -15,9 +15,10 @@
           <li><strong>Dashboard:</strong> Resumen general de métricas y actividad reciente.</li>
           <li><strong>Gestión de Solicitudes:</strong> Vista para revisar solicitudes de los usuarios.</li>
           <li><strong>Gestión de Cursos:</strong> Panel para trabajar con los cursos disponibles.</li>
-          <li><strong>Lista de Espera:</strong> Área para administrar la lista de usuarios o estudiantes en espera.</li>
           <li><strong>Gestión de Usuarios:</strong> Solo disponible para Super Administradores, permite administrar cuentas de administradores.</li>
+          <li><strong>Lista de Espera:</strong> Área para administrar la lista de usuarios o estudiantes en espera.</li>
           <li><strong>Tutorial:</strong> Enlace directo a esta guía para consultar cómo funciona el dashboard.</li>
+          <li><strong>Ir a ver el sitio:</strong> Acceso directo al sitio web como usuario.</li>
         </ul>
       </section>
 
@@ -35,7 +36,7 @@
       <section>
         <h3>3. Cómo usar el Dashboard</h3>
         <p>
-          En la pantalla principal del dashboard se muestra un resumen de datos clave, como métricas y gráficos. Usa esta vista para obtener una visión rápida del estado general.
+          En la pantalla principal del dashboard se muestra un resumen de datos clave, como métricas y gráficos. Usa esta vista para obtener una visión rápida del estado general. <br>Información de sesión del usuario logueado. <br>Accesos rapidos a la gestión administrativa: Solicitudes, Cursos, Usuarios y Lista de espera.
         </p>
       </section>
 
