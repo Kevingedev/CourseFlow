@@ -281,7 +281,7 @@ async function submitForm() {
               course_id: Number(id)
             }
           });
-          alert('¡Te has registrado con éxito en la lista de espera!');
+          // alert('¡Te has registrado con éxito en la lista de espera!');
           isEnrolled.value = true;
           await checkCourseCapacity();
         } catch (waitErr: any) {
