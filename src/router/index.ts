@@ -67,6 +67,12 @@ const router = createRouter({
           meta: { title: 'Lista de Espera' }
         },
         {
+          path: 'tutorial',
+          name: 'admin-tutorial',
+          component: () => import('../views/admin/AdminTutorialView.vue'),
+          meta: { title: 'Tutorial de Admin' }
+        },
+        {
           path: 'users',
           name: 'admin-users',
           component: () => import('../views/admin/AdminUsersView.vue'),
