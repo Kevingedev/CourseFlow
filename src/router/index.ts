@@ -63,7 +63,7 @@ const router = createRouter({
         {
           path: 'waiting-list',
           name: 'admin-waiting-list',
-          component: () => import('../views/admin/PlaceholderView.vue'),
+          component: () => import('../views/admin/AdminWaitingListView.vue'),
           meta: { title: 'Lista de Espera' }
         },
         {
