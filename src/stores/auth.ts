@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(null)
   const hasSession = ref(
     Cookies.get(SESSION_STORAGE_KEY) === ACTIVE_SESSION_VALUE ||
-      localStorage.getItem(SESSION_STORAGE_KEY) === ACTIVE_SESSION_VALUE
+      localStorage.getItem(SESSION_STORAGE_KEY) === ACTIVE_SESSION_VALUE,
   )
   const isInitialized = ref(false)
   let initializePromise: Promise<void> | null = null

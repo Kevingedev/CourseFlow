@@ -16,7 +16,7 @@ const langMenuTop = ref(0)
 const langMenuLeft = ref(0)
 
 const currentLocaleShort = computed(() => {
-  const opt = localeOptions.find(o => o.code === locale.value)
+  const opt = localeOptions.find((o) => o.code === locale.value)
   return opt?.shortLabel ?? 'ES'
 })
 
@@ -70,7 +70,11 @@ onUnmounted(() => {
         <router-link to="/about" class="nav-link">{{ t('nav.about') }}</router-link>
         <router-link to="/courses" class="nav-link">{{ t('nav.courses') }}</router-link>
         <router-link to="/contact" class="nav-link">{{ t('nav.contact') }}</router-link>
-        <router-link v-if="authStore.isAdminOrSuadmin" to="/admin/dashboard" class="nav-link admin-link">
+        <router-link
+          v-if="authStore.isAdminOrSuadmin"
+          to="/admin/dashboard"
+          class="nav-link admin-link"
+        >
           {{ t('nav.admin') }}
         </router-link>
 
@@ -113,7 +117,7 @@ onUnmounted(() => {
                   type="button"
                   class="lang-dropdown-item"
                   :class="{ active: option.code === locale }"
-                  @click="setLocale(option.code as LocaleCode); closeLangDropdown()"
+                  @click="setLocale(option.code as LocaleCode)"
                 >
                   <svg
                     v-if="option.code === locale"
@@ -137,7 +141,9 @@ onUnmounted(() => {
         </div>
 
         <template v-if="authStore.isAuthenticated">
-          <span class="user-greeting">{{ t('nav.greeting', { name: authStore.user?.fullName || '' }) }}</span>
+          <span class="user-greeting">{{
+            t('nav.greeting', { name: authStore.user?.fullName || '' })
+          }}</span>
           <button class="btn-logout" @click="handleLogout">{{ t('nav.logout') }}</button>
         </template>
         <template v-else>
@@ -182,10 +188,21 @@ onUnmounted(() => {
     <!-- Mobile Menu Overlay -->
     <Transition name="slide">
       <div v-if="isMenuOpen" class="mobile-menu">
-        <router-link to="/about" class="mobile-link" @click="isMenuOpen = false">{{ t('nav.about') }}</router-link>
-        <router-link to="/courses" class="mobile-link" @click="isMenuOpen = false">{{ t('nav.courses') }}</router-link>
-        <router-link to="/contact" class="mobile-link" @click="isMenuOpen = false">{{ t('nav.contact') }}</router-link>
-        <router-link v-if="authStore.isAdminOrSuadmin" to="/admin/dashboard" class="mobile-link admin-link" @click="isMenuOpen = false">
+        <router-link to="/about" class="mobile-link" @click="isMenuOpen = false">{{
+          t('nav.about')
+        }}</router-link>
+        <router-link to="/courses" class="mobile-link" @click="isMenuOpen = false">{{
+          t('nav.courses')
+        }}</router-link>
+        <router-link to="/contact" class="mobile-link" @click="isMenuOpen = false">{{
+          t('nav.contact')
+        }}</router-link>
+        <router-link
+          v-if="authStore.isAdminOrSuadmin"
+          to="/admin/dashboard"
+          class="mobile-link admin-link"
+          @click="isMenuOpen = false"
+        >
           {{ t('nav.admin') }}
         </router-link>
 
@@ -198,7 +215,7 @@ onUnmounted(() => {
               type="button"
               class="mobile-lang-btn"
               :class="{ active: option.code === locale }"
-              @click="setLocale(option.code as LocaleCode)"
+              @click="setLocale(option.code)"
             >
               <svg
                 v-if="option.code === locale"
@@ -222,11 +239,18 @@ onUnmounted(() => {
         <div class="mobile-divider"></div>
 
         <template v-if="authStore.isAuthenticated">
-          <div class="mobile-user-greeting">{{ t('nav.greeting', { name: authStore.user?.fullName || '' }) }}</div>
+          <div class="mobile-user-greeting">
+            {{ t('nav.greeting', { name: authStore.user?.fullName || '' }) }}
+          </div>
           <button class="btn-logout w-full" @click="handleLogout">{{ t('nav.logout') }}</button>
         </template>
         <template v-else>
-          <router-link to="/login" class="btn-primary w-full text-center" @click="isMenuOpen = false">{{ t('nav.login') }}</router-link>
+          <router-link
+            to="/login"
+            class="btn-primary w-full text-center"
+            @click="isMenuOpen = false"
+            >{{ t('nav.login') }}</router-link
+          >
         </template>
       </div>
     </Transition>

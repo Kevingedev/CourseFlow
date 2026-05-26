@@ -153,7 +153,10 @@ watch(totalPages, (nextTotalPages) => {
       </template>
       <template v-else>
         <h4>No hay cursos registrados</h4>
-        <p>Crea tu primer curso presionando el botón "Nuevo curso" y aparecerá aquí con sus acciones de edición y desactivación.</p>
+        <p>
+          Crea tu primer curso presionando el botón "Nuevo curso" y aparecerá aquí con sus acciones
+          de edición y desactivación.
+        </p>
       </template>
     </div>
 
@@ -177,7 +180,9 @@ watch(totalPages, (nextTotalPages) => {
               </div>
             </td>
             <td>
-              <span class="date-range">{{ formatDateRange(course.start_date, course.end_date) }}</span>
+              <span class="date-range">{{
+                formatDateRange(course.start_date, course.end_date)
+              }}</span>
             </td>
             <td>
               <span class="capacity-pill">{{ formatCapacity(course.capacity) }}</span>
@@ -198,11 +203,7 @@ watch(totalPages, (nextTotalPages) => {
                   :disabled="deletingCourseId === course.id"
                   @click="emit('remove', course)"
                 >
-                  {{
-                    deletingCourseId === course.id
-                      ? 'Desactivando...'
-                      : 'Desactivar'
-                  }}
+                  {{ deletingCourseId === course.id ? 'Desactivando...' : 'Desactivar' }}
                 </button>
               </div>
             </td>
@@ -299,7 +300,9 @@ watch(totalPages, (nextTotalPages) => {
   color: var(--text-dark);
   font-size: 0.9rem;
   width: 200px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   font-family: inherit;
 }
 

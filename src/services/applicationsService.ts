@@ -1,8 +1,5 @@
 import api from './api'
-import type {
-  ApplicationRecord,
-  ApplicationStatus,
-} from '@/types/applications'
+import type { ApplicationRecord, ApplicationStatus } from '@/types/applications'
 
 interface RawApplication {
   id: number
@@ -91,9 +88,7 @@ export const applicationsService = {
       return response.data.map(mapApplication)
     } catch (error: unknown) {
       console.error('[applications] Failed to load applications:', error)
-      throw new Error(
-        getApiErrorMessage(error, 'No se pudo cargar la lista de solicitudes.'),
-      )
+      throw new Error(getApiErrorMessage(error, 'No se pudo cargar la lista de solicitudes.'))
     }
   },
 

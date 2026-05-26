@@ -11,7 +11,9 @@ const { t } = useI18n()
 
     <section class="features section-padding">
       <div class="container">
-        <h2 class="section-title">{{ t('home.features.titlePrefix') }} <span class="text-accent">Course Flow?</span></h2>
+        <h2 class="section-title">
+          {{ t('home.features.titlePrefix') }} <span class="text-accent">Course Flow?</span>
+        </h2>
         <div class="features-grid">
           <div class="feature-card glass-card">
             <h3>{{ t('home.features.card1.title') }}</h3>

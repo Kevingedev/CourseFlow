@@ -76,9 +76,7 @@ export const adminUsersService = {
       const response = await api.get<RawAdminUser[]>('/api/admin/users')
       return response.data.map(mapAdminUser)
     } catch (error: unknown) {
-      throw new Error(
-        getApiErrorMessage(error, 'No se pudo cargar la lista de administradores.'),
-      )
+      throw new Error(getApiErrorMessage(error, 'No se pudo cargar la lista de administradores.'))
     }
   },
 
@@ -91,10 +89,7 @@ export const adminUsersService = {
     }
   },
 
-  async updateAdminUser(
-    userId: string,
-    payload: AdminUserUpdatePayload,
-  ): Promise<AdminUserRecord> {
+  async updateAdminUser(userId: string, payload: AdminUserUpdatePayload): Promise<AdminUserRecord> {
     try {
       const response = await api.patch<RawAdminUser>(`/api/admin/users/${userId}`, payload)
       return mapAdminUser(response.data)
@@ -103,10 +98,7 @@ export const adminUsersService = {
     }
   },
 
-  async updateAdminUserStatus(
-    userId: string,
-    isActive: boolean,
-  ): Promise<AdminUserRecord> {
+  async updateAdminUserStatus(userId: string, isActive: boolean): Promise<AdminUserRecord> {
     try {
       const response = await api.patch<RawAdminUser>(`/api/admin/users/${userId}`, {
         is_active: isActive,

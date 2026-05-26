@@ -2,35 +2,35 @@
 
 :root {
   /* -- Primarios (Púrpura) -- */
-  --primary-100: #21006C;
-  --primary-90: #2E0490;
-  --primary-80: #32059B;
-  --primary-70: #3B0BAC;
-  --primary-60: #4311B9; /* Principal */
-  --primary-50: #724CCA;
-  --primary-40: #A18BDC;
-  --primary-30: #CBBFE8;
-  --primary-20: #E5DFF3;
-  --primary-10: #F5F2FA;
+  --primary-100: #21006c;
+  --primary-90: #2e0490;
+  --primary-80: #32059b;
+  --primary-70: #3b0bac;
+  --primary-60: #4311b9; /* Principal */
+  --primary-50: #724cca;
+  --primary-40: #a18bdc;
+  --primary-30: #cbbfe8;
+  --primary-20: #e5dff3;
+  --primary-10: #f5f2fa;
 
   /* -- Secundarios (Naranja / Coral) -- */
-  --secondary-100: #6F1A00;
-  --secondary-90: #B22A01;
-  --secondary-80: #CA3A0F;
-  --secondary-78: #E24C1F;
-  --secondary-60: #EC5620; /* Principal */
-  --secondary-50: #F1805E;
-  --secondary-40: #F5AA94;
-  --secondary-30: #F9CCBF;
-  --secondary-20: #FBDDD4;
-  --secondary-10: #FDEEEA;
+  --secondary-100: #6f1a00;
+  --secondary-90: #b22a01;
+  --secondary-80: #ca3a0f;
+  --secondary-78: #e24c1f;
+  --secondary-60: #ec5620; /* Principal */
+  --secondary-50: #f1805e;
+  --secondary-40: #f5aa94;
+  --secondary-30: #f9ccbf;
+  --secondary-20: #fbddd4;
+  --secondary-10: #fdeeea;
 
   /* -- Acentos y Neutros -- */
-  --accent-orange: #FF4700;
-  --accent-teal: #0A4749;
-  --neutral-white: #FFFFFF;
+  --accent-orange: #ff4700;
+  --accent-teal: #0a4749;
+  --neutral-white: #ffffff;
   --neutral-black: #000000;
-  --neutral-gray: #F6F6F6;
+  --neutral-gray: #f6f6f6;
 
   /* Semantic Mappings */
   --primary-color: var(--primary-60);
@@ -340,4 +340,3 @@ h3 {
   text-align: center;
   margin-top: 1.5rem;
 }
-

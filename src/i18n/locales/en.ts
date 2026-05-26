@@ -10,7 +10,8 @@ export const en: TranslationDictionary = {
   'nav.greeting': 'Hi, {name}',
   'nav.language': 'Language',
 
-  'footer.description': 'Professional learning management platform. Supporting digital talent and inclusion.',
+  'footer.description':
+    'Professional learning management platform. Supporting digital talent and inclusion.',
   'footer.quickLinks': 'Quick links',
   'footer.about': 'About us',
   'footer.courses': 'Training programs',
@@ -23,7 +24,8 @@ export const en: TranslationDictionary = {
 
   'home.hero.titlePrefix': 'We open',
   'home.hero.titleAccent': 'inclusive paths into digital talent.',
-  'home.hero.subtitle': 'Discover a new way to learn and join technology training programs. Designed to support diverse talent and an inclusive society.',
+  'home.hero.subtitle':
+    'Discover a new way to learn and join technology training programs. Designed to support diverse talent and an inclusive society.',
   'home.hero.primary': 'Explore Programs',
   'home.hero.secondary': 'About us',
   'home.hero.imageAlt': 'Inclusive digital talent',
@@ -33,38 +35,50 @@ export const en: TranslationDictionary = {
   'home.features.card2.title': 'Flexible and Inclusive Methodology',
   'home.features.card2.text': 'Access training anytime, from anywhere, at your own pace.',
   'home.features.card3.title': 'Practical Learning',
-  'home.features.card3.text': 'Work on real, dynamic projects designed to move your digital career forward.',
+  'home.features.card3.text':
+    'Work on real, dynamic projects designed to move your digital career forward.',
 
   'about.hero.titlePrefix': 'Meet',
-  'about.hero.subtitle': 'We build an equitable, accessible technology learning environment for everyone.',
+  'about.hero.subtitle':
+    'We build an equitable, accessible technology learning environment for everyone.',
   'about.mission.title': 'Our Mission',
-  'about.mission.text': 'We support people in their digital development with inclusive technology training that helps reduce the digital divide and promote diversity in tech.',
+  'about.mission.text':
+    'We support people in their digital development with inclusive technology training that helps reduce the digital divide and promote diversity in tech.',
   'about.vision.title': 'Our Vision',
-  'about.vision.text': 'To become the reference learning network connecting diverse talent with career opportunities and professional growth in the digital sector.',
+  'about.vision.text':
+    'To become the reference learning network connecting diverse talent with career opportunities and professional growth in the digital sector.',
   'about.values.title': 'Our Values',
   'about.values.innovation.title': 'Innovation',
-  'about.values.innovation.text': 'We constantly seek innovative learning solutions focused on employment.',
+  'about.values.innovation.text':
+    'We constantly seek innovative learning solutions focused on employment.',
   'about.values.inclusion.title': 'Inclusion and Diversity',
-  'about.values.inclusion.text': "We believe in every person's potential and talent, regardless of their starting point.",
+  'about.values.inclusion.text':
+    "We believe in every person's potential and talent, regardless of their starting point.",
   'about.values.accessibility.title': 'Accessibility',
-  'about.values.accessibility.text': 'We provide free, high-quality technology education for diverse communities.',
+  'about.values.accessibility.text':
+    'We provide free, high-quality technology education for diverse communities.',
   'about.impact.title': 'Our Impact Data',
   'about.impact.people': 'People trained and supported in their digital job placement.',
   'about.impact.rate': 'Job placement and success rate with partner companies.',
   'about.impact.partners': 'Partner companies and organizations that trust our talent.',
   'about.story.title': 'Our Story',
-  'about.story.text': 'Founded in 2024, Course Flow was born from the need to offer a more accessible and supportive learning environment in technology. What started as a local digital inclusion project has become a robust platform designed to connect quality training with the jobs of the future.',
+  'about.story.text':
+    'Founded in 2024, Course Flow was born from the need to offer a more accessible and supportive learning environment in technology. What started as a local digital inclusion project has become a robust platform designed to connect quality training with the jobs of the future.',
 
   'courses.hero.titlePrefix': 'Our training',
   'courses.hero.titleAccent': 'pathways',
-  'courses.hero.subtitle': 'Discover free programs designed to help you build a career in technology.',
+  'courses.hero.subtitle':
+    'Discover free programs designed to help you build a career in technology.',
   'courses.categories.title': 'Explore by specialty',
   'courses.categories.web.title': 'Web and App Development',
-  'courses.categories.web.text': 'Build the front-end and back-end technical skills most demanded in the digital sector.',
+  'courses.categories.web.text':
+    'Build the front-end and back-end technical skills most demanded in the digital sector.',
   'courses.categories.data.title': 'Data and Artificial Intelligence',
-  'courses.categories.data.text': 'Master data analysis and learn how to apply AI solutions to real projects.',
+  'courses.categories.data.text':
+    'Master data analysis and learn how to apply AI solutions to real projects.',
   'courses.categories.systems.title': 'Support and Systems',
-  'courses.categories.systems.text': 'Specialize in network infrastructure, cloud systems and professional IT support.',
+  'courses.categories.systems.text':
+    'Specialize in network infrastructure, cloud systems and professional IT support.',
   'courses.catalog.title': 'Course Catalog',
   'courses.loading': 'Loading courses...',
   'courses.error': 'Error: {message}',
@@ -80,7 +94,8 @@ export const en: TranslationDictionary = {
   'courses.showLess': 'Show less',
   'courses.showMore': 'Show more',
   'courses.comingSoon.title': 'Full catalog in progress',
-  'courses.comingSoon.text': 'We are preparing an interactive course catalog. Soon you will be able to search, filter and apply directly to our quality training programs.',
+  'courses.comingSoon.text':
+    'We are preparing an interactive course catalog. Soon you will be able to search, filter and apply directly to our quality training programs.',
   'courses.duration.tbd': 'TBD',
   'courses.duration.year': 'year',
   'courses.duration.years': 'years',
@@ -93,7 +108,8 @@ export const en: TranslationDictionary = {
 
   'contact.hero.titlePrefix': 'Join the',
   'contact.hero.titleAccent': 'change',
-  'contact.hero.subtitle': 'Do you have questions about our programs or want to collaborate with us? Our team is ready to help.',
+  'contact.hero.subtitle':
+    'Do you have questions about our programs or want to collaborate with us? Our team is ready to help.',
   'contact.info.title': 'Contact information',
   'contact.write.title': 'Write to us',
   'contact.call.title': 'Call us',
@@ -166,15 +182,18 @@ export const en: TranslationDictionary = {
   'courseDetail.private.text': 'You must be registered and logged in to apply for this course.',
   'courseDetail.private.cta': 'Log In',
   'courseDetail.enrolled.title': 'You are already registered!',
-  'courseDetail.enrolled.text': 'Your application for this course has already been submitted and is pending review.',
+  'courseDetail.enrolled.text':
+    'Your application for this course has already been submitted and is pending review.',
   'courseDetail.inactive.title': 'Inactive Course',
   'courseDetail.inactive.text': 'This course is not accepting new applications at the moment.',
   'courseDetail.closed.title': 'Applications Closed',
   'courseDetail.closed.text': 'This course started on {date} and no longer accepts new students.',
   'courseDetail.full.title': 'Capacity Reached',
-  'courseDetail.full.text': 'Sorry, this course has exceeded capacity and the maximum waiting list quota.',
+  'courseDetail.full.text':
+    'Sorry, this course has exceeded capacity and the maximum waiting list quota.',
   'courseDetail.form.title': 'Interested in this course?',
-  'courseDetail.form.warning': 'Capacity reached. Your application will go to the waiting list (Pending).',
+  'courseDetail.form.warning':
+    'Capacity reached. Your application will go to the waiting list (Pending).',
   'courseDetail.form.subtitle': 'Complete this form and we will contact you shortly.',
   'courseDetail.form.personal': 'Your Information',
   'courseDetail.form.name': 'First name *',
@@ -228,10 +247,14 @@ export const en: TranslationDictionary = {
   'courseDetail.form.submit': 'Send Application',
   'courseDetail.validation.login': 'You must log in to apply.',
   'courseDetail.validation.terms': 'Please accept the terms and conditions.',
-  'courseDetail.validation.dni': 'The DNI/NIE format is invalid. It must have 8 numbers and 1 letter (e.g. 12345678Z) or a valid NIE format (e.g. X1234567Z).',
+  'courseDetail.validation.dni':
+    'The DNI/NIE format is invalid. It must have 8 numbers and 1 letter (e.g. 12345678Z) or a valid NIE format (e.g. X1234567Z).',
   'courseDetail.validation.age': 'You must be at least 18 years old to apply for this course.',
-  'courseDetail.validation.darde': 'Please select whether you are unemployed with an updated DARDE.',
-  'courseDetail.validation.previousEducation': 'Your previous education description cannot exceed 250 characters.',
-  'courseDetail.validation.success': 'Your application has been submitted successfully. Status: Pending review.',
+  'courseDetail.validation.darde':
+    'Please select whether you are unemployed with an updated DARDE.',
+  'courseDetail.validation.previousEducation':
+    'Your previous education description cannot exceed 250 characters.',
+  'courseDetail.validation.success':
+    'Your application has been submitted successfully. Status: Pending review.',
   'courseDetail.validation.submitError': 'Error submitting the application. Please try again.',
 }

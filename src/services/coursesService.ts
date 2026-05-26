@@ -1,9 +1,5 @@
 import api from './api'
-import type {
-  CourseCreatePayload,
-  CourseRecord,
-  CourseUpdatePayload,
-} from '@/types/courses'
+import type { CourseCreatePayload, CourseRecord, CourseUpdatePayload } from '@/types/courses'
 
 const getApiErrorMessage = (error: unknown, fallbackMessage: string): string => {
   if (
@@ -51,9 +47,7 @@ export const coursesService = {
       const response = await api.get<CourseRecord[]>('/api/v1/courses/')
       return response.data
     } catch (error: unknown) {
-      throw new Error(
-        getApiErrorMessage(error, 'No se pudo cargar la lista de cursos.'),
-      )
+      throw new Error(getApiErrorMessage(error, 'No se pudo cargar la lista de cursos.'))
     }
   },
 
@@ -62,9 +56,7 @@ export const coursesService = {
       const response = await api.get<CourseRecord>(`/api/v1/courses/${courseId}`)
       return response.data
     } catch (error: unknown) {
-      throw new Error(
-        getApiErrorMessage(error, 'No se pudo cargar el curso.'),
-      )
+      throw new Error(getApiErrorMessage(error, 'No se pudo cargar el curso.'))
     }
   },
 
@@ -77,10 +69,7 @@ export const coursesService = {
     }
   },
 
-  async updateCourse(
-    courseId: number,
-    payload: CourseUpdatePayload,
-  ): Promise<CourseRecord> {
+  async updateCourse(courseId: number, payload: CourseUpdatePayload): Promise<CourseRecord> {
     try {
       const response = await api.put<CourseRecord>(`/api/v1/courses/${courseId}`, payload)
       return response.data

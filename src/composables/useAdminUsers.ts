@@ -1,10 +1,6 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { adminUsersService } from '@/services/adminUsersService'
-import type {
-  AdminUserFormValues,
-  AdminUserRecord,
-  AdminUsersFeedback,
-} from '@/types/adminUsers'
+import type { AdminUserFormValues, AdminUserRecord, AdminUsersFeedback } from '@/types/adminUsers'
 
 const createInitialForm = (): AdminUserFormValues => ({
   name: '',
@@ -65,9 +61,7 @@ export const useAdminUsers = (currentUserId: string | undefined) => {
       feedback.value = {
         type: 'error',
         message:
-          error instanceof Error
-            ? error.message
-            : 'No se pudo cargar la lista de administradores.',
+          error instanceof Error ? error.message : 'No se pudo cargar la lista de administradores.',
       }
     } finally {
       loading.value = false
@@ -118,8 +112,7 @@ export const useAdminUsers = (currentUserId: string | undefined) => {
     } catch (error: unknown) {
       feedback.value = {
         type: 'error',
-        message:
-          error instanceof Error ? error.message : 'No se pudo guardar el administrador.',
+        message: error instanceof Error ? error.message : 'No se pudo guardar el administrador.',
       }
     } finally {
       submitting.value = false
@@ -153,8 +146,7 @@ export const useAdminUsers = (currentUserId: string | undefined) => {
     } catch (error: unknown) {
       feedback.value = {
         type: 'error',
-        message:
-          error instanceof Error ? error.message : 'No se pudo eliminar el administrador.',
+        message: error instanceof Error ? error.message : 'No se pudo eliminar el administrador.',
       }
     } finally {
       deletingUserId.value = null
@@ -170,9 +162,7 @@ export const useAdminUsers = (currentUserId: string | undefined) => {
 
     try {
       const updatedUser = await adminUsersService.updateAdminUserStatus(user.id, newStatus)
-      adminUsers.value = adminUsers.value.map((u) =>
-        u.id === updatedUser.id ? updatedUser : u,
-      )
+      adminUsers.value = adminUsers.value.map((u) => (u.id === updatedUser.id ? updatedUser : u))
       feedback.value = {
         type: 'success',
         message: `Administrador ${actionLabel}do correctamente.`,
@@ -181,9 +171,7 @@ export const useAdminUsers = (currentUserId: string | undefined) => {
       feedback.value = {
         type: 'error',
         message:
-          error instanceof Error
-            ? error.message
-            : `No se pudo ${actionLabel} el administrador.`,
+          error instanceof Error ? error.message : `No se pudo ${actionLabel} el administrador.`,
       }
     } finally {
       togglingUserId.value = null

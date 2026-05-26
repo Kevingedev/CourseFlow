@@ -10,7 +10,8 @@ const title = (route.meta.title as string) || 'Módulo Administrativo'
     <div class="card glass-card">
       <h2>{{ title }}</h2>
       <p class="description">
-        Esta sección se encuentra en preparación para desarrollo y se implementará en la siguiente historia de usuario.
+        Esta sección se encuentra en preparación para desarrollo y se implementará en la siguiente
+        historia de usuario.
       </p>
       <router-link to="/admin/dashboard" class="btn-primary back-btn">
         Volver al Dashboard

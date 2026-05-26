@@ -3,7 +3,7 @@
  * ContactView.vue
  * Placeholder for the Contact page.
  */
-import { Mail, Phone, MapPin } from '@lucide/vue';
+import { Mail, Phone, MapPin } from '@lucide/vue'
 import { useI18n } from '@/i18n'
 
 const { t } = useI18n()
@@ -14,7 +14,11 @@ const { t } = useI18n()
     <!-- Contact Hero -->
     <section class="contact-hero section-padding">
       <div class="container text-center">
-        <h1 class="hero-title">{{ t('contact.hero.titlePrefix') }} <span class="text-accent">{{ t('contact.hero.titleAccent') }}</span>!</h1>
+        <h1 class="hero-title">
+          {{ t('contact.hero.titlePrefix') }}
+          <span class="text-accent">{{ t('contact.hero.titleAccent') }}</span
+          >!
+        </h1>
         <p class="hero-subtitle mx-auto">
           {{ t('contact.hero.subtitle') }}
         </p>
@@ -68,7 +72,12 @@ const { t } = useI18n()
             </div>
             <div class="form-group">
               <label for="subject">{{ t('contact.subject') }}</label>
-              <input type="text" id="subject" :placeholder="t('contact.subjectPlaceholder')" required />
+              <input
+                type="text"
+                id="subject"
+                :placeholder="t('contact.subjectPlaceholder')"
+                required
+              />
             </div>
             <div class="form-group">
               <label for="message">{{ t('contact.message') }}</label>

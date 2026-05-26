@@ -18,18 +18,14 @@ const emit = defineEmits<{
 </script>
 
 <template>
+  <!-- eslint-disable vue/no-mutating-props -->
   <section class="glass-card admin-user-form-card">
     <div class="card-header">
       <div>
         <p class="eyebrow">Gestión de acceso</p>
         <h3>{{ isEditing ? 'Editar administrador' : 'Crear administrador' }}</h3>
       </div>
-      <button
-        v-if="isEditing"
-        type="button"
-        class="ghost-action"
-        @click="emit('reset')"
-      >
+      <button v-if="isEditing" type="button" class="ghost-action" @click="emit('reset')">
         Cancelar edición
       </button>
     </div>
@@ -79,8 +75,6 @@ const emit = defineEmits<{
           autocomplete="new-password"
         />
       </label>
-
-      
 
       <div class="form-actions">
         <button type="submit" class="btn-primary" :disabled="submitting || !canSubmit">
@@ -172,7 +166,9 @@ const emit = defineEmits<{
   background: rgba(255, 255, 255, 0.92);
   color: var(--text-dark);
   font-size: 0.95rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .field-input:focus {
