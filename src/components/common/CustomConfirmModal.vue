@@ -125,7 +125,7 @@ watch(
   background: var(--white);
   border-radius: 24px;
   border: 1px solid rgba(67, 17, 185, 0.12);
-  box-shadow: 
+  box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
     0 20px 40px -4px rgba(67, 17, 185, 0.12);
   padding: 2.25rem 2rem 2rem 2rem;
@@ -144,7 +144,7 @@ watch(
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-color));
 }
 
 .confirm-icon-wrapper {
@@ -159,12 +159,12 @@ watch(
 
 .confirm-icon-wrapper.danger {
   background: rgba(236, 86, 32, 0.1);
-  color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 .confirm-icon-wrapper.warning {
   background: rgba(236, 86, 32, 0.08);
-  color: var(--secondary-80);
+  color: var(--primary-80);
 }
 
 .confirm-icon-wrapper.info {
@@ -236,23 +236,23 @@ button {
 }
 
 .btn-confirm.danger {
-  background: var(--secondary-color);
+  background: var(--primary-color);
   box-shadow: 0 4px 12px rgba(236, 86, 32, 0.2);
 }
 
 .btn-confirm.danger:hover:not(:disabled) {
-  background: var(--secondary-80);
+  background: var(--primary-80);
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(236, 86, 32, 0.3);
 }
 
 .btn-confirm.warning {
-  background: var(--secondary-color);
+  background: var(--primary-color);
   box-shadow: 0 4px 12px rgba(236, 86, 32, 0.2);
 }
 
 .btn-confirm.warning:hover:not(:disabled) {
-  background: var(--secondary-80);
+  background: var(--primary-80);
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(236, 86, 32, 0.3);
 }
@@ -330,12 +330,12 @@ button:disabled {
     padding: 1.75rem 1.5rem 1.5rem 1.5rem;
     border-radius: 20px;
   }
-  
+
   .confirm-actions {
     grid-template-columns: 1fr;
     gap: 0.75rem;
   }
-  
+
   .btn-confirm {
     order: -1;
   }

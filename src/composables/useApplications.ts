@@ -19,10 +19,16 @@ export const useApplications = () => {
     [...applications.value].sort((left, right) => right.id - left.id),
   )
 
+  const visibleApplications = computed(() =>
+    sortedApplications.value.filter(
+      (app) => app.status !== 'rejected' && app.status !== 'cancelled',
+    ),
+  )
+
   const filteredApplications = computed(() => {
     const query = searchQuery.value.toLowerCase().trim()
 
-    return sortedApplications.value.filter((application) => {
+    return visibleApplications.value.filter((application) => {
       const matchesStatus = statusFilter.value === 'all' || application.status === statusFilter.value
       const searchableText = [
         application.id,
@@ -41,10 +47,9 @@ export const useApplications = () => {
   })
 
   const stats = computed(() => ({
-    total: applications.value.length,
-    pending: applications.value.filter((application) => application.status === 'pending').length,
-    accepted: applications.value.filter((application) => application.status === 'accepted').length,
-    rejected: applications.value.filter((application) => application.status === 'rejected').length,
+    total: visibleApplications.value.length,
+    pending: visibleApplications.value.filter((application) => application.status === 'pending').length,
+    accepted: visibleApplications.value.filter((application) => application.status === 'accepted').length,
   }))
 
   const resetFeedback = () => {

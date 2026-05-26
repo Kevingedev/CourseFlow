@@ -62,10 +62,6 @@ const handleConfirmDelete = async () => {
         <span>Aceptadas</span>
         <strong>{{ stats.accepted }}</strong>
       </article>
-      <article class="stat-card rejected">
-        <span>Rechazadas</span>
-        <strong>{{ stats.rejected }}</strong>
-      </article>
     </section>
 
     <ApplicationsTable
@@ -127,7 +123,7 @@ const handleConfirmDelete = async () => {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -160,10 +156,6 @@ const handleConfirmDelete = async () => {
 
 .stat-card.accepted {
   border-color: rgba(10, 71, 73, 0.22);
-}
-
-.stat-card.rejected {
-  border-color: rgba(236, 86, 41, 0.25);
 }
 
 .feedback-banner {
