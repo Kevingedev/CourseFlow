@@ -1,9 +1,13 @@
 # CourseFlow Frontend
 
-Frontend administrativo y público de `CourseFlow`, construido con Vue 3, Vite, TypeScript, Pinia y Vue Router. La aplicación consume una API REST con autenticación basada en cookie HttpOnly y organiza la experiencia en dos zonas claras:
+Frontend público y administrativo de CourseFlow, construido con Vue 3, Vite, TypeScript, Pinia y Vue Router. La aplicación consume la API REST del backend mediante cookie HttpOnly y separa la experiencia en dos áreas:
 
 - Sitio público: inicio, catálogo, detalle de curso, contacto, login y registro.
 - Panel administrativo: dashboard, gestión de cursos, solicitudes y administradores.
+
+## Objetivo
+
+Este frontend sirve como capa de presentación para el ecosistema CourseFlow. Su responsabilidad es mostrar la oferta formativa, permitir el registro y la autenticación de usuarios, y dar soporte operativo al equipo administrativo sin mezclar la lógica de negocio con la UI.
 
 ## Stack
 
@@ -25,16 +29,16 @@ Frontend administrativo y público de `CourseFlow`, construido con Vue 3, Vite, 
 - `src/stores/`: estado global compartido.
 - `src/types/`: contratos de datos del frontend.
 
-## Cómo se integra con el backend
+## Arquitectura de integración
 
-La integración se centraliza en `src/services/api.ts`.
+La integración con el backend se centraliza en `src/services/api.ts`.
 
 - Usa `axios.create(...)` con `withCredentials: true`.
 - Envía `Accept: application/json`.
-- Trata la sesión por cookie HttpOnly, no por `Authorization: Bearer`.
+- Gestiona la sesión por cookie HttpOnly, no por `Authorization: Bearer`.
 - Intercepta `401 Unauthorized`, limpia la sesión y emite el evento `auth:expired`.
 
-El resto de servicios usa ese cliente base:
+El resto de servicios reutiliza ese cliente base:
 
 - `src/services/authService.ts`
 - `src/services/coursesService.ts`
@@ -42,7 +46,7 @@ El resto de servicios usa ese cliente base:
 - `src/services/applicationsService.ts`
 - `src/services/dashboardService.ts`
 
-El guard de rutas en `src/router/index.ts` protege las rutas administrativas y valida roles:
+El guard de rutas en `src/router/index.ts` protege las rutas administrativas y valida los roles:
 
 - `user`
 - `admin`
@@ -67,7 +71,7 @@ El guard de rutas en `src/router/index.ts` protege las rutas administrativas y v
 | `GET` | `/api/v1/courses/{id}` | Detalle de un curso. |
 | `POST` | `/api/v1/courses/` | Creación de curso desde admin. |
 | `PUT` | `/api/v1/courses/{id}` | Edición de curso desde admin. |
-| `DELETE` | `/api/v1/courses/{id}` | Baja/desactivación de curso desde admin. |
+| `DELETE` | `/api/v1/courses/{id}` | Baja o desactivación de curso desde admin. |
 
 ### Administradores
 
@@ -105,13 +109,13 @@ El guard de rutas en `src/router/index.ts` protege las rutas administrativas y v
 | `GET` | `/applications?course_id={id}` | Cálculo del total de solicitudes en el detalle público. |
 | `POST` | `/applications` | Registro público de una nueva solicitud. |
 
-## Cómo se gestiona cada módulo
+## Módulos funcionales
 
 ### Público
 
 - `HomeView`, `AboutView`, `CoursesView`, `CourseDetail.vue`, `ContactView`, `LoginView` y `RegisterView` componen el recorrido público.
 - El navbar público vive en `src/components/AppNavbar.vue`.
-- Las páginas públicas consumen el API para mostrar contenido, listar cursos, registrar usuarios y permitir login.
+- Las páginas públicas consumen la API para mostrar contenido, listar cursos, registrar usuarios y permitir login.
 
 ### Autenticación
 
@@ -139,15 +143,12 @@ El guard de rutas en `src/router/index.ts` protege las rutas administrativas y v
 ### Solicitudes
 
 - `ApplicationsManager.vue` orquesta la gestión administrativa.
-- `ApplicationsTable.vue` lista solicitudes, muestra el estado en formato etiqueta y permite:
-  - cambiar estado
-  - eliminar solicitud
-- La tabla muestra logs técnicos de las operaciones de solicitudes en consola a través del servicio.
+- `ApplicationsTable.vue` lista solicitudes, muestra el estado en formato etiqueta y permite cambiar estado o eliminar la solicitud.
 - El panel no incluye creación ni edición manual de campos de solicitud, porque el backend expone solo cambio de estado y borrado para administración.
 
 ### Administradores
 
-- `AdminUsersManager.vue` coordina alta, edición, activación/desactivación y eliminación.
+- `AdminUsersManager.vue` coordina alta, edición, activación, desactivación y eliminación.
 - La lógica de formularios y listado vive separada para mantener el panel modular.
 
 ### Dashboard
@@ -191,7 +192,7 @@ En `CourseDetail.vue` el formulario público valida:
 
 - el único campo editable administrativamente es `status`
 - la gestión se limita a cambio de estado y eliminación
-- no se expone creación/edición completa desde el panel porque no existe ese contrato en el backend
+- no se expone creación o edición completa desde el panel porque no existe ese contrato en el backend
 
 ## Cambio de idioma en páginas públicas
 
@@ -208,7 +209,7 @@ El sitio público está organizado por vistas y componentes de presentación, as
 
 Esta separación hace que el cambio de idioma sea local al frontend público y no afecte servicios, autenticación ni panel administrativo. En esta versión no hay una librería formal como `vue-i18n`; la estrategia actual es mantener el contenido visible aislado por vistas para poder traducirlo o sustituirlo sin tocar la lógica de negocio. Si se quiere llevar a una solución de i18n completa, el punto de entrada natural es el navbar público y las vistas públicas, dejando el área `/admin` fuera de esa capa.
 
-## Tutorial de uso
+## Uso local
 
 ### 1. Instalar dependencias
 
