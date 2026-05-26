@@ -5,4 +5,3 @@ import WaitingListManager from '@/components/admin/waiting-list/WaitingListManag
 <template>
   <WaitingListManager />
 </template>
-

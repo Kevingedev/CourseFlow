@@ -118,8 +118,7 @@ const handleSubmit = async () => {
     const role = authStore.user?.role
     router.push(role === 'admin' || role === 'suadmin' ? '/admin/dashboard' : '/courses')
   } catch (error: unknown) {
-    errors.general =
-      error instanceof Error ? error.message : t('register.generalError')
+    errors.general = error instanceof Error ? error.message : t('register.generalError')
   } finally {
     isLoading.value = false
   }
@@ -137,13 +136,13 @@ const handleSubmit = async () => {
         <div class="input-shell">
           <UserRound :size="18" class="input-icon" />
           <input
-          v-model="formData.fullName"
-          type="text"
-          class="form-input"
-          :placeholder="t('register.fullNamePlaceholder')"
-          :disabled="isLoading"
-          autocomplete="name"
-        />
+            v-model="formData.fullName"
+            type="text"
+            class="form-input"
+            :placeholder="t('register.fullNamePlaceholder')"
+            :disabled="isLoading"
+            autocomplete="name"
+          />
         </div>
         <p v-if="errors.fullName" class="form-error">{{ errors.fullName }}</p>
       </div>
@@ -153,13 +152,13 @@ const handleSubmit = async () => {
         <div class="input-shell">
           <Mail :size="18" class="input-icon" />
           <input
-          v-model="formData.email"
-          type="email"
-          class="form-input"
-          placeholder="email@ejemplo.com"
-          :disabled="isLoading"
-          autocomplete="email"
-        />
+            v-model="formData.email"
+            type="email"
+            class="form-input"
+            placeholder="email@ejemplo.com"
+            :disabled="isLoading"
+            autocomplete="email"
+          />
         </div>
         <p v-if="errors.email" class="form-error">{{ errors.email }}</p>
       </div>
@@ -169,13 +168,13 @@ const handleSubmit = async () => {
         <div class="input-shell">
           <ShieldCheck :size="18" class="input-icon" />
           <input
-          v-model="formData.password"
-          type="password"
-          class="form-input"
-          placeholder="••••••••"
-          :disabled="isLoading"
-          autocomplete="new-password"
-        />
+            v-model="formData.password"
+            type="password"
+            class="form-input"
+            placeholder="••••••••"
+            :disabled="isLoading"
+            autocomplete="new-password"
+          />
         </div>
         <p v-if="errors.password" class="form-error">{{ errors.password }}</p>
       </div>
@@ -185,13 +184,13 @@ const handleSubmit = async () => {
         <div class="input-shell">
           <ShieldCheck :size="18" class="input-icon" />
           <input
-          v-model="formData.confirmPassword"
-          type="password"
-          class="form-input"
-          placeholder="••••••••"
-          :disabled="isLoading"
-          autocomplete="new-password"
-        />
+            v-model="formData.confirmPassword"
+            type="password"
+            class="form-input"
+            placeholder="••••••••"
+            :disabled="isLoading"
+            autocomplete="new-password"
+          />
         </div>
         <p v-if="errors.confirmPassword" class="form-error">{{ errors.confirmPassword }}</p>
       </div>
@@ -235,13 +234,19 @@ const handleSubmit = async () => {
         {{ errors.general }}
       </div>
 
-      <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem;" :disabled="isLoading">
+      <button
+        type="submit"
+        class="btn-primary"
+        style="width: 100%; padding: 1rem"
+        :disabled="isLoading"
+      >
         {{ isLoading ? t('register.loading') : t('register.submit') }}
       </button>
     </form>
 
     <p class="auth-footer">
-      {{ t('register.hasAccount') }} <router-link to="/login" class="auth-link">{{ t('register.login') }}</router-link>
+      {{ t('register.hasAccount') }}
+      <router-link to="/login" class="auth-link">{{ t('register.login') }}</router-link>
     </p>
   </div>
 </template>
@@ -276,7 +281,9 @@ const handleSubmit = async () => {
   border: 1px solid rgba(34, 121, 160, 0.18);
   border-radius: 14px;
   background-color: rgba(255, 255, 255, 0.9);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .input-shell:focus-within {

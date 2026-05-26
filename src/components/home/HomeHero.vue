@@ -9,14 +9,17 @@ const { t } = useI18n()
     <div class="container hero-grid">
       <div class="hero-content">
         <h1 class="hero-title">
-          {{ t('home.hero.titlePrefix') }} <span class="text-accent">{{ t('home.hero.titleAccent') }}</span>
+          {{ t('home.hero.titlePrefix') }}
+          <span class="text-accent">{{ t('home.hero.titleAccent') }}</span>
         </h1>
         <p class="hero-subtitle">
           {{ t('home.hero.subtitle') }}
         </p>
         <div class="hero-actions">
           <router-link to="/courses" class="btn-primary">{{ t('home.hero.primary') }}</router-link>
-          <router-link to="/about" class="btn-secondary">{{ t('home.hero.secondary') }}</router-link>
+          <router-link to="/about" class="btn-secondary">{{
+            t('home.hero.secondary')
+          }}</router-link>
         </div>
       </div>
       <div class="hero-image-container">

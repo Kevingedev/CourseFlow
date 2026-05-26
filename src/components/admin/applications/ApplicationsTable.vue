@@ -176,7 +176,12 @@ onUnmounted(() => {
         <select
           :value="statusFilter"
           class="status-filter"
-          @change="emit('update:statusFilter', ($event.target as HTMLSelectElement).value as ApplicationStatus | 'all')"
+          @change="
+            emit(
+              'update:statusFilter',
+              ($event.target as HTMLSelectElement).value as ApplicationStatus | 'all',
+            )
+          "
         >
           <option v-for="status in statuses" :key="status.value" :value="status.value">
             {{ status.label }}
@@ -201,7 +206,10 @@ onUnmounted(() => {
       </template>
       <template v-else>
         <h4>No hay solicitudes registradas</h4>
-        <p>Cuando el endpoint devuelva solicitudes, aparecerán aquí con acciones de edición, estado y eliminación.</p>
+        <p>
+          Cuando el endpoint devuelva solicitudes, aparecerán aquí con acciones de edición, estado y
+          eliminación.
+        </p>
       </template>
     </div>
 
@@ -232,7 +240,7 @@ onUnmounted(() => {
               </div>
             </td>
             <td>
-              <span class="course-pill">Curso #{{ application.course_id }}</span>
+              <span class="course-pill">{{ application.course?.name || 'Sin curso' }}</span>
             </td>
             <td>
               <span class="darde-value">{{ formatDarde(application.has_darde) }}</span>
@@ -247,7 +255,9 @@ onUnmounted(() => {
                 <button
                   type="button"
                   class="dropdown-trigger"
-                  :disabled="deletingApplicationId === application.id || updatingStatusId === application.id"
+                  :disabled="
+                    deletingApplicationId === application.id || updatingStatusId === application.id
+                  "
                   @click="openDropdown(application, $event)"
                   aria-label="Acciones"
                 >
@@ -329,16 +339,57 @@ onUnmounted(() => {
           type="button"
           class="dropdown-item status"
           :disabled="updatingStatusId === activeAppRef.id"
-          @click="emit('statusChange', activeAppRef, action.value); closeDropdown()"
+          @click="
+            emit('statusChange', activeAppRef, action.value);
+            closeDropdown();
+          "
         >
           <template v-if="action.value === 'accepted'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
           </template>
           <template v-else-if="action.value === 'rejected'">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
           </template>
           <template v-else>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
           </template>
           {{ action.label }}
         </button>
@@ -349,9 +400,27 @@ onUnmounted(() => {
           type="button"
           class="dropdown-item delete"
           :disabled="deletingApplicationId === activeAppRef.id"
-          @click="emit('remove', activeAppRef); closeDropdown()"
+          @click="
+            emit('remove', activeAppRef);
+            closeDropdown();
+          "
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path
+              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+            ></path>
+          </svg>
           {{ deletingApplicationId === activeAppRef.id ? 'Eliminando...' : 'Eliminar' }}
         </button>
       </div>
@@ -404,7 +473,9 @@ onUnmounted(() => {
   background: rgba(255, 255, 255, 0.9);
   color: var(--text-dark);
   font-size: 0.9rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   font-family: inherit;
 }
 

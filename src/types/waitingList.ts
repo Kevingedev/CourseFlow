@@ -18,4 +18,3 @@ export interface WaitingListEntry {
   user?: WaitingListUserShort
   course?: WaitingListCourseShort
 }
-

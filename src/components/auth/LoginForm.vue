@@ -1,57 +1,56 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
-import { useI18n } from '@/i18n';
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { useI18n } from '@/i18n'
 
-const router = useRouter();
-const authStore = useAuthStore();
-const { t } = useI18n();
+const router = useRouter()
+const authStore = useAuthStore()
+const { t } = useI18n()
 
 const formData = reactive({
   email: '',
-  password: ''
-});
+  password: '',
+})
 
 const errors = reactive({
   email: '',
   password: '',
-  general: ''
-});
+  general: '',
+})
 
-const isLoading = ref(false);
+const isLoading = ref(false)
 
 const validate = () => {
-  let isValid = true;
-  errors.email = !formData.email ? t('login.emailRequired') : '';
-  errors.password = !formData.password ? t('login.passwordRequired') : '';
+  let isValid = true
+  errors.email = !formData.email ? t('login.emailRequired') : ''
+  errors.password = !formData.password ? t('login.passwordRequired') : ''
 
   if (errors.email || errors.password) {
-    isValid = false;
+    isValid = false
   }
-  return isValid;
-};
+  return isValid
+}
 
 const handleSubmit = async () => {
-  if (!validate()) return;
+  if (!validate()) return
 
-  isLoading.value = true;
-  errors.general = '';
+  isLoading.value = true
+  errors.general = ''
 
   try {
-    await authStore.login(formData.email, formData.password);
-    router.push('/');
-  } catch(error: unknown) {
-    errors.general = error instanceof Error ? error.message : t('login.error');
+    await authStore.login(formData.email, formData.password)
+    router.push('/')
+  } catch (error: unknown) {
+    errors.general = error instanceof Error ? error.message : t('login.error')
   } finally {
-    isLoading.value = false;
+    isLoading.value = false
   }
-};
+}
 </script>
 
 <template>
   <div class="auth-card">
-
     <h1 class="auth-title">{{ t('login.title') }}</h1>
     <p class="auth-subtitle">{{ t('login.subtitle') }}</p>
 
@@ -80,26 +79,32 @@ const handleSubmit = async () => {
         <p v-if="errors.password" class="form-error">{{ errors.password }}</p>
       </div>
 
-      <div style="text-align: right; margin-bottom: 2rem;">
-        <a class="auth-link" style="font-size: 0.85rem;">{{ t('login.forgotPassword') }}</a>
+      <div style="text-align: right; margin-bottom: 2rem">
+        <a class="auth-link" style="font-size: 0.85rem">{{ t('login.forgotPassword') }}</a>
       </div>
 
-      <p v-if="errors.general" class="form-error" style="margin-bottom: 1rem; text-align: center;">
+      <p v-if="errors.general" class="form-error" style="margin-bottom: 1rem; text-align: center">
         {{ errors.general }}
       </p>
 
-      <button type="submit" class="btn-primary" style="width: 100%; padding: 1rem;" :disabled="isLoading">
+      <button
+        type="submit"
+        class="btn-primary"
+        style="width: 100%; padding: 1rem"
+        :disabled="isLoading"
+      >
         {{ isLoading ? t('login.loading') : t('login.submit') }}
       </button>
     </form>
 
-    <div style="margin: 2rem 0; height: 1px; background: var(--border-color);"></div>
+    <div style="margin: 2rem 0; height: 1px; background: var(--border-color)"></div>
 
     <p class="auth-footer">
-      {{ t('login.noAccount') }} <router-link to="/register" class="auth-link">{{ t('login.createAccount') }}</router-link>
+      {{ t('login.noAccount') }}
+      <router-link to="/register" class="auth-link">{{ t('login.createAccount') }}</router-link>
     </p>
 
-    <div class="auth-footer" style="font-size: 0.75rem; margin-top: 3rem;">
+    <div class="auth-footer" style="font-size: 0.75rem; margin-top: 3rem">
       {{ t('login.legal') }}
     </div>
   </div>

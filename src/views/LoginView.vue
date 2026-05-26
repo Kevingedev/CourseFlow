@@ -13,13 +13,13 @@ const { t } = useI18n()
 // Form states
 const form = reactive({
   email: '',
-  password: ''
+  password: '',
 })
 
 const errors = reactive({
   email: '',
   password: '',
-  general: ''
+  general: '',
 })
 
 const isLoading = ref(false)
@@ -171,7 +171,6 @@ const handleSubmit = async () => {
           {{ t('login.createAccount') }}
         </router-link>
       </div>
-
     </div>
   </div>
 </template>

@@ -72,7 +72,7 @@ export const authService = {
         ...payload,
         dni_nie: payload.dni_nie || null,
         birth_date: payload.birth_date || null,
-        role: 'user'
+        role: 'user',
       })
 
       return mapUser(response.data)
@@ -126,5 +126,5 @@ export const authService = {
 
       throw new Error(message)
     }
-  }
+  },
 }

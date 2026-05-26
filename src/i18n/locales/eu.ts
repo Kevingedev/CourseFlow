@@ -10,7 +10,8 @@ export const eu: TranslationDictionary = {
   'nav.greeting': 'Kaixo, {name}',
   'nav.language': 'Hizkuntza',
 
-  'footer.description': 'Kudeaketa pedagogikorako plataforma profesionala. Talentu digitala eta inklusioa bultzatzen.',
+  'footer.description':
+    'Kudeaketa pedagogikorako plataforma profesionala. Talentu digitala eta inklusioa bultzatzen.',
   'footer.quickLinks': 'Esteka azkarrak',
   'footer.about': 'Gure berri',
   'footer.courses': 'Prestakuntzak',
@@ -23,48 +24,62 @@ export const eu: TranslationDictionary = {
 
   'home.hero.titlePrefix': 'Bideak zabaltzen',
   'home.hero.titleAccent': 'inklusoak talentu digitalerantz.',
-  'home.hero.subtitle': 'Ikasteko eta prestakuntza teknologikoetan parte hartzeko modu berri bat ezagutu. Talentu anitza sustatzeko eta gizarte inklusiboa bultzatzeko diseinatua.',
+  'home.hero.subtitle':
+    'Ikasteko eta prestakuntza teknologikoetan parte hartzeko modu berri bat ezagutu. Talentu anitza sustatzeko eta gizarte inklusiboa bultzatzeko diseinatua.',
   'home.hero.primary': 'Prestakuntzak arakatu',
   'home.hero.secondary': 'Gure berri',
   'home.hero.imageAlt': 'Talentu digital inklusiboa',
   'home.features.titlePrefix': 'Zergatik aukeratu',
   'home.features.card1.title': 'Prestakuntza eta Laguntza',
-  'home.features.card1.text': 'Ikasi teknologia sektoreko profesional eta esperientzia handiko irakasleengandik.',
+  'home.features.card1.text':
+    'Ikasi teknologia sektoreko profesional eta esperientzia handiko irakasleengandik.',
   'home.features.card2.title': 'Metodologia Malgua eta Inklusiboa',
   'home.features.card2.text': 'Atzitu prestakuntzak edonoiz, edonondik eta zure erritmora.',
   'home.features.card3.title': 'Ikasketa Praktikoa',
-  'home.features.card3.text': 'Parte hartu proiektu erreal eta dinamikoekin, zure karrera digitala bultzatzeko diseinatuta.',
+  'home.features.card3.text':
+    'Parte hartu proiektu erreal eta dinamikoekin, zure karrera digitala bultzatzeko diseinatuta.',
 
   'about.hero.titlePrefix': 'Ezagutu',
-  'about.hero.subtitle': 'Ikaskuntza teknologikorako ingurune bidezkoa eta irisgarria eraikitzen dugu guztiontzat.',
+  'about.hero.subtitle':
+    'Ikaskuntza teknologikorako ingurune bidezkoa eta irisgarria eraikitzen dugu guztiontzat.',
   'about.mission.title': 'Gure Eginkizuna',
-  'about.mission.text': 'Pertsonak garapen digitalean laguntzen ditugu, prestakuntza teknologiko inklusiboa eskainiz, brecha digitala murrizteko eta aniztasuna sustatzeko sektore teknologikoan.',
+  'about.mission.text':
+    'Pertsonak garapen digitalean laguntzen ditugu, prestakuntza teknologiko inklusiboa eskainiz, brecha digitala murrizteko eta aniztasuna sustatzeko sektore teknologikoan.',
   'about.vision.title': 'Gure Ikuspegia',
-  'about.vision.text': 'Erreferentziazko ikaskuntza-sarea izatea, talentu anitza lan aukerekin eta hazkunde profesionalarekin konektatzen duena sektore digitalean.',
+  'about.vision.text':
+    'Erreferentziazko ikaskuntza-sarea izatea, talentu anitza lan aukerekin eta hazkunde profesionalarekin konektatzen duena sektore digitalean.',
   'about.values.title': 'Gure Balioak',
   'about.values.innovation.title': 'Berrikuntza',
-  'about.values.innovation.text': 'Etengabe bilatzen ditugu irtenbide pedagogiko berritzaileak, enplegura bideratuak.',
+  'about.values.innovation.text':
+    'Etengabe bilatzen ditugu irtenbide pedagogiko berritzaileak, enplegura bideratuak.',
   'about.values.inclusion.title': 'Inklusioa eta Aniztasuna',
-  'about.values.inclusion.text': 'Pertsona bakoitzaren potentzialean eta talentuan sinesten dugu, edozein dela ere bere abiapuntua.',
+  'about.values.inclusion.text':
+    'Pertsona bakoitzaren potentzialean eta talentuan sinesten dugu, edozein dela ere bere abiapuntua.',
   'about.values.accessibility.title': 'Irisgarritasuna',
-  'about.values.accessibility.text': 'Kalitate handiko doako hezkuntza teknologikoa bermatzen dugu kolektibo anitzentzat.',
+  'about.values.accessibility.text':
+    'Kalitate handiko doako hezkuntza teknologikoa bermatzen dugu kolektibo anitzentzat.',
   'about.impact.title': 'Gure Eraginaren Datuak',
   'about.impact.people': 'Pertsonak formatu eta lagundu ditugu laneratze digitalean.',
   'about.impact.rate': 'Enplegu-tasa eta arrakasta-bataz bestekoa bazkide diren enpresetan.',
   'about.impact.partners': 'Gure talentuaz fidatzen diren lankide eta bazkide enpresak.',
   'about.story.title': 'Gure Istorioa',
-  'about.story.text': '2024an sortua, Course Flow ikaskuntza-ingurune irisgarriago eta solidarioago bat eskaintzeko beharretik jaio zen. Garapen teknologikoaren eremuan tokiko inklusio digitaleko proiektu gisa hasi zena plataforma sendo bihurtu da, kalitatezko prestakuntza etorkizuneko enpleguarekin konektatzeko diseinatua.',
+  'about.story.text':
+    '2024an sortua, Course Flow ikaskuntza-ingurune irisgarriago eta solidarioago bat eskaintzeko beharretik jaio zen. Garapen teknologikoaren eremuan tokiko inklusio digitaleko proiektu gisa hasi zena plataforma sendo bihurtu da, kalitatezko prestakuntza etorkizuneko enpleguarekin konektatzeko diseinatua.',
 
   'courses.hero.titlePrefix': 'Gure ibilbide',
   'courses.hero.titleAccent': 'formatzaileak',
-  'courses.hero.subtitle': 'Ezagutu gure programa doakoak, teknologian zure karrera bultzatzeko diseinatuak.',
+  'courses.hero.subtitle':
+    'Ezagutu gure programa doakoak, teknologian zure karrera bultzatzeko diseinatuak.',
   'courses.categories.title': 'Arakatu espezialitateka',
   'courses.categories.web.title': 'Web eta App Garapena',
-  'courses.categories.web.text': 'Eskuratu front-end eta back-endeko gaitasun tekniko eskaerarenak sektore digitalean.',
+  'courses.categories.web.text':
+    'Eskuratu front-end eta back-endeko gaitasun tekniko eskaerarenak sektore digitalean.',
   'courses.categories.data.title': 'Datuak eta Adimen Artifiziala',
-  'courses.categories.data.text': 'Menperatu datuen analisia eta ikasi adimen artifizialeko irtenbideak aplikatzen proiektu errealetan.',
+  'courses.categories.data.text':
+    'Menperatu datuen analisia eta ikasi adimen artifizialeko irtenbideak aplikatzen proiektu errealetan.',
   'courses.categories.systems.title': 'Euskarria eta Sistemak',
-  'courses.categories.systems.text': 'Espezializatu sare-azpiegituretan, sistema cloudetan eta laguntza informatiko profesionalean.',
+  'courses.categories.systems.text':
+    'Espezializatu sare-azpiegituretan, sistema cloudetan eta laguntza informatiko profesionalean.',
   'courses.catalog.title': 'Ikastaroen Katalogoa',
   'courses.loading': 'Ikastaroak kargatzen...',
   'courses.error': 'Errorea: {message}',
@@ -80,7 +95,8 @@ export const eu: TranslationDictionary = {
   'courses.showLess': 'Gutxiago erakutsi',
   'courses.showMore': 'Gehiago ikusi',
   'courses.comingSoon.title': 'Katalogo osoa garatzen',
-  'courses.comingSoon.text': 'Ikastaroen katalogo interaktibo bat prestatzen ari gara. Laster, gure prestakuntza kalitatezkoetan bilatu, iragazi eta zuzenean izena eman ahal izango duzu.',
+  'courses.comingSoon.text':
+    'Ikastaroen katalogo interaktibo bat prestatzen ari gara. Laster, gure prestakuntza kalitatezkoetan bilatu, iragazi eta zuzenean izena eman ahal izango duzu.',
   'courses.duration.tbd': 'Zehazteke',
   'courses.duration.year': 'urte',
   'courses.duration.years': 'urte',
@@ -93,7 +109,8 @@ export const eu: TranslationDictionary = {
 
   'contact.hero.titlePrefix': 'Bat egin',
   'contact.hero.titleAccent': 'aldaketarekin',
-  'contact.hero.subtitle': 'Gure prestakuntzei buruzko zalantzak dituzu edo gurekin kolaboratu nahi duzu? Gure taldea prest dago laguntzeko.',
+  'contact.hero.subtitle':
+    'Gure prestakuntzei buruzko zalantzak dituzu edo gurekin kolaboratu nahi duzu? Gure taldea prest dago laguntzeko.',
   'contact.info.title': 'Kontakturako informazioa',
   'contact.write.title': 'Idatzi iezaguzu',
   'contact.call.title': 'Deitu iezaguzu',
@@ -163,16 +180,20 @@ export const eu: TranslationDictionary = {
   'courseDetail.syllabus': 'Egitaraua',
   'courseDetail.outcomes': 'Zer ikasiko duzu',
   'courseDetail.private.title': 'Izapide Pribatua',
-  'courseDetail.private.text': 'Erregistratuta eta saioa hasita egon behar duzu ikastaro honetan izena emateko.',
+  'courseDetail.private.text':
+    'Erregistratuta eta saioa hasita egon behar duzu ikastaro honetan izena emateko.',
   'courseDetail.private.cta': 'Saioa Hasi',
   'courseDetail.enrolled.title': 'Dagoeneko izena emanda!',
-  'courseDetail.enrolled.text': 'Ikastaro honetarako zure eskaera jada erregistratu da eta berrikuspen zain dago.',
+  'courseDetail.enrolled.text':
+    'Ikastaro honetarako zure eskaera jada erregistratu da eta berrikuspen zain dago.',
   'courseDetail.inactive.title': 'Ikastaro Ezaktiboa',
   'courseDetail.inactive.text': 'Ikastaro honek ez du eskaera berririk onartzen une honetan.',
   'courseDetail.closed.title': 'Izen-emateak Itxita',
-  'courseDetail.closed.text': 'Ikastaro hau {date}n hasi zen eta jada ez du ikasle berririk onartzen.',
+  'courseDetail.closed.text':
+    'Ikastaro hau {date}n hasi zen eta jada ez du ikasle berririk onartzen.',
   'courseDetail.full.title': 'Plaza Guztiak Beteak',
-  'courseDetail.full.text': 'Barkatu, ikastaro honek edukiera gainditu du eta itxaron-zerrendaren muga maximoa.',
+  'courseDetail.full.text':
+    'Barkatu, ikastaro honek edukiera gainditu du eta itxaron-zerrendaren muga maximoa.',
   'courseDetail.form.title': 'Ikastaro honek interesa du?',
   'courseDetail.form.warning': 'Edukiera beteta. Zure eskaera itxaron-zerrendan sartuko da (Zain).',
   'courseDetail.form.subtitle': 'Bete inprimaki hau eta laster jarriko gara harremanetan.',
@@ -193,7 +214,8 @@ export const eu: TranslationDictionary = {
   'courseDetail.form.requirements': 'Ikastaroaren Baldintzak',
   'courseDetail.form.requirementsLabel': 'Ikastaroaren aurretiko baldintzak:',
   'courseDetail.form.previousEducation': 'Zehaztu zure aurretiko prestakuntza lotua (Aukerakoa)',
-  'courseDetail.form.previousEducationPlaceholder': 'Azaldu labur zure ikasketak edo esperientzia...',
+  'courseDetail.form.previousEducationPlaceholder':
+    'Azaldu labur zure ikasketak edo esperientzia...',
   'courseDetail.form.remainingChars': '{count} karaktere geratzen dira',
   'courseDetail.form.location': 'Kokalekua',
   'courseDetail.form.municipality': 'Udalerria',
@@ -223,15 +245,20 @@ export const eu: TranslationDictionary = {
   'courseDetail.form.comments': 'Iruzkinak',
   'courseDetail.form.moreInfo': 'Badago jakin beharko genukeen beste zerbait?',
   'courseDetail.form.commentsPlaceholder': 'Kontatu zure itxaropenak edo zalantzak...',
-  'courseDetail.form.terms': 'Onartzen ditut baldintzak, pribatutasun politika eta nirekin harremanetan jartzea *',
+  'courseDetail.form.terms':
+    'Onartzen ditut baldintzak, pribatutasun politika eta nirekin harremanetan jartzea *',
   'courseDetail.form.submitting': 'Izen-ematea bidaltzen...',
   'courseDetail.form.submit': 'Izen-ematea Bidali',
   'courseDetail.validation.login': 'Saioa hasi behar duzu izena emateko.',
   'courseDetail.validation.terms': 'Mesedez, onartu baldintzak eta betekizunak.',
-  'courseDetail.validation.dni': 'NAN/NIE formatua ez da baliozkoa. 8 zenbaki eta letra 1 izan behar ditu (adib. 12345678Z) edo NIE formatu baliozkoa (adib. X1234567Z).',
-  'courseDetail.validation.age': 'Gutxienez 18 urte izan behar dituzu ikastaro honetan izena emateko.',
+  'courseDetail.validation.dni':
+    'NAN/NIE formatua ez da baliozkoa. 8 zenbaki eta letra 1 izan behar ditu (adib. 12345678Z) edo NIE formatu baliozkoa (adib. X1234567Z).',
+  'courseDetail.validation.age':
+    'Gutxienez 18 urte izan behar dituzu ikastaro honetan izena emateko.',
   'courseDetail.validation.darde': 'Mesedez, aukeratu langabezian zauden DARDE eguneratuta edo ez.',
-  'courseDetail.validation.previousEducation': 'Zure aurretiko prestakuntzaren deskribapenak ezin du 250 karaktere baino gehiago izan.',
-  'courseDetail.validation.success': 'Zure izen-emate eskaera ongi erregistratu da. Egoera: Berrikuspen zain.',
+  'courseDetail.validation.previousEducation':
+    'Zure aurretiko prestakuntzaren deskribapenak ezin du 250 karaktere baino gehiago izan.',
+  'courseDetail.validation.success':
+    'Zure izen-emate eskaera ongi erregistratu da. Egoera: Berrikuspen zain.',
   'courseDetail.validation.submitError': 'Errorea izen-ematea bidaltzean. Saiatu berriro.',
 }

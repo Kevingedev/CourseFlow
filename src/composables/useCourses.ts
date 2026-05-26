@@ -1,10 +1,6 @@
 import { computed, onMounted, reactive, ref } from 'vue'
 import { coursesService } from '@/services/coursesService'
-import type {
-  CourseFormValues,
-  CourseRecord,
-  CoursesFeedback,
-} from '@/types/courses'
+import type { CourseFormValues, CourseRecord, CoursesFeedback } from '@/types/courses'
 
 const createInitialForm = (): CourseFormValues => ({
   name: '',
@@ -89,10 +85,7 @@ export const useCourses = () => {
     } catch (error: unknown) {
       feedback.value = {
         type: 'error',
-        message:
-          error instanceof Error
-            ? error.message
-            : 'No se pudo cargar la lista de cursos.',
+        message: error instanceof Error ? error.message : 'No se pudo cargar la lista de cursos.',
       }
     } finally {
       loading.value = false
@@ -150,8 +143,7 @@ export const useCourses = () => {
     } catch (error: unknown) {
       feedback.value = {
         type: 'error',
-        message:
-          error instanceof Error ? error.message : 'No se pudo guardar el curso.',
+        message: error instanceof Error ? error.message : 'No se pudo guardar el curso.',
       }
     } finally {
       submitting.value = false
@@ -177,8 +169,7 @@ export const useCourses = () => {
     } catch (error: unknown) {
       feedback.value = {
         type: 'error',
-        message:
-          error instanceof Error ? error.message : 'No se pudo desactivar el curso.',
+        message: error instanceof Error ? error.message : 'No se pudo desactivar el curso.',
       }
     } finally {
       deletingCourseId.value = null

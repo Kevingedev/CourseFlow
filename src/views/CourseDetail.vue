@@ -1,50 +1,51 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useAuthStore } from '../stores/auth';
-import api from '../services/api';
-import { Lock, PartyPopper, Ban, Calendar, OctagonX, TriangleAlert } from '@lucide/vue';
+import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
+import api from '../services/api'
+import { Lock, PartyPopper, Ban, Calendar, OctagonX, TriangleAlert } from '@lucide/vue'
 import { useI18n } from '@/i18n'
+import type { ApplicationRecord } from '@/types/applications'
 
 interface Course {
-  id: number;
-  name: string;
-  description?: string;
-  summary?: string;
-  banner?: string;
-  delivery?: string;
-  technologies?: string[];
-  syllabus?: string[];
-  prerequisites?: string;
-  learning_outcomes?: string[];
-  instructor?: string;
-  start_date?: string;
-  end_date?: string;
-  category?: string;
-  capacity?: number;
-  is_active?: boolean;
+  id: number
+  name: string
+  description?: string
+  summary?: string
+  banner?: string
+  delivery?: string
+  technologies?: string[]
+  syllabus?: string[]
+  prerequisites?: string
+  learning_outcomes?: string[]
+  instructor?: string
+  start_date?: string
+  end_date?: string
+  category?: string
+  capacity?: number
+  is_active?: boolean
 }
 
-const route = useRoute();
-const router = useRouter();
-const id = route.params.id as string;
+const route = useRoute()
+const router = useRouter()
+const id = route.params.id as string
 
-const authStore = useAuthStore();
+const authStore = useAuthStore()
 const { t } = useI18n()
 
-const course = ref<Course | null>(null);
-const loading = ref(false);
-const error = ref<string | null>(null);
+const course = ref<Course | null>(null)
+const loading = ref(false)
+const error = ref<string | null>(null)
 
-const checkingEnrollment = ref(false);
-const isEnrolled = ref(false);
-const acceptedCount = ref(0);
-const totalApplicationsCount = ref(0);
-const isCourseFull = ref(false);
-const isBlockedByCapacity = ref(false);
+const checkingEnrollment = ref(false)
+const isEnrolled = ref(false)
+const acceptedCount = ref(0)
+const totalApplicationsCount = ref(0)
+const isCourseFull = ref(false)
+const isBlockedByCapacity = ref(false)
 
-const submitError = ref<string | null>(null);
-const submitting = ref(false);
+const submitError = ref<string | null>(null)
+const submitting = ref(false)
 
 const getRequestErrorMessage = (err: unknown, fallback: string): string => {
   if (
@@ -74,112 +75,127 @@ const getRequestErrorMessage = (err: unknown, fallback: string): string => {
 }
 
 function formatDuration(start?: string, end?: string) {
-  if (!start || !end) return t('courses.duration.tbd');
-  const s = new Date(start);
-  const e = new Date(end);
-  if (isNaN(s.getTime()) || isNaN(e.getTime()) || e <= s) return t('courses.duration.tbd');
-  const diffMs = e.getTime() - s.getTime();
-  const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+  if (!start || !end) return t('courses.duration.tbd')
+  const s = new Date(start)
+  const e = new Date(end)
+  if (isNaN(s.getTime()) || isNaN(e.getTime()) || e <= s) return t('courses.duration.tbd')
+  const diffMs = e.getTime() - s.getTime()
+  const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24))
   if (diffDays >= 365) {
-    const years = Math.round(diffDays / 365);
-    return `${years} ${years === 1 ? t('courses.duration.year') : t('courses.duration.years')}`;
+    const years = Math.round(diffDays / 365)
+    return `${years} ${years === 1 ? t('courses.duration.year') : t('courses.duration.years')}`
   }
   if (diffDays >= 30) {
-    const months = Math.round(diffDays / 30);
-    return `${months} ${months === 1 ? t('courses.duration.month') : t('courses.duration.months')}`;
+    const months = Math.round(diffDays / 30)
+    return `${months} ${months === 1 ? t('courses.duration.month') : t('courses.duration.months')}`
   }
   if (diffDays >= 7) {
-    const weeks = Math.round(diffDays / 7);
-    return `${weeks} ${weeks === 1 ? t('courses.duration.week') : t('courses.duration.weeks')}`;
+    const weeks = Math.round(diffDays / 7)
+    return `${weeks} ${weeks === 1 ? t('courses.duration.week') : t('courses.duration.weeks')}`
   }
-  return `${diffDays} ${diffDays === 1 ? t('courses.duration.day') : t('courses.duration.days')}`;
+  return `${diffDays} ${diffDays === 1 ? t('courses.duration.day') : t('courses.duration.days')}`
 }
 
 const isPastStartDate = computed(() => {
-  if (!course.value?.start_date) return false;
-  const start = new Date(course.value.start_date);
-  const today = new Date();
-  start.setHours(0,0,0,0);
-  today.setHours(0,0,0,0);
-  return today >= start;
-});
+  if (!course.value?.start_date) return false
+  const start = new Date(course.value.start_date)
+  const today = new Date()
+  start.setHours(0, 0, 0, 0)
+  today.setHours(0, 0, 0, 0)
+  return today >= start
+})
 
 async function checkEnrollment() {
-  if (!id || !authStore.isAuthenticated || !authStore.user?.id) return;
-  checkingEnrollment.value = true;
+  if (!id || !authStore.isAuthenticated || !authStore.user?.id) return
+  checkingEnrollment.value = true
   try {
-    const res = await api.get('/api/v1/applications/me');
-    const userApps = res.data;
-    const courseIdNum = Number(id);
-    const found = userApps.find((app: any) => app.course_id === courseIdNum && app.status !== 'cancelled');
-    isEnrolled.value = !!found;
+    const res = await api.get('/api/v1/applications/me')
+    const userApps = res.data
+    const courseIdNum = Number(id)
+    const found = userApps.find(
+      (app: ApplicationRecord) => app.course_id === courseIdNum && app.status !== 'cancelled',
+    )
+    isEnrolled.value = !!found
   } catch (err) {
-    console.error('Error checking enrollment:', err);
+    console.error('Error checking enrollment:', err)
   } finally {
-    checkingEnrollment.value = false;
+    checkingEnrollment.value = false
   }
 }
 
 async function checkCourseCapacity() {
-  if (!id || !course.value) return;
-  const capacity = course.value.capacity || 20;
-  acceptedCount.value = 0;
-  totalApplicationsCount.value = 0;
-  isCourseFull.value = false;
-  isBlockedByCapacity.value = false;
+  if (!id || !course.value) return
+  const capacity = course.value.capacity || 20
+  acceptedCount.value = 0
+  totalApplicationsCount.value = 0
+  isCourseFull.value = false
+  isBlockedByCapacity.value = false
 
   try {
     if (authStore.isAuthenticated && authStore.isAdminOrSuadmin) {
-      const res = await api.get(`/api/v1/courses/${id}/applications`);
-      const apps = res.data;
-      acceptedCount.value = apps.filter((app: any) => app.status === 'accepted' || app.status === 'admitted').length;
-      totalApplicationsCount.value = apps.length;
+      const res = await api.get(`/api/v1/courses/${id}/applications`)
+      const apps = res.data
+      acceptedCount.value = apps.filter(
+        (app: ApplicationRecord) => app.status === 'accepted',
+      ).length
+      totalApplicationsCount.value = apps.length
 
-      isCourseFull.value = acceptedCount.value >= capacity;
-      isBlockedByCapacity.value = totalApplicationsCount.value >= Math.floor(capacity * 1.2);
+      isCourseFull.value = acceptedCount.value >= capacity
+      isBlockedByCapacity.value = totalApplicationsCount.value >= Math.floor(capacity * 1.2)
     } else {
-      const waitlistRes = await api.get(`/api/v1/waiting-list/${id}`);
-      totalApplicationsCount.value = waitlistRes.data.length;
+      const waitlistRes = await api.get(`/api/v1/waiting-list/${id}`)
+      const payload = waitlistRes.data
+      const list = Array.isArray(payload)
+        ? payload
+        : payload && typeof payload === 'object'
+          ? payload.entries ||
+            payload.items ||
+            payload.results ||
+            payload.data ||
+            payload.waiting_list ||
+            payload.waitingList
+          : null
+      totalApplicationsCount.value = Array.isArray(list) ? list.length : 0
     }
   } catch (err) {
-    console.error('Error checking capacity:', err);
+    console.error('Error checking capacity:', err)
   }
 }
 
 async function loadCourse() {
-  if (!id) return;
-  loading.value = true;
-  error.value = null;
+  if (!id) return
+  loading.value = true
+  error.value = null
   try {
-    const res = await api.get(`/api/v1/courses/${id}`);
-    course.value = res.data;
-    await checkEnrollment();
-    await checkCourseCapacity();
+    const res = await api.get(`/api/v1/courses/${id}`)
+    course.value = res.data
+    await checkEnrollment()
+    await checkCourseCapacity()
   } catch (err: unknown) {
-    error.value = getRequestErrorMessage(err, t('courses.loadError'));
+    error.value = getRequestErrorMessage(err, t('courses.loadError'))
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 onMounted(() => {
-  loadCourse();
-});
+  loadCourse()
+})
 
 // Split auth user full name if possible
 const getPrefilledNames = () => {
-  const fullName = authStore.user?.fullName || '';
-  const parts = fullName.trim().split(/\s+/);
+  const fullName = authStore.user?.fullName || ''
+  const parts = fullName.trim().split(/\s+/)
   if (parts.length > 1) {
     return {
       first: parts[0],
-      last: parts.slice(1).join(' ')
-    };
+      last: parts.slice(1).join(' '),
+    }
   }
-  return { first: fullName, last: '' };
-};
+  return { first: fullName, last: '' }
+}
 
-const names = getPrefilledNames();
+const names = getPrefilledNames()
 
 const form = ref({
   name: names.first,
@@ -189,62 +205,62 @@ const form = ref({
   dni_nie: '',
   has_darde: '' as boolean | '',
   previous_education: '',
-  agreeTerms: false
-});
+  agreeTerms: false,
+})
 
 function validateDniNie(value: string) {
-  const cleanVal = value.trim().toUpperCase();
-  const regex = /^[XYZ0-9]\d{7}[A-Z]$/;
-  return regex.test(cleanVal);
+  const cleanVal = value.trim().toUpperCase()
+  const regex = /^[XYZ0-9]\d{7}[A-Z]$/
+  return regex.test(cleanVal)
 }
 
 function calculateAge(birthDateStr: string) {
-  if (!birthDateStr) return 0;
-  const birthDate = new Date(birthDateStr);
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const m = today.getMonth() - birthDate.getMonth();
+  if (!birthDateStr) return 0
+  const birthDate = new Date(birthDateStr)
+  const today = new Date()
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const m = today.getMonth() - birthDate.getMonth()
   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-    age--;
+    age--
   }
-  return age;
+  return age
 }
 
 async function submitForm() {
-  submitError.value = null;
+  submitError.value = null
 
   if (!authStore.isAuthenticated) {
-    alert(t('courseDetail.validation.login'));
-    router.push('/login');
-    return;
+    alert(t('courseDetail.validation.login'))
+    router.push('/login')
+    return
   }
 
   if (!form.value.agreeTerms) {
-    alert(t('courseDetail.validation.terms'));
-    return;
+    alert(t('courseDetail.validation.terms'))
+    return
   }
 
   if (!validateDniNie(form.value.dni_nie)) {
-    submitError.value = t('courseDetail.validation.dni');
-    return;
+    submitError.value = t('courseDetail.validation.dni')
+    return
   }
 
   if (calculateAge(form.value.birth_date) < 18) {
-    submitError.value = t('courseDetail.validation.age');
-    return;
+    submitError.value = t('courseDetail.validation.age')
+    return
   }
 
   if (form.value.has_darde === '') {
-    submitError.value = t('courseDetail.validation.darde');
-    return;
+    submitError.value = t('courseDetail.validation.darde')
+    return
   }
 
   if (form.value.previous_education.length > 250) {
-    submitError.value = t('courseDetail.validation.previousEducation');
-    return;
+    submitError.value = t('courseDetail.validation.previousEducation')
+    return
   }
 
-  submitting.value = true;
+  submitting.value = true
 
   try {
     // 1. Actualizar el perfil del usuario autenticado en FastAPI (Requisito legal)
@@ -252,60 +268,67 @@ async function submitForm() {
       name: `${form.value.name} ${form.value.lastName}`.trim(),
       email: form.value.email,
       dni_nie: form.value.dni_nie.trim().toUpperCase(),
-      birth_date: form.value.birth_date
-    });
+      birth_date: form.value.birth_date,
+    })
 
     // 2. Intentar crear la solicitud de inscripción en FastAPI
     const payload = {
       course_id: Number(id),
       has_darde: form.value.has_darde === true,
-      previous_education: form.value.previous_education ? form.value.previous_education.trim() : null
-    };
+      previous_education: form.value.previous_education
+        ? form.value.previous_education.trim()
+        : null,
+    }
 
-    await api.post('/api/v1/applications/', payload);
+    await api.post('/api/v1/applications/', payload)
 
-    alert(t('courseDetail.validation.success'));
-    isEnrolled.value = true;
-    await checkCourseCapacity();
-
-  } catch (err: any) {
-    const errorDetail = err?.response?.data?.detail;
+    alert(t('courseDetail.validation.success'))
+    isEnrolled.value = true
+    await checkCourseCapacity()
+  } catch (err: unknown) {
+    const errorDetail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
 
     // 3. Manejo inteligente si el aforo está completo ("Course is full")
-    if (errorDetail === "Course is full") {
-      if (confirm('El cupo para este curso está lleno. ¿Deseas inscribirte en la lista de espera?')) {
+    if (errorDetail === 'Course is full') {
+      if (
+        confirm('El cupo para este curso está lleno. ¿Deseas inscribirte en la lista de espera?')
+      ) {
         try {
           await api.post('/api/v1/waiting-list/', null, {
             params: {
               user_id: Number(authStore.user?.id),
-              course_id: Number(id)
-            }
-          });
+              course_id: Number(id),
+            },
+          })
           // alert('¡Te has registrado con éxito en la lista de espera!');
-          isEnrolled.value = true;
-          await checkCourseCapacity();
-        } catch (waitErr: any) {
-          submitError.value = waitErr?.response?.data?.detail || 'Error al unirse a la lista de espera.';
+          isEnrolled.value = true
+          await checkCourseCapacity()
+        } catch (waitErr: unknown) {
+          submitError.value =
+            (waitErr as { response?: { data?: { detail?: string } } })?.response?.data?.detail || 'Error al unirse a la lista de espera.'
         }
       }
     } else {
-      submitError.value = errorDetail || err.message || 'Error al procesar la inscripción.';
+      submitError.value = errorDetail || (err as { message?: string })?.message || 'Error al procesar la inscripción.'
     }
   } finally {
-    submitting.value = false;
+    submitting.value = false
   }
 }
 </script>
 
 <template>
   <div class="course-detail-page">
-    <header class="course-hero" :style="course && course.banner ? `background-image: url(${course.banner})` : ''">
+    <header
+      class="course-hero"
+      :style="course && course.banner ? `background-image: url(${course.banner})` : ''"
+    >
       <div class="container hero-inner">
         <div class="hero-text">
           <h1 class="hero-title">{{ course?.name || t('courseDetail.fallbackTitle') }}</h1>
           <p class="hero-subtitle">{{ course?.summary || course?.description || '' }}</p>
         </div>
-        <div v-if="course" >
+        <div v-if="course">
           <div class="hero-meta-item">
             <span class="hero-meta-label">Inicio:</span>
             <strong>{{ course.start_date || 'TBD' }}</strong>
@@ -326,11 +349,12 @@ async function submitForm() {
       <div class="detail-grid">
         <section class="detail-main">
           <div v-if="loading" class="text-center">{{ t('courseDetail.loading') }}</div>
-          <div v-else-if="error" class="text-center" style="color:var(--error-color)">{{ t('courseDetail.error', { message: error }) }}</div>
+          <div v-else-if="error" class="text-center" style="color: var(--error-color)">
+            {{ t('courseDetail.error', { message: error }) }}
+          </div>
 
           <div>
-            <div>
-            </div>
+            <div></div>
           </div>
         </section>
 
@@ -341,7 +365,11 @@ async function submitForm() {
               <div class="status-icon"><Lock :size="56" /></div>
               <h3 class="form-title">{{ t('courseDetail.private.title') }}</h3>
               <p class="form-subtitle">{{ t('courseDetail.private.text') }}</p>
-              <router-link to="/login" class="full-width btn-primary-link text-center" style="display: block; margin-top: 1.5rem; text-decoration: none;">
+              <router-link
+                to="/login"
+                class="full-width btn-primary-link text-center"
+                style="display: block; margin-top: 1.5rem; text-decoration: none"
+              >
                 {{ t('courseDetail.private.cta') }}
               </router-link>
             </div>
@@ -364,7 +392,9 @@ async function submitForm() {
             <div v-else-if="isPastStartDate" class="status-prompt-box text-center">
               <div class="status-icon"><Calendar :size="56" /></div>
               <h3 class="form-title">{{ t('courseDetail.closed.title') }}</h3>
-              <p class="form-subtitle">{{ t('courseDetail.closed.text', { date: course?.start_date || '' }) }}</p>
+              <p class="form-subtitle">
+                {{ t('courseDetail.closed.text', { date: course?.start_date || '' }) }}
+              </p>
             </div>
 
             <!-- 5. Blocked by Over-booking (>120% capacity) State -->
@@ -380,7 +410,8 @@ async function submitForm() {
 
               <!-- Warning Badge if Capacity Reached but pending (over-booking) is allowed -->
               <div v-if="isCourseFull" class="warning-badge">
-                <TriangleAlert :size="16" style="vertical-align: middle; margin-right: 4px;" /> {{ t('courseDetail.form.warning') }}
+                <TriangleAlert :size="16" style="vertical-align: middle; margin-right: 4px" />
+                {{ t('courseDetail.form.warning') }}
               </div>
               <p v-else class="form-subtitle">{{ t('courseDetail.form.subtitle') }}</p>
 
@@ -392,23 +423,47 @@ async function submitForm() {
                   <div class="form-row">
                     <div class="form-group">
                       <label class="form-label">{{ t('courseDetail.form.name') }}</label>
-                      <input v-model="form.name" class="form-input" type="text" :placeholder="t('courseDetail.form.namePlaceholder')" required />
+                      <input
+                        v-model="form.name"
+                        class="form-input"
+                        type="text"
+                        :placeholder="t('courseDetail.form.namePlaceholder')"
+                        required
+                      />
                     </div>
                     <div class="form-group">
                       <label class="form-label">{{ t('courseDetail.form.lastName') }}</label>
-                      <input v-model="form.lastName" class="form-input" type="text" :placeholder="t('courseDetail.form.lastNamePlaceholder')" required />
+                      <input
+                        v-model="form.lastName"
+                        class="form-input"
+                        type="text"
+                        :placeholder="t('courseDetail.form.lastNamePlaceholder')"
+                        required
+                      />
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label class="form-label">{{ t('courseDetail.form.email') }}</label>
-                    <input v-model="form.email" class="form-input" type="email" placeholder="tu@correo.com" required />
+                    <input
+                      v-model="form.email"
+                      class="form-input"
+                      type="email"
+                      placeholder="tu@correo.com"
+                      required
+                    />
                   </div>
 
                   <div class="form-row">
                     <div class="form-group">
                       <label class="form-label">{{ t('courseDetail.form.dni') }}</label>
-                      <input v-model="form.dni_nie" class="form-input" type="text" placeholder="12345678Z o X1234567Z" required />
+                      <input
+                        v-model="form.dni_nie"
+                        class="form-input"
+                        type="text"
+                        placeholder="12345678Z o X1234567Z"
+                        required
+                      />
                     </div>
                     <div class="form-group">
                       <label class="form-label">{{ t('courseDetail.form.birthDate') }}</label>
@@ -435,8 +490,20 @@ async function submitForm() {
                   </div>
                   <div class="form-group">
                     <label class="form-label">{{ t('courseDetail.form.previousEducation') }}</label>
-                    <textarea v-model="form.previous_education" class="form-input" rows="3" :placeholder="t('courseDetail.form.previousEducationPlaceholder')" maxlength="250"></textarea>
-                    <p class="char-counter">{{ t('courseDetail.form.remainingChars', { count: 250 - form.previous_education.length }) }}</p>
+                    <textarea
+                      v-model="form.previous_education"
+                      class="form-input"
+                      rows="3"
+                      :placeholder="t('courseDetail.form.previousEducationPlaceholder')"
+                      maxlength="250"
+                    ></textarea>
+                    <p class="char-counter">
+                      {{
+                        t('courseDetail.form.remainingChars', {
+                          count: 250 - form.previous_education.length,
+                        })
+                      }}
+                    </p>
                   </div>
                 </fieldset>
 
@@ -449,12 +516,15 @@ async function submitForm() {
                 </div>
 
                 <div v-if="submitError" class="submit-error-msg">
-                  <TriangleAlert :size="16" style="vertical-align: middle; margin-right: 4px;" /> {{ submitError }}
+                  <TriangleAlert :size="16" style="vertical-align: middle; margin-right: 4px" />
+                  {{ submitError }}
                 </div>
 
                 <!-- Botón -->
                 <button type="submit" class="full-width btn-primary" :disabled="submitting">
-                  {{ submitting ? t('courseDetail.form.submitting') : t('courseDetail.form.submit') }}
+                  {{
+                    submitting ? t('courseDetail.form.submitting') : t('courseDetail.form.submit')
+                  }}
                 </button>
               </form>
             </div>
@@ -468,7 +538,7 @@ async function submitForm() {
 <style scoped>
 .course-hero {
   min-height: 360px;
-  background: linear-gradient(90deg, rgba(84,24,193,0.08), rgba(255,87,34,0.02));
+  background: linear-gradient(90deg, rgba(84, 24, 193, 0.08), rgba(255, 87, 34, 0.02));
   background-size: cover;
   background-position: center;
   display: flex;
@@ -786,7 +856,7 @@ select.form-input {
   background: var(--primary-color-soft);
 }
 
-.checkbox-label input[type="checkbox"] {
+.checkbox-label input[type='checkbox'] {
   margin-top: 0.35rem;
   cursor: pointer;
   accent-color: var(--primary-color);
