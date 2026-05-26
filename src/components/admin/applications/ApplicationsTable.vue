@@ -232,7 +232,7 @@ onUnmounted(() => {
               </div>
             </td>
             <td>
-              <span class="course-pill">Curso #{{ application.course_id }}</span>
+              <span class="course-pill">{{ application.course?.name || 'Sin curso' }}</span>
             </td>
             <td>
               <span class="darde-value">{{ formatDarde(application.has_darde) }}</span>

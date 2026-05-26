@@ -5,6 +5,10 @@ export interface ApplicationUser {
   email: string
 }
 
+export interface ApplicationCourse {
+  name: string
+}
+
 export interface ApplicationRecord {
   id: number
   user_id: number
@@ -13,6 +17,7 @@ export interface ApplicationRecord {
   has_darde: boolean | null
   previous_education: string | null
   user?: ApplicationUser | null
+  course?: ApplicationCourse | null
 }
 
 export interface ApplicationsFeedback {

@@ -15,6 +15,9 @@ interface RawApplication {
     name: string
     email: string
   } | null
+  course?: {
+    name: string
+  } | null
 }
 
 const normalizeStatus = (status: string): ApplicationStatus => {
@@ -35,6 +38,7 @@ const mapApplication = (application: RawApplication): ApplicationRecord => ({
   has_darde: application.has_darde ?? null,
   previous_education: application.previous_education ?? null,
   user: application.user ?? null,
+  course: application.course ?? null,
 })
 
 const getApiErrorMessage = (error: unknown, fallbackMessage: string): string => {
