@@ -28,7 +28,8 @@ export const useApplications = () => {
         return false
       }
 
-      const matchesStatus = statusFilter.value === 'all' || application.status === statusFilter.value
+      const matchesStatus =
+        statusFilter.value === 'all' || application.status === statusFilter.value
       const searchableText = [
         application.id,
         application.user_id,
@@ -48,8 +49,10 @@ export const useApplications = () => {
   const stats = computed(() => ({
     total: applicationsRaw.value.length,
     pending: applicationsRaw.value.filter((application) => application.status === 'pending').length,
-    accepted: applicationsRaw.value.filter((application) => application.status === 'accepted').length,
-    rejected: applicationsRaw.value.filter((application) => application.status === 'rejected').length,
+    accepted: applicationsRaw.value.filter((application) => application.status === 'accepted')
+      .length,
+    rejected: applicationsRaw.value.filter((application) => application.status === 'rejected')
+      .length,
   }))
 
   const resetFeedback = () => {
@@ -65,9 +68,7 @@ export const useApplications = () => {
       feedback.value = {
         type: 'error',
         message:
-          error instanceof Error
-            ? error.message
-            : 'No se pudo cargar la lista de solicitudes.',
+          error instanceof Error ? error.message : 'No se pudo cargar la lista de solicitudes.',
       }
     } finally {
       loading.value = false
@@ -115,8 +116,7 @@ export const useApplications = () => {
     } catch (error: unknown) {
       feedback.value = {
         type: 'error',
-        message:
-          error instanceof Error ? error.message : 'No se pudo actualizar el estado.',
+        message: error instanceof Error ? error.message : 'No se pudo actualizar el estado.',
       }
     } finally {
       updatingStatusId.value = null
@@ -138,8 +138,7 @@ export const useApplications = () => {
     } catch (error: unknown) {
       feedback.value = {
         type: 'error',
-        message:
-          error instanceof Error ? error.message : 'No se pudo eliminar la solicitud.',
+        message: error instanceof Error ? error.message : 'No se pudo eliminar la solicitud.',
       }
     } finally {
       deletingApplicationId.value = null

@@ -18,12 +18,14 @@ api.interceptors.response.use(
       authStore.clearSession()
 
       // Dispatch custom event so the UI can notify the user
-      window.dispatchEvent(new CustomEvent('auth:expired', {
-        detail: 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.'
-      }))
+      window.dispatchEvent(
+        new CustomEvent('auth:expired', {
+          detail: 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.',
+        }),
+      )
     }
     return Promise.reject(error)
-  }
+  },
 )
 
 export default api

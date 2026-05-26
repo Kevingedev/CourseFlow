@@ -18,18 +18,14 @@ const emit = defineEmits<{
 </script>
 
 <template>
+  <!-- eslint-disable vue/no-mutating-props -->
   <section class="glass-card course-form-card">
     <div class="card-header">
       <div>
         <p class="eyebrow">Panel de cursos</p>
         <h3>{{ isEditing ? 'Editar curso' : 'Crear curso' }}</h3>
       </div>
-      <button
-        v-if="isEditing"
-        type="button"
-        class="ghost-action"
-        @click="emit('reset')"
-      >
+      <button v-if="isEditing" type="button" class="ghost-action" @click="emit('reset')">
         Cancelar edición
       </button>
     </div>
@@ -70,20 +66,12 @@ const emit = defineEmits<{
       <div class="field-row">
         <label class="field-group">
           <span class="field-label">Fecha de inicio <span class="required">*</span></span>
-          <input
-            v-model="form.start_date"
-            type="date"
-            class="field-input"
-          />
+          <input v-model="form.start_date" type="date" class="field-input" />
         </label>
 
         <label class="field-group">
           <span class="field-label">Fecha de fin <span class="required">*</span></span>
-          <input
-            v-model="form.end_date"
-            type="date"
-            class="field-input"
-          />
+          <input v-model="form.end_date" type="date" class="field-input" />
         </label>
       </div>
 
@@ -102,12 +90,7 @@ const emit = defineEmits<{
       <label class="toggle-group">
         <span class="field-label">Curso activo</span>
         <div class="toggle-track">
-          <input
-            v-model="form.is_active"
-            type="checkbox"
-            class="toggle-input"
-            role="switch"
-          />
+          <input v-model="form.is_active" type="checkbox" class="toggle-input" role="switch" />
           <span class="toggle-slider"></span>
           <span class="toggle-label">{{ form.is_active ? 'Visible para alumnos' : 'Oculto' }}</span>
         </div>
@@ -207,7 +190,9 @@ const emit = defineEmits<{
   background: rgba(255, 255, 255, 0.92);
   color: var(--text-dark);
   font-size: 0.95rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   font-family: inherit;
 }
 

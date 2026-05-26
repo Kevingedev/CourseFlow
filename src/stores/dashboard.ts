@@ -37,15 +37,15 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
   // Live dynamic metrics calculated from collections
   const totalCourses = computed(() => {
-    return courses.value.filter(c => c.is_active).length
+    return courses.value.filter((c) => c.is_active).length
   })
 
   const pendingApplications = computed(() => {
-    return applications.value.filter(a => a.status === 'pending').length
+    return applications.value.filter((a) => a.status === 'pending').length
   })
 
   const admittedStudents = computed(() => {
-    return applications.value.filter(a => a.status === 'accepted').length
+    return applications.value.filter((a) => a.status === 'accepted').length
   })
 
   const waitingListCount = computed(() => {
@@ -57,10 +57,10 @@ export const useDashboardStore = defineStore('dashboard', () => {
     const statusCounts = {
       pending: 0,
       accepted: 0,
-      rejected: 0
+      rejected: 0,
     }
 
-    applications.value.forEach(app => {
+    applications.value.forEach((app) => {
       if (app.status === 'accepted') {
         statusCounts.accepted++
       } else if (app.status === 'pending') {
@@ -79,27 +79,30 @@ export const useDashboardStore = defineStore('dashboard', () => {
           hoverBackgroundColor: ['#FFD54F', '#81C784', '#94A3B8'],
           borderWidth: 2,
           borderColor: '#ffffff',
-          data: [statusCounts.pending, statusCounts.accepted, statusCounts.rejected]
-        }
-      ]
+          data: [statusCounts.pending, statusCounts.accepted, statusCounts.rejected],
+        },
+      ],
     }
   })
 
   const studentsPerCourseData = computed(() => {
     // Get enrollment count per course
-    const courseMap = new Map<string | number, { name: string; enrolled: number; capacity: number }>()
+    const courseMap = new Map<
+      string | number,
+      { name: string; enrolled: number; capacity: number }
+    >()
 
     // Initialize map with all courses
-    courses.value.forEach(course => {
+    courses.value.forEach((course) => {
       courseMap.set(course.id, {
         name: course.name,
         enrolled: 0,
-        capacity: course.capacity ?? 0
+        capacity: course.capacity ?? 0,
       })
     })
 
     // Count admitted students
-    applications.value.forEach(app => {
+    applications.value.forEach((app) => {
       if (app.status === 'accepted') {
         const courseData = courseMap.get(app.course_id)
         if (courseData) {
@@ -112,7 +115,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
     const enrolledData: number[] = []
     const capacityData: number[] = []
 
-    courseMap.forEach(data => {
+    courseMap.forEach((data) => {
       labels.push(data.name.length > 20 ? data.name.substring(0, 20) + '...' : data.name)
       enrolledData.push(data.enrolled)
       capacityData.push(data.capacity)
@@ -126,16 +129,16 @@ export const useDashboardStore = defineStore('dashboard', () => {
           backgroundColor: '#4311B9',
           hoverBackgroundColor: '#724CCA',
           borderRadius: 6,
-          data: enrolledData
+          data: enrolledData,
         },
         {
           label: 'Capacidad del Curso',
           backgroundColor: '#E5DFF3',
           hoverBackgroundColor: '#F5F2FA',
           borderRadius: 6,
-          data: capacityData
-        }
-      ]
+          data: capacityData,
+        },
+      ],
     }
   })
 
@@ -149,8 +152,12 @@ export const useDashboardStore = defineStore('dashboard', () => {
       const courseIds = coursesRes.map((course) => course.id)
 
       const [applicationsByCourse, waitingListByCourse] = await Promise.all([
-        Promise.allSettled(courseIds.map((courseId) => dashboardService.getCourseApplications(courseId))),
-        Promise.allSettled(courseIds.map((courseId) => dashboardService.getWaitingListByCourse(courseId))),
+        Promise.allSettled(
+          courseIds.map((courseId) => dashboardService.getCourseApplications(courseId)),
+        ),
+        Promise.allSettled(
+          courseIds.map((courseId) => dashboardService.getWaitingListByCourse(courseId)),
+        ),
       ])
 
       applications.value = applicationsByCourse.flatMap((result) => {
@@ -193,6 +200,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     waitingListCount,
     applicationsStatusData,
     studentsPerCourseData,
-    fetchDashboardData
+    fetchDashboardData,
   }
 })

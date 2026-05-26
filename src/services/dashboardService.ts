@@ -11,14 +11,6 @@ interface RawApplication {
   status: string
 }
 
-interface RawWaitingListEntry {
-  id: number
-  user_id: number
-  course_id: number
-  position?: number
-  created_at: string
-}
-
 interface RawUser {
   id: number
   name: string
@@ -57,7 +49,6 @@ const mapAdminUser = (user: RawUser): User => ({
 })
 
 export const dashboardService = {
-
   /**
    * Fetches all courses
    */
@@ -112,5 +103,5 @@ export const dashboardService = {
   async getAdminUsers(): Promise<User[]> {
     const response = await api.get<RawUser[]>('/api/admin/users')
     return response.data.map(mapAdminUser)
-  }
+  },
 }

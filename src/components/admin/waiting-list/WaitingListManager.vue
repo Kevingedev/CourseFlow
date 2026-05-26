@@ -11,10 +11,14 @@ const {
   entries,
   loadingCourses,
   loadingEntries,
+  updatingEntryId,
+  deletingEntryId,
   error,
   searchQuery,
   loadCourses,
   loadEntries,
+  moveEntryToPending,
+  deleteEntry,
 } = useWaitingList()
 
 const handleRefresh = async () => {
@@ -50,11 +54,7 @@ const handleRefresh = async () => {
           <select v-model="selectedCourseId" class="course-filter" :disabled="loadingCourses">
             <option value="all">Todos los cursos</option>
             <option v-if="loadingCourses" value="all" disabled>Cargando cursos...</option>
-            <option
-              v-for="course in courses"
-              :key="String(course.id)"
-              :value="String(course.id)"
-            >
+            <option v-for="course in courses" :key="String(course.id)" :value="String(course.id)">
               {{ course.name }}
             </option>
           </select>
@@ -98,6 +98,10 @@ const handleRefresh = async () => {
         v-else
         :entries="entries"
         :course-name-by-id="courseNameById"
+        :updating-entry-id="updatingEntryId"
+        :deleting-entry-id="deletingEntryId"
+        @pending="moveEntryToPending"
+        @remove="deleteEntry"
       />
     </section>
   </div>
@@ -172,7 +176,9 @@ const handleRefresh = async () => {
   font-weight: 600;
   color: var(--text-dark);
   font-size: 0.9rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   font-family: inherit;
 }
 
@@ -189,7 +195,9 @@ const handleRefresh = async () => {
   font-weight: 700;
   color: var(--text-dark);
   font-size: 0.9rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   font-family: inherit;
 }
 

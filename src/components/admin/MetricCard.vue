@@ -51,17 +51,17 @@ defineProps<{
 
 .pending-icon {
   background-color: rgba(255, 193, 7, 0.08);
-  color: #FFC107;
+  color: #ffc107;
 }
 
 .admitted-icon {
   background-color: rgba(76, 175, 80, 0.08);
-  color: #4CAF50;
+  color: #4caf50;
 }
 
 .waiting-icon {
   background-color: rgba(33, 150, 243, 0.08);
-  color: #2196F3;
+  color: #2196f3;
 }
 
 .card-data {

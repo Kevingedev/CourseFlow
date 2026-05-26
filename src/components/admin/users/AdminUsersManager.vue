@@ -46,8 +46,6 @@ const handleConfirmDelete = async () => {
 
 <template>
   <div class="admin-users-manager">
-    
-
     <section class="content-grid">
       <AdminUserFormCard
         :form="form"
@@ -76,7 +74,11 @@ const handleConfirmDelete = async () => {
     <CustomConfirmModal
       :open="confirmOpen"
       title="Eliminar administrador"
-      :message="userToDelete ? `Vas a eliminar al administrador ${userToDelete.fullName}. Esta acción no se puede deshacer.` : ''"
+      :message="
+        userToDelete
+          ? `Vas a eliminar al administrador ${userToDelete.fullName}. Esta acción no se puede deshacer.`
+          : ''
+      "
       confirm-text="Eliminar"
       cancel-text="Cancelar"
       type="danger"

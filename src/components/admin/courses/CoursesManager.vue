@@ -126,7 +126,11 @@ const handleConfirmDeactivate = async () => {
     <CustomConfirmModal
       :open="confirmOpen"
       title="Desactivar curso"
-      :message="courseToDeactivate ? `Vas a desactivar el curso &quot;${courseToDeactivate.name}&quot;. Los alumnos ya inscritos no se verán afectados, pero el curso dejará de ser visible para nuevas inscripciones.` : ''"
+      :message="
+        courseToDeactivate
+          ? `Vas a desactivar el curso &quot;${courseToDeactivate.name}&quot;. Los alumnos ya inscritos no se verán afectados, pero el curso dejará de ser visible para nuevas inscripciones.`
+          : ''
+      "
       confirm-text="Desactivar"
       cancel-text="Cancelar"
       type="warning"

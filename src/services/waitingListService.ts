@@ -120,4 +120,20 @@ export const waitingListService = {
       throw new Error(getApiErrorMessage(error, 'No se pudo añadir a la lista de espera.'))
     }
   },
+
+  async moveToPending(entryId: string | number): Promise<void> {
+    try {
+      await api.patch(`/api/v1/waiting-list/${entryId}/pending`)
+    } catch (error: unknown) {
+      throw new Error(getApiErrorMessage(error, 'No se pudo devolver a pendiente.'))
+    }
+  },
+
+  async deleteWaitingEntry(entryId: string | number): Promise<void> {
+    try {
+      await api.delete(`/api/v1/waiting-list/${entryId}`)
+    } catch (error: unknown) {
+      throw new Error(getApiErrorMessage(error, 'No se pudo eliminar de la lista de espera.'))
+    }
+  },
 }

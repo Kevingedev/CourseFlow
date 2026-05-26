@@ -10,7 +10,7 @@ import {
   CategoryScale,
   LinearScale,
   type ChartOptions,
-  type ChartData
+  type ChartData,
 } from 'chart.js'
 
 // Register ChartJS modules
@@ -32,11 +32,11 @@ const defaultOptions = computed<ChartOptions<'bar'>>(() => ({
         font: {
           family: 'Inter, sans-serif',
           size: 12,
-          weight: 500
+          weight: 500,
         },
         usePointStyle: true,
-        padding: 20
-      }
+        padding: 20,
+      },
     },
     title: {
       display: !!props.title,
@@ -45,41 +45,41 @@ const defaultOptions = computed<ChartOptions<'bar'>>(() => ({
       font: {
         family: 'Outfit, sans-serif',
         size: 16,
-        weight: 'bold'
+        weight: 'bold',
       },
       padding: {
-        bottom: 20
-      }
-    }
+        bottom: 20,
+      },
+    },
   },
   scales: {
     x: {
       grid: {
-        display: false
+        display: false,
       },
       ticks: {
         font: {
           family: 'Inter, sans-serif',
-          size: 11
-        }
-      }
+          size: 11,
+        },
+      },
     },
     y: {
       border: {
-        dash: [4, 4]
+        dash: [4, 4],
       },
       grid: {
-        color: '#f0f0f0'
+        color: '#f0f0f0',
       },
       ticks: {
         font: {
           family: 'Inter, sans-serif',
-          size: 11
+          size: 11,
         },
-        stepSize: 1
-      }
-    }
-  }
+        stepSize: 1,
+      },
+    },
+  },
 }))
 </script>
 

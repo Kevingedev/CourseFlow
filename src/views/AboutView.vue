@@ -3,7 +3,7 @@
  * AboutView.vue
  * Information about the Course Flow platform.
  */
-import { Lightbulb, Handshake, Globe, Users, TrendingUp, Building2 } from '@lucide/vue';
+import { Lightbulb, Handshake, Globe, Users, TrendingUp, Building2 } from '@lucide/vue'
 import { useI18n } from '@/i18n'
 
 const { t } = useI18n()
@@ -14,7 +14,9 @@ const { t } = useI18n()
     <!-- About Hero -->
     <section class="about-hero section-padding">
       <div class="container text-center">
-        <h1 class="hero-title">{{ t('about.hero.titlePrefix') }} <span class="text-accent">Course Flow</span></h1>
+        <h1 class="hero-title">
+          {{ t('about.hero.titlePrefix') }} <span class="text-accent">Course Flow</span>
+        </h1>
         <p class="hero-subtitle mx-auto">
           {{ t('about.hero.subtitle') }}
         </p>

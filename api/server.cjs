@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const jsonServer = require('json-server')
 const path = require('path')
 
@@ -39,6 +39,59 @@ const toNumber = (value) => {
   const n = Number(value)
   return Number.isFinite(n) ? n : null
 }
+
+const getUserById = (userId) =>
+  (db().get('users').value() || []).find((user) => Number(user.id) === Number(userId)) || null
+
+const getCourseById = (courseId) =>
+  (db().get('courses').value() || []).find((course) => Number(course.id) === Number(courseId)) || null
+
+const waitingEntriesForCourse = (courseId) =>
+  (db().get('waiting_list').value() || [])
+    .filter((entry) => Number(entry.course_id) === Number(courseId))
+    .sort((left, right) => {
+      const leftPosition = Number(left.position) || 0
+      const rightPosition = Number(right.position) || 0
+      if (leftPosition !== rightPosition) return leftPosition - rightPosition
+      return Number(left.id) - Number(right.id)
+    })
+
+const reindexWaitingList = (courseId) => {
+  const entries = waitingEntriesForCourse(courseId)
+  entries.forEach((entry, index) => {
+    db().get('waiting_list').find({ id: entry.id }).assign({ position: index + 1 }).write()
+  })
+}
+
+const serializeWaitingEntry = (entry, position) => {
+  const user = getUserById(entry.user_id)
+  const course = getCourseById(entry.course_id)
+
+  return {
+    ...entry,
+    position: typeof position === 'number' ? position : entry.position,
+    user: user
+      ? {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        }
+      : null,
+    course: course
+      ? {
+          id: course.id,
+          name: course.name,
+        }
+      : null,
+  }
+}
+
+const findApplicationByUserAndCourse = (userId, courseId) =>
+  (db().get('applications').value() || []).find(
+    (application) =>
+      Number(application.user_id) === Number(userId) &&
+      Number(application.course_id) === Number(courseId),
+  ) || null
 
 server.get('/api/v1/courses/', (req, res) => {
   res.json(db().get('courses').value() || [])
@@ -90,9 +143,9 @@ server.get('/api/v1/waiting-list/:courseId', (req, res) => {
   const courseId = toNumber(req.params.courseId)
   if (courseId === null) return res.status(400).json({ detail: 'Invalid course id.' })
 
-  const entries = (db().get('waiting_list').value() || [])
-    .filter((entry) => Number(entry.course_id) === courseId)
-    .map((entry, index) => ({ ...entry, position: index + 1 }))
+  const entries = waitingEntriesForCourse(courseId).map((entry, index) =>
+    serializeWaitingEntry(entry, entry.position || index + 1),
+  )
 
   res.json(entries)
 })
@@ -109,15 +162,57 @@ server.post('/api/v1/waiting-list/', (req, res) => {
   )
   if (already) return res.status(409).json({ detail: 'Already in waiting list.' })
 
+  const maxPos =
+    waitingEntriesForCourse(courseId).reduce((acc, entry) => {
+      const entryPosition = Number(entry.position) || 0
+      return Math.max(acc, entryPosition)
+    }, 0) + 1
+
   const record = {
     id: nextId('waiting_list'),
     user_id: userId,
     course_id: courseId,
+    position: maxPos,
     created_at: new Date().toISOString(),
   }
 
   db().get('waiting_list').push(record).write()
-  res.status(201).json(record)
+  res.status(201).json(serializeWaitingEntry(record, record.position))
+})
+
+server.patch('/api/v1/waiting-list/:entryId/pending', (req, res) => {
+  const entryId = toNumber(req.params.entryId)
+  if (entryId === null) return res.status(400).json({ detail: 'Invalid waiting list id.' })
+
+  const entry = db().get('waiting_list').find({ id: entryId }).value()
+  if (!entry) return res.status(404).json({ detail: 'Waiting list entry not found.' })
+
+  const application = findApplicationByUserAndCourse(entry.user_id, entry.course_id)
+  if (!application) {
+    return res.status(404).json({ detail: 'Application not found.' })
+  }
+
+  db().get('applications').find({ id: application.id }).assign({ status: 'pending' }).write()
+  db().get('waiting_list').remove({ id: entryId }).write()
+  reindexWaitingList(entry.course_id)
+
+  const updatedApplication = db().get('applications').find({ id: application.id }).value()
+  res.json({
+    waiting_list_removed: true,
+    application: updatedApplication,
+  })
+})
+
+server.delete('/api/v1/waiting-list/:entryId', (req, res) => {
+  const entryId = toNumber(req.params.entryId)
+  if (entryId === null) return res.status(400).json({ detail: 'Invalid waiting list id.' })
+
+  const entry = db().get('waiting_list').find({ id: entryId }).value()
+  if (!entry) return res.status(404).json({ detail: 'Waiting list entry not found.' })
+
+  db().get('waiting_list').remove({ id: entryId }).write()
+  reindexWaitingList(entry.course_id)
+  res.sendStatus(204)
 })
 
 server.get('/api/admin/users', (req, res) => {
@@ -197,7 +292,6 @@ server.use(router)
 
 const port = Number(process.env.PORT) || 8002
 server.listen(port, () => {
-  // eslint-disable-next-line no-console
+   
   console.log(`JSON Server API running on http://localhost:${port}`)
 })
-

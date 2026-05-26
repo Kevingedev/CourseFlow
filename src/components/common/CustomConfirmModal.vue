@@ -16,7 +16,7 @@ const props = withDefaults(
     cancelText: 'Cancelar',
     type: 'danger',
     loading: false,
-  }
+  },
 )
 
 const emit = defineEmits<{
@@ -55,7 +55,18 @@ watch(
         <div class="confirm-panel" role="dialog" aria-modal="true" :aria-labelledby="titleId">
           <div class="confirm-icon-wrapper" :class="type">
             <!-- Danger / Delete (Trash) -->
-            <svg v-if="type === 'danger'" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              v-if="type === 'danger'"
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M3 6h18"></path>
               <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
               <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
@@ -63,13 +74,37 @@ watch(
               <line x1="14" y1="11" x2="14" y2="17"></line>
             </svg>
             <!-- Warning / Deactivate (Alert Triangle) -->
-            <svg v-else-if="type === 'warning'" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+            <svg
+              v-else-if="type === 'warning'"
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
+              ></path>
               <line x1="12" y1="9" x2="12" y2="13"></line>
               <line x1="12" y1="17" x2="12.01" y2="17"></line>
             </svg>
             <!-- Info / Default (Info circle) -->
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="12" y1="16" x2="12" y2="12"></line>
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -82,12 +117,7 @@ watch(
           </div>
 
           <div class="confirm-actions">
-            <button
-              type="button"
-              class="btn-cancel"
-              :disabled="loading"
-              @click="emit('close')"
-            >
+            <button type="button" class="btn-cancel" :disabled="loading" @click="emit('close')">
               {{ cancelText }}
             </button>
             <button
@@ -125,7 +155,7 @@ watch(
   background: var(--white);
   border-radius: 24px;
   border: 1px solid rgba(67, 17, 185, 0.12);
-  box-shadow: 
+  box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
     0 20px 40px -4px rgba(67, 17, 185, 0.12);
   padding: 2.25rem 2rem 2rem 2rem;
@@ -330,12 +360,12 @@ button:disabled {
     padding: 1.75rem 1.5rem 1.5rem 1.5rem;
     border-radius: 20px;
   }
-  
+
   .confirm-actions {
     grid-template-columns: 1fr;
     gap: 0.75rem;
   }
-  
+
   .btn-confirm {
     order: -1;
   }

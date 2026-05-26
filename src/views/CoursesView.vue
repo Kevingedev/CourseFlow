@@ -1,87 +1,84 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import api from '../services/api';
-import { Monitor, ChartBar, Settings } from '@lucide/vue';
+import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import api from '../services/api'
+import { Monitor, ChartBar, Settings } from '@lucide/vue'
 import { useI18n } from '@/i18n'
 
 interface Course {
-  id: number;
-  name: string;
-  description: string;
-  instructor?: string;
-  duration?: string;
-  start_date?: string;
-  end_date?: string;
-  category?: string;
-  capacity?: number;
-  is_active?: boolean;
+  id: number
+  name: string
+  description: string
+  instructor?: string
+  duration?: string
+  start_date?: string
+  end_date?: string
+  category?: string
+  capacity?: number
+  is_active?: boolean
 }
 
-const courses = ref<Course[]>([]);
-const loading = ref(false);
-const error = ref<string | null>(null);
-const showAll = ref(false);
+const courses = ref<Course[]>([])
+const loading = ref(false)
+const error = ref<string | null>(null)
+const showAll = ref(false)
 const { t } = useI18n()
 
 const displayedCourses = computed(() => {
-  if (showAll.value) return courses.value;
-  return courses.value.slice(0, 6);
-});
+  if (showAll.value) return courses.value
+  return courses.value.slice(0, 6)
+})
 
-const router = useRouter();
+const router = useRouter()
 
 function goToCourse(id?: number) {
-  if (!id) return;
-  router.push(`/courses/${id}`);
+  if (!id) return
+  router.push(`/courses/${id}`)
 }
 
 function formatDuration(start?: string, end?: string) {
-  if (!start || !end) return t('courses.duration.tbd');
-  const s = new Date(start);
-  const e = new Date(end);
-  if (isNaN(s.getTime()) || isNaN(e.getTime()) || e <= s) return t('courses.duration.tbd');
-  const diffMs = e.getTime() - s.getTime();
-  const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+  if (!start || !end) return t('courses.duration.tbd')
+  const s = new Date(start)
+  const e = new Date(end)
+  if (isNaN(s.getTime()) || isNaN(e.getTime()) || e <= s) return t('courses.duration.tbd')
+  const diffMs = e.getTime() - s.getTime()
+  const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24))
   if (diffDays >= 30) {
-    const months = Math.round(diffDays / 30);
-    return `${months} ${months === 1 ? t('courses.duration.month') : t('courses.duration.months')}`;
+    const months = Math.round(diffDays / 30)
+    return `${months} ${months === 1 ? t('courses.duration.month') : t('courses.duration.months')}`
   }
   if (diffDays >= 7) {
-    const weeks = Math.round(diffDays / 7);
-    return `${weeks} ${weeks === 1 ? t('courses.duration.week') : t('courses.duration.weeks')}`;
+    const weeks = Math.round(diffDays / 7)
+    return `${weeks} ${weeks === 1 ? t('courses.duration.week') : t('courses.duration.weeks')}`
   }
-  return `${diffDays} ${diffDays === 1 ? t('courses.duration.day') : t('courses.duration.days')}`;
+  return `${diffDays} ${diffDays === 1 ? t('courses.duration.day') : t('courses.duration.days')}`
 }
 
 async function loadCourses() {
-  loading.value = true;
-  error.value = null;
+  loading.value = true
+  error.value = null
   try {
-    const res = await api.get('/api/v1/courses/');
-    courses.value = res.data;
+    const res = await api.get('/api/v1/courses/')
+    courses.value = res.data
   } catch (err: unknown) {
     const apiError = err as {
-      response?: { status?: number; data?: { detail?: string } };
-      message?: string;
-    };
+      response?: { status?: number; data?: { detail?: string } }
+      message?: string
+    }
 
     if (apiError.response?.status === 401) {
-      error.value = t('courses.authRequired');
+      error.value = t('courses.authRequired')
     } else {
-      error.value =
-        apiError.response?.data?.detail ||
-        apiError.message ||
-        t('courses.loadError');
+      error.value = apiError.response?.data?.detail || apiError.message || t('courses.loadError')
     }
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 onMounted(() => {
-  loadCourses();
-});
+  loadCourses()
+})
 </script>
 
 <template>
@@ -89,7 +86,10 @@ onMounted(() => {
     <!-- Courses Hero -->
     <section class="courses-hero section-padding">
       <div class="container text-center">
-        <h1 class="hero-title">{{ t('courses.hero.titlePrefix') }} <span class="text-accent">{{ t('courses.hero.titleAccent') }}</span></h1>
+        <h1 class="hero-title">
+          {{ t('courses.hero.titlePrefix') }}
+          <span class="text-accent">{{ t('courses.hero.titleAccent') }}</span>
+        </h1>
         <p class="hero-subtitle mx-auto">
           {{ t('courses.hero.subtitle') }}
         </p>
@@ -148,20 +148,35 @@ onMounted(() => {
                 <span>{{ course.category || t('courses.fallbackCategory') }}</span>
               </div>
               <div class="course-content">
-                <span class="course-tag">{{ course.is_active ? t('courses.status.open') : t('courses.status.closed') }}</span>
+                <span class="course-tag">{{
+                  course.is_active ? t('courses.status.open') : t('courses.status.closed')
+                }}</span>
                 <h3>{{ course.name }}</h3>
                 <p>{{ course.description }}</p>
-                <p class="course-meta">{{ t('courses.duration') }}: <strong>{{ formatDuration(course.start_date, course.end_date) }}</strong></p>
+                <p class="course-meta">
+                  {{ t('courses.duration') }}:
+                  <strong>{{ formatDuration(course.start_date, course.end_date) }}</strong>
+                </p>
                 <div class="course-footer">
-                  <span class="course-price">{{ t('courses.capacity') }}: {{ course.capacity ?? '–' }}</span>
-                  <button class="btn-primary-small" :disabled="!course.is_active" @click="goToCourse(course.id)">{{ t('courses.apply') }}</button>
+                  <span class="course-price"
+                    >{{ t('courses.capacity') }}: {{ course.capacity ?? '–' }}</span
+                  >
+                  <button
+                    class="btn-primary-small"
+                    :disabled="!course.is_active"
+                    @click="goToCourse(course.id)"
+                  >
+                    {{ t('courses.apply') }}
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
           <div v-if="courses.length > 6" class="text-center" style="margin-top: 1.5rem">
-            <button class="btn-primary" @click="showAll = !showAll">{{ showAll ? t('courses.showLess') : t('courses.showMore') }}</button>
+            <button class="btn-primary" @click="showAll = !showAll">
+              {{ showAll ? t('courses.showLess') : t('courses.showMore') }}
+            </button>
           </div>
         </div>
       </div>
@@ -257,7 +272,6 @@ onMounted(() => {
 .course-card:hover {
   transform: translateY(-8px);
 }
-
 
 /* Make grid items stretch so cards have equal height */
 .courses-grid {
