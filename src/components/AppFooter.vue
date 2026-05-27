@@ -100,7 +100,7 @@ const { t } = useI18n()
 }
 
 .footer-logo {
-  height: 40px;
+  height: 54px;
   width: auto;
   object-fit: contain;
 }
