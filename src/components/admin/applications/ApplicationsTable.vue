@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, shallowRef, reactive, onMounted, onUnmounted, watch } from 'vue'
-import { ChevronLeft, ChevronRight, RefreshCcw, Search } from '@lucide/vue'
+import { ChevronLeft, ChevronRight, RefreshCcw, Search, Download } from '@lucide/vue'
 import type { ApplicationRecord, ApplicationStatus } from '@/types/applications'
 
 const props = defineProps<{
@@ -146,6 +146,51 @@ const handleClickOutside = (e: MouseEvent) => {
   }
 }
 
+const downloadExcel = async () => {
+  const { utils, write } = await import('xlsx')
+
+  const data = props.applications.map((app) => ({
+    ID: app.id,
+    USUARIO: app.user?.name || `Usuario #${app.user_id}`,
+    EMAIL: app.user?.email || '',
+    'EDUCACIÓN PREVIA': app.previous_education || 'Sin informar',
+    'ID CURSO': app.course_id,
+    CURSO: app.course?.name || `Curso #${app.course_id}`,
+    DARDE: app.has_darde === null ? 'Sin informar' : app.has_darde ? 'Sí' : 'No',
+    ESTADO: getStatusLabel(app.status),
+  }))
+
+  const worksheet = utils.json_to_sheet(data)
+  const workbook = utils.book_new()
+  utils.book_append_sheet(workbook, worksheet, 'Solicitudes')
+
+  // Auto-fit column widths for better visual layout
+  if (data.length > 0 && data[0]) {
+    const firstRow = data[0]
+    const keys = Object.keys(firstRow)
+    worksheet['!cols'] = keys.map((key) => {
+      const maxLength = Math.max(
+        key.length,
+        ...data.map((row) => String(row[key as keyof typeof row] || '').length),
+      )
+      return { wch: maxLength + 3 }
+    })
+  }
+
+  const excelBuffer = write(workbook, { bookType: 'xlsx', type: 'array' })
+  const blob = new Blob([excelBuffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8',
+  })
+
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.setAttribute('href', url)
+  link.setAttribute('download', `solicitudes_${new Date().toISOString().slice(0, 10)}.xlsx`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
 })
@@ -187,6 +232,15 @@ onUnmounted(() => {
             {{ status.label }}
           </option>
         </select>
+        <button
+          type="button"
+          class="btn-outline"
+          :disabled="loading || applications.length === 0"
+          @click="downloadExcel"
+        >
+          <Download :size="16" aria-hidden="true" />
+          Exportar Excel
+        </button>
         <button type="button" class="btn-outline" :disabled="loading" @click="emit('refresh')">
           <RefreshCcw :size="16" aria-hidden="true" />
           {{ loading ? 'Actualizando...' : 'Recargar' }}
