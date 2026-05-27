@@ -151,13 +151,13 @@ const downloadExcel = async () => {
 
   const data = props.applications.map((app) => ({
     ID: app.id,
-    Usuario: app.user?.name || `Usuario #${app.user_id}`,
-    Email: app.user?.email || '',
-    'Educación Previa': app.previous_education || 'Sin informar',
-    'ID Curso': app.course_id,
-    Curso: app.course?.name || `Curso #${app.course_id}`,
+    USUARIO: app.user?.name || `Usuario #${app.user_id}`,
+    EMAIL: app.user?.email || '',
+    'EDUCACIÓN PREVIA': app.previous_education || 'Sin informar',
+    'ID CURSO': app.course_id,
+    CURSO: app.course?.name || `Curso #${app.course_id}`,
     DARDE: app.has_darde === null ? 'Sin informar' : app.has_darde ? 'Sí' : 'No',
-    Estado: getStatusLabel(app.status),
+    ESTADO: getStatusLabel(app.status),
   }))
 
   const worksheet = utils.json_to_sheet(data)
