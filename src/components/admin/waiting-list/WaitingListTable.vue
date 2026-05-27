@@ -195,7 +195,7 @@ onUnmounted(() => {
       </tbody>
     </table>
 
-    <div v-if="totalPages > 1" class="pagination-bar" aria-label="Paginación de la lista de espera">
+    <div v-if="totalPages > 0" class="pagination-bar" aria-label="Paginación de la lista de espera">
       <p class="pagination-summary">{{ paginationSummary }}</p>
 
       <nav class="pagination-controls" aria-label="Páginas">
@@ -301,7 +301,7 @@ onUnmounted(() => {
   justify-content: center;
   min-width: 40px;
   padding: 0.25rem 0.6rem;
-  border-radius: 999px;
+  border-radius: 10px;
   font-weight: 800;
   color: var(--primary-color);
   background: rgba(67, 17, 185, 0.1);
@@ -485,7 +485,7 @@ onUnmounted(() => {
   width: 36px;
   height: 36px;
   border: 1px solid var(--border-color);
-  border-radius: 50%;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.78);
   color: var(--text-dark);
   display: inline-grid;
