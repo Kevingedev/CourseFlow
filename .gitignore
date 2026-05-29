@@ -43,6 +43,7 @@ api/db.json
 
 # Variables
 .env
+.env.production
 
 #prototype en react
 prototype
