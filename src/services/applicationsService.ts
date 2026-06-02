@@ -77,6 +77,28 @@ const getApiErrorMessage = (error: unknown, fallbackMessage: string): string => 
   return fallbackMessage
 }
 
+const getFilenameFromContentDisposition = (headerValue: string | undefined): string => {
+  if (!headerValue) {
+    return 'solicitudes.xlsx'
+  }
+
+  const utf8Match = headerValue.match(/filename\*=UTF-8''([^;]+)/i)
+  if (utf8Match?.[1]) {
+    try {
+      return decodeURIComponent(utf8Match[1])
+    } catch {
+      return utf8Match[1]
+    }
+  }
+
+  const plainMatch = headerValue.match(/filename="?([^";]+)"?/i)
+  if (plainMatch?.[1]) {
+    return plainMatch[1]
+  }
+
+  return 'solicitudes.xlsx'
+}
+
 export const applicationsService = {
   async getApplications(): Promise<ApplicationRecord[]> {
     console.info('[applications] GET /api/v1/applications/')
@@ -121,6 +143,37 @@ export const applicationsService = {
     } catch (error: unknown) {
       console.error('[applications] Failed to delete application:', error)
       throw new Error(getApiErrorMessage(error, 'No se pudo eliminar la solicitud.'))
+    }
+  },
+
+  async exportApplicationsExcel(): Promise<void> {
+    console.info('[applications] GET /api/v1/applications/export/excel')
+
+    try {
+      const response = await api.get<Blob>('/api/v1/applications/export/excel', {
+        responseType: 'blob',
+      })
+
+      const contentTypeHeader = response.headers['content-type']
+      const contentDispositionHeader = response.headers['content-disposition']
+      const contentType = typeof contentTypeHeader === 'string' ? contentTypeHeader : undefined
+      const contentDisposition =
+        typeof contentDispositionHeader === 'string' ? contentDispositionHeader : undefined
+
+      const blob = new Blob([response.data], {
+        type: contentType || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      })
+      const downloadUrl = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.download = getFilenameFromContentDisposition(contentDisposition)
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      window.URL.revokeObjectURL(downloadUrl)
+    } catch (error: unknown) {
+      console.error('[applications] Failed to export applications:', error)
+      throw new Error(getApiErrorMessage(error, 'No se pudo exportar el Excel.'))
     }
   },
 }

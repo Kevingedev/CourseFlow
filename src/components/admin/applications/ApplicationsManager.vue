@@ -7,11 +7,13 @@ const {
   applications,
   deletingApplicationId,
   feedback,
+  exportingApplications,
   loading,
   searchQuery,
   stats,
   statusFilter,
   updatingStatusId,
+  exportApplications,
   loadApplications,
   removeApplication,
   updateStatus,
@@ -69,7 +71,9 @@ const handleDelete = async (application: ApplicationRecord) => {
       :deleting-application-id="deletingApplicationId"
       :updating-status-id="updatingStatusId"
       :loading="loading"
+      :exporting-applications="exportingApplications"
       @refresh="loadApplications"
+      @export="exportApplications"
       @remove="handleDelete"
       @status-change="updateStatus"
       @update:search-query="searchQuery = $event"

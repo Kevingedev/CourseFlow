@@ -11,6 +11,7 @@ export const useApplications = () => {
   const loading = ref(false)
   const deletingApplicationId = ref<number | null>(null)
   const updatingStatusId = ref<number | null>(null)
+  const exportingApplications = ref(false)
   const feedback = ref<ApplicationsFeedback | null>(null)
   const searchQuery = ref('')
   const statusFilter = ref<ApplicationStatus | 'all'>('all')
@@ -123,12 +124,34 @@ export const useApplications = () => {
     }
   }
 
+  const exportApplications = async () => {
+    exportingApplications.value = true
+    resetFeedback()
+
+    try {
+      await applicationsService.exportApplicationsExcel()
+      feedback.value = {
+        type: 'success',
+        message: 'Exportación generada correctamente.',
+      }
+    } catch (error: unknown) {
+      feedback.value = {
+        type: 'error',
+        message:
+          error instanceof Error ? error.message : 'No se pudo exportar el Excel.',
+      }
+    } finally {
+      exportingApplications.value = false
+    }
+  }
+
   onMounted(loadApplications)
 
   return {
     applications: filteredApplications,
     deletingApplicationId,
     feedback,
+    exportingApplications,
     loading,
     searchQuery,
     stats,
@@ -137,6 +160,7 @@ export const useApplications = () => {
     loadApplications,
     removeApplication,
     resetFeedback,
+    exportApplications,
     updateStatus,
   }
 }
