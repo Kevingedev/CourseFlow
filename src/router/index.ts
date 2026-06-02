@@ -52,27 +52,33 @@ const router = createRouter({
           path: 'requests',
           name: 'admin-requests',
           component: () => import('../views/admin/AdminRequestsView.vue'),
-          meta: { title: 'Gestión de Solicitudes' }
+          meta: { title: 'Gestión de Solicitudes' },
         },
         {
           path: 'courses',
           name: 'admin-courses',
           component: () => import('../views/admin/AdminCoursesView.vue'),
-          meta: { title: 'Gestión de Cursos' }
+          meta: { title: 'Gestión de Cursos' },
         },
         {
           path: 'waiting-list',
           name: 'admin-waiting-list',
-          component: () => import('../views/admin/PlaceholderView.vue'),
-          meta: { title: 'Lista de Espera' }
+          component: () => import('../views/admin/AdminWaitingListView.vue'),
+          meta: { title: 'Lista de Espera' },
+        },
+        {
+          path: 'tutorial',
+          name: 'admin-tutorial',
+          component: () => import('../views/admin/AdminTutorialView.vue'),
+          meta: { title: 'Tutorial de Admin' },
         },
         {
           path: 'users',
           name: 'admin-users',
           component: () => import('../views/admin/AdminUsersView.vue'),
-          meta: { title: 'Gestión de Administradores', roles: ['suadmin'] }
-        }
-      ]
+          meta: { title: 'Gestión de Administradores', roles: ['suadmin'] },
+        },
+      ],
     },
     {
       path: '/courses/:id',
@@ -93,7 +99,7 @@ router.beforeEach(async (to, from, next) => {
   await authStore.initialize()
 
   // Find if any parent route requires auth
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
 
   // Find allowed roles for this route (checking all matched nested routes)
   const allowedRoles = to.matched.reduce<string[]>((roles, record) => {
@@ -116,7 +122,7 @@ router.beforeEach(async (to, from, next) => {
     if (!authStore.isAuthenticated) {
       return next({
         name: 'login',
-        query: { redirect: to.fullPath }
+        query: { redirect: to.fullPath },
       })
     }
 

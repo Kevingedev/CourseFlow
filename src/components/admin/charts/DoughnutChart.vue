@@ -8,7 +8,7 @@ import {
   Legend,
   ArcElement,
   type ChartOptions,
-  type ChartData
+  type ChartData,
 } from 'chart.js'
 
 // Register ChartJS modules
@@ -30,11 +30,11 @@ const defaultOptions = computed<ChartOptions<'doughnut'>>(() => ({
         font: {
           family: 'Inter, sans-serif',
           size: 12,
-          weight: 500
+          weight: 500,
         },
         usePointStyle: true,
-        padding: 20
-      }
+        padding: 20,
+      },
     },
     title: {
       display: !!props.title,
@@ -43,14 +43,14 @@ const defaultOptions = computed<ChartOptions<'doughnut'>>(() => ({
       font: {
         family: 'Outfit, sans-serif',
         size: 16,
-        weight: 'bold'
+        weight: 'bold',
       },
       padding: {
-        bottom: 20
-      }
-    }
+        bottom: 20,
+      },
+    },
   },
-  cutout: '70%'
+  cutout: '70%',
 }))
 </script>
 

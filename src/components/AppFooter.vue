@@ -22,9 +22,15 @@ const { t } = useI18n()
       <div class="footer-col">
         <h4 class="footer-title">{{ t('footer.quickLinks') }}</h4>
         <ul class="footer-links">
-          <li><router-link to="/about">{{ t('footer.about') }}</router-link></li>
-          <li><router-link to="/courses">{{ t('footer.courses') }}</router-link></li>
-          <li><router-link to="/contact">{{ t('footer.contact') }}</router-link></li>
+          <li>
+            <router-link to="/about">{{ t('footer.about') }}</router-link>
+          </li>
+          <li>
+            <router-link to="/courses">{{ t('footer.courses') }}</router-link>
+          </li>
+          <li>
+            <router-link to="/contact">{{ t('footer.contact') }}</router-link>
+          </li>
         </ul>
       </div>
 
@@ -94,7 +100,7 @@ const { t } = useI18n()
 }
 
 .footer-logo {
-  height: 40px;
+  height: 54px;
   width: auto;
   object-fit: contain;
 }

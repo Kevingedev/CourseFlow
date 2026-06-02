@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Languages } from '@lucide/vue'
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
@@ -11,6 +11,15 @@ const authStore = useAuthStore()
 const router = useRouter()
 const { locale, localeOptions, setLocale, t } = useI18n()
 
+const isLangDropdownOpen = ref(false)
+const langMenuTop = ref(0)
+const langMenuLeft = ref(0)
+
+const currentLocaleShort = computed(() => {
+  const opt = localeOptions.find((o) => o.code === locale.value)
+  return opt?.shortLabel ?? 'ES'
+})
+
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
@@ -21,9 +30,32 @@ const handleLogout = () => {
   isMenuOpen.value = false
 }
 
-const handleLocaleChange = (value: string) => {
-  setLocale(value as LocaleCode)
+const toggleLangDropdown = (event: MouseEvent) => {
+  const button = event.currentTarget as HTMLElement
+  const rect = button.getBoundingClientRect()
+  langMenuTop.value = rect.bottom + 4
+  langMenuLeft.value = Math.max(8, rect.right - 180)
+  isLangDropdownOpen.value = !isLangDropdownOpen.value
 }
+
+const closeLangDropdown = () => {
+  isLangDropdownOpen.value = false
+}
+
+const handleLangClickOutside = (e: MouseEvent) => {
+  const target = e.target as HTMLElement
+  if (!target.closest('.language-dropdown') && !target.closest('.lang-dropdown-menu')) {
+    closeLangDropdown()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleLangClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleLangClickOutside)
+})
 </script>
 
 <template>
@@ -38,26 +70,80 @@ const handleLocaleChange = (value: string) => {
         <router-link to="/about" class="nav-link">{{ t('nav.about') }}</router-link>
         <router-link to="/courses" class="nav-link">{{ t('nav.courses') }}</router-link>
         <router-link to="/contact" class="nav-link">{{ t('nav.contact') }}</router-link>
-        <router-link v-if="authStore.isAdminOrSuadmin" to="/admin/dashboard" class="nav-link admin-link">
+        <router-link
+          v-if="authStore.isAdminOrSuadmin"
+          to="/admin/dashboard"
+          class="nav-link admin-link"
+        >
           {{ t('nav.admin') }}
         </router-link>
 
-        <label class="language-select">
-          <Languages :size="16" aria-hidden="true" />
-          <span class="sr-only">{{ t('nav.language') }}</span>
-          <select
-            :value="locale"
+        <div class="language-dropdown">
+          <button
+            type="button"
+            class="language-dropdown-trigger"
             :aria-label="t('nav.language')"
-            @change="handleLocaleChange(($event.target as HTMLSelectElement).value)"
+            @click="toggleLangDropdown"
           >
-            <option v-for="option in localeOptions" :key="option.code" :value="option.code">
-              {{ option.shortLabel }}
-            </option>
-          </select>
-        </label>
+            <Languages :size="16" aria-hidden="true" />
+            <span class="lang-label">{{ currentLocaleShort }}</span>
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="chevron"
+              :class="{ open: isLangDropdownOpen }"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <Teleport to="body">
+            <Transition name="dropdown">
+              <div
+                v-if="isLangDropdownOpen"
+                class="lang-dropdown-menu"
+                :style="{ top: langMenuTop + 'px', left: langMenuLeft + 'px' }"
+                @click.stop
+              >
+                <button
+                  v-for="option in localeOptions"
+                  :key="option.code"
+                  type="button"
+                  class="lang-dropdown-item"
+                  :class="{ active: option.code === locale }"
+                  @click="setLocale(option.code as LocaleCode)"
+                >
+                  <svg
+                    v-if="option.code === locale"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span v-else class="check-spacer"></span>
+                  {{ option.label }}
+                </button>
+              </div>
+            </Transition>
+          </Teleport>
+        </div>
 
         <template v-if="authStore.isAuthenticated">
-          <span class="user-greeting">{{ t('nav.greeting', { name: authStore.user?.fullName || '' }) }}</span>
+          <span class="user-greeting">{{
+            t('nav.greeting', { name: authStore.user?.fullName || '' })
+          }}</span>
           <button class="btn-logout" @click="handleLogout">{{ t('nav.logout') }}</button>
         </template>
         <template v-else>
@@ -102,34 +188,69 @@ const handleLocaleChange = (value: string) => {
     <!-- Mobile Menu Overlay -->
     <Transition name="slide">
       <div v-if="isMenuOpen" class="mobile-menu">
-        <router-link to="/about" class="mobile-link" @click="isMenuOpen = false">{{ t('nav.about') }}</router-link>
-        <router-link to="/courses" class="mobile-link" @click="isMenuOpen = false">{{ t('nav.courses') }}</router-link>
-        <router-link to="/contact" class="mobile-link" @click="isMenuOpen = false">{{ t('nav.contact') }}</router-link>
-        <router-link v-if="authStore.isAdminOrSuadmin" to="/admin/dashboard" class="mobile-link admin-link" @click="isMenuOpen = false">
+        <router-link to="/about" class="mobile-link" @click="isMenuOpen = false">{{
+          t('nav.about')
+        }}</router-link>
+        <router-link to="/courses" class="mobile-link" @click="isMenuOpen = false">{{
+          t('nav.courses')
+        }}</router-link>
+        <router-link to="/contact" class="mobile-link" @click="isMenuOpen = false">{{
+          t('nav.contact')
+        }}</router-link>
+        <router-link
+          v-if="authStore.isAdminOrSuadmin"
+          to="/admin/dashboard"
+          class="mobile-link admin-link"
+          @click="isMenuOpen = false"
+        >
           {{ t('nav.admin') }}
         </router-link>
 
-        <label class="mobile-language-select">
+        <div class="mobile-language-select">
           <span>{{ t('nav.language') }}</span>
-          <select
-            :value="locale"
-            :aria-label="t('nav.language')"
-            @change="handleLocaleChange(($event.target as HTMLSelectElement).value)"
-          >
-            <option v-for="option in localeOptions" :key="option.code" :value="option.code">
+          <div class="mobile-lang-options">
+            <button
+              v-for="option in localeOptions"
+              :key="option.code"
+              type="button"
+              class="mobile-lang-btn"
+              :class="{ active: option.code === locale }"
+              @click="setLocale(option.code)"
+            >
+              <svg
+                v-if="option.code === locale"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span v-else class="check-spacer"></span>
               {{ option.label }}
-            </option>
-          </select>
-        </label>
+            </button>
+          </div>
+        </div>
 
         <div class="mobile-divider"></div>
 
         <template v-if="authStore.isAuthenticated">
-          <div class="mobile-user-greeting">{{ t('nav.greeting', { name: authStore.user?.fullName || '' }) }}</div>
+          <div class="mobile-user-greeting">
+            {{ t('nav.greeting', { name: authStore.user?.fullName || '' }) }}
+          </div>
           <button class="btn-logout w-full" @click="handleLogout">{{ t('nav.logout') }}</button>
         </template>
         <template v-else>
-          <router-link to="/login" class="btn-primary w-full text-center" @click="isMenuOpen = false">{{ t('nav.login') }}</router-link>
+          <router-link
+            to="/login"
+            class="btn-primary w-full text-center"
+            @click="isMenuOpen = false"
+            >{{ t('nav.login') }}</router-link
+          >
         </template>
       </div>
     </Transition>
@@ -173,45 +294,111 @@ const handleLocaleChange = (value: string) => {
   gap: 2.5rem;
 }
 
-.language-select,
-.mobile-language-select {
+.language-dropdown {
+  position: relative;
   display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  color: var(--text-muted);
-  font-weight: 700;
 }
 
-.language-select select,
-.mobile-language-select select {
+.language-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.6rem;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.84);
-  color: var(--text-dark);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--text-muted);
   font: inherit;
   font-size: 0.85rem;
   font-weight: 700;
-  padding: 0.35rem 0.55rem;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.language-select select:focus,
-.mobile-language-select select:focus {
-  outline: none;
+.language-dropdown-trigger:hover {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(67, 17, 185, 0.08);
+  color: var(--primary-color);
+  background: rgba(67, 17, 185, 0.04);
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+.lang-label {
+  min-width: 22px;
+  text-align: center;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown menu (teleported) */
+.lang-dropdown-menu {
+  position: fixed;
+  z-index: 9999;
+  min-width: 160px;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  padding: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lang-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-dark);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
   white-space: nowrap;
-  border: 0;
+  font-family: inherit;
+}
+
+.lang-dropdown-item:hover {
+  background: rgba(67, 17, 185, 0.06);
+  color: var(--primary-color);
+}
+
+.lang-dropdown-item.active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.check-spacer {
+  width: 16px;
+  height: 16px;
+}
+
+/* Dropdown transition */
+.dropdown-enter-active {
+  animation: dropIn 0.15s ease;
+}
+
+.dropdown-leave-active {
+  animation: dropIn 0.1s ease reverse;
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .admin-link {
@@ -284,8 +471,55 @@ const handleLocaleChange = (value: string) => {
 }
 
 .mobile-language-select {
-  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
   width: 100%;
+}
+
+.mobile-language-select > span {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.mobile-lang-options {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: rgba(67, 17, 185, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.25rem;
+}
+
+.mobile-lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 0.75rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+}
+
+.mobile-lang-btn:hover {
+  background: rgba(67, 17, 185, 0.06);
+  color: var(--primary-color);
+}
+
+.mobile-lang-btn.active {
+  color: var(--primary-color);
+  font-weight: 600;
+  background: rgba(67, 17, 185, 0.06);
 }
 
 .mobile-divider {

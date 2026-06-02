@@ -47,12 +47,7 @@ watch(
     <Transition name="modal">
       <div v-if="open" class="modal-overlay" @click.self="emit('close')">
         <div class="modal-panel">
-          <button
-            type="button"
-            class="modal-close"
-            aria-label="Cerrar"
-            @click="emit('close')"
-          >
+          <button type="button" class="modal-close" aria-label="Cerrar" @click="emit('close')">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="22"

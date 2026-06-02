@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useAdminUsers } from '@/composables/useAdminUsers'
 import AdminUserFormCard from './AdminUserFormCard.vue'
 import AdminUsersTable from './AdminUsersTable.vue'
+import CustomConfirmModal from '@/components/common/CustomConfirmModal.vue'
 import type { AdminUserRecord } from '@/types/adminUsers'
 
 const authStore = useAuthStore()
@@ -25,21 +27,25 @@ const {
   submitForm,
 } = useAdminUsers(authStore.user?.id)
 
-const handleDelete = async (user: AdminUserRecord) => {
-  const confirmed = window.confirm(`Vas a eliminar al administrador ${user.fullName}. Esta acción no se puede deshacer.`)
+const confirmOpen = ref(false)
+const userToDelete = ref<AdminUserRecord | null>(null)
 
-  if (!confirmed) {
-    return
+const handleDelete = (user: AdminUserRecord) => {
+  userToDelete.value = user
+  confirmOpen.value = true
+}
+
+const handleConfirmDelete = async () => {
+  if (userToDelete.value) {
+    await removeAdminUser(userToDelete.value)
   }
-
-  await removeAdminUser(user)
+  confirmOpen.value = false
+  userToDelete.value = null
 }
 </script>
 
 <template>
   <div class="admin-users-manager">
-    
-
     <section class="content-grid">
       <AdminUserFormCard
         :form="form"
@@ -64,6 +70,22 @@ const handleDelete = async (user: AdminUserRecord) => {
         @toggle="toggleUserActive"
       />
     </section>
+
+    <CustomConfirmModal
+      :open="confirmOpen"
+      title="Eliminar administrador"
+      :message="
+        userToDelete
+          ? `Vas a eliminar al administrador ${userToDelete.fullName}. Esta acción no se puede deshacer.`
+          : ''
+      "
+      confirm-text="Eliminar"
+      cancel-text="Cancelar"
+      type="danger"
+      :loading="deletingUserId !== null"
+      @close="confirmOpen = false"
+      @confirm="handleConfirmDelete"
+    />
   </div>
 </template>
 

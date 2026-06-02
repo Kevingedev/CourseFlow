@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useCourses } from '@/composables/useCourses'
 import CourseFormModal from './CourseFormModal.vue'
 import CoursesTable from './CoursesTable.vue'
+import CustomConfirmModal from '@/components/common/CustomConfirmModal.vue'
 import type { CourseRecord } from '@/types/courses'
 
 const {
@@ -24,6 +25,8 @@ const {
 } = useCourses()
 
 const showModal = ref(false)
+const confirmOpen = ref(false)
+const courseToDeactivate = ref<CourseRecord | null>(null)
 
 const openCreateModal = () => {
   resetForm()
@@ -56,16 +59,17 @@ const handleReset = () => {
   }
 }
 
-const handleDelete = async (course: CourseRecord) => {
-  const confirmed = window.confirm(
-    `Vas a desactivar el curso "${course.name}". Los alumnos ya inscritos no se verán afectados, pero el curso dejará de ser visible para nuevas inscripciones.`,
-  )
+const handleDelete = (course: CourseRecord) => {
+  courseToDeactivate.value = course
+  confirmOpen.value = true
+}
 
-  if (!confirmed) {
-    return
+const handleConfirmDeactivate = async () => {
+  if (courseToDeactivate.value) {
+    await removeCourse(courseToDeactivate.value)
   }
-
-  await removeCourse(course)
+  confirmOpen.value = false
+  courseToDeactivate.value = null
 }
 </script>
 
@@ -117,6 +121,22 @@ const handleDelete = async (course: CourseRecord) => {
       @close="closeModal"
       @submit="handleSubmit"
       @reset="handleReset"
+    />
+
+    <CustomConfirmModal
+      :open="confirmOpen"
+      title="Desactivar curso"
+      :message="
+        courseToDeactivate
+          ? `Vas a desactivar el curso &quot;${courseToDeactivate.name}&quot;. Los alumnos ya inscritos no se verán afectados, pero el curso dejará de ser visible para nuevas inscripciones.`
+          : ''
+      "
+      confirm-text="Desactivar"
+      cancel-text="Cancelar"
+      type="warning"
+      :loading="deletingCourseId !== null"
+      @close="confirmOpen = false"
+      @confirm="handleConfirmDeactivate"
     />
   </div>
 </template>

@@ -10,7 +10,8 @@ export const es: TranslationDictionary = {
   'nav.greeting': 'Hola, {name}',
   'nav.language': 'Idioma',
 
-  'footer.description': 'Plataforma de gestion pedagogica profesional. Impulsando el talento digital y la inclusion.',
+  'footer.description':
+    'Plataforma de gestion pedagogica profesional. Impulsando el talento digital y la inclusion.',
   'footer.quickLinks': 'Enlaces rapidos',
   'footer.about': 'Conocenos',
   'footer.courses': 'Formaciones',
@@ -23,48 +24,63 @@ export const es: TranslationDictionary = {
 
   'home.hero.titlePrefix': 'Abrimos rutas',
   'home.hero.titleAccent': 'inclusivas al talento digital.',
-  'home.hero.subtitle': 'Descubre una nueva forma de aprender y participar en formaciones tecnologicas. Disenado para impulsar el talento diverso y fomentar una sociedad inclusiva.',
+  'home.hero.subtitle':
+    'Descubre una nueva forma de aprender y participar en formaciones tecnologicas. Disenado para impulsar el talento diverso y fomentar una sociedad inclusiva.',
   'home.hero.primary': 'Explorar Formaciones',
   'home.hero.secondary': 'Conocenos',
   'home.hero.imageAlt': 'Talento digital inclusivo',
   'home.features.titlePrefix': 'Por que elegir',
   'home.features.card1.title': 'Formacion y Acompanamiento',
-  'home.features.card1.text': 'Aprende de profesionales del sector tecnologico y docentes con amplia experiencia.',
+  'home.features.card1.text':
+    'Aprende de profesionales del sector tecnologico y docentes con amplia experiencia.',
   'home.features.card2.title': 'Metodologia Flexible e Inclusiva',
-  'home.features.card2.text': 'Accede a las formaciones en cualquier momento, desde cualquier lugar y a tu ritmo.',
+  'home.features.card2.text':
+    'Accede a las formaciones en cualquier momento, desde cualquier lugar y a tu ritmo.',
   'home.features.card3.title': 'Aprendizaje Practico',
-  'home.features.card3.text': 'Participa con proyectos reales y dinamicos disenados para impulsar tu carrera digital.',
+  'home.features.card3.text':
+    'Participa con proyectos reales y dinamicos disenados para impulsar tu carrera digital.',
 
   'about.hero.titlePrefix': 'Conoce',
-  'about.hero.subtitle': 'Construimos un entorno de aprendizaje tecnologico, equitativo y accesible para todas y todos.',
+  'about.hero.subtitle':
+    'Construimos un entorno de aprendizaje tecnologico, equitativo y accesible para todas y todos.',
   'about.mission.title': 'Nuestra Mision',
-  'about.mission.text': 'Acompanamos a las personas en su desarrollo digital ofreciendo formacion tecnologica inclusiva para reducir la brecha digital y fomentar la diversidad en el sector tecnologico.',
+  'about.mission.text':
+    'Acompanamos a las personas en su desarrollo digital ofreciendo formacion tecnologica inclusiva para reducir la brecha digital y fomentar la diversidad en el sector tecnologico.',
   'about.vision.title': 'Nuestra Vision',
-  'about.vision.text': 'Ser la red de aprendizaje de referencia que conecta el talento diverso con oportunidades laborales y crecimiento profesional en el sector digital.',
+  'about.vision.text':
+    'Ser la red de aprendizaje de referencia que conecta el talento diverso con oportunidades laborales y crecimiento profesional en el sector digital.',
   'about.values.title': 'Nuestros Valores',
   'about.values.innovation.title': 'Innovacion',
-  'about.values.innovation.text': 'Buscamos constantemente soluciones pedagogicas innovadoras orientadas al empleo.',
+  'about.values.innovation.text':
+    'Buscamos constantemente soluciones pedagogicas innovadoras orientadas al empleo.',
   'about.values.inclusion.title': 'Inclusion y Diversidad',
-  'about.values.inclusion.text': 'Creemos en el potencial y talento de cada persona sin importar su punto de partida.',
+  'about.values.inclusion.text':
+    'Creemos en el potencial y talento de cada persona sin importar su punto de partida.',
   'about.values.accessibility.title': 'Accesibilidad',
-  'about.values.accessibility.text': 'Garantizamos educacion tecnologica gratuita y de alta calidad para colectivos diversos.',
+  'about.values.accessibility.text':
+    'Garantizamos educacion tecnologica gratuita y de alta calidad para colectivos diversos.',
   'about.impact.title': 'Nuestros Datos de Impacto',
   'about.impact.people': 'Personas formadas y acompanadas en su insercion laboral digital.',
   'about.impact.rate': 'Tasa de insercion y exito laboral en empresas aliadas.',
   'about.impact.partners': 'Empresas colaboradoras y partners que confian en nuestro talento.',
   'about.story.title': 'Nuestra Historia',
-  'about.story.text': 'Fundada en 2024, Course Flow nacio de la necesidad de ofrecer un entorno de aprendizaje mas accesible y solidario en el ambito del desarrollo tecnologico. Lo que comenzo como un proyecto local de inclusion digital se ha consolidado en una plataforma robusta disenada para conectar la formacion de calidad con el empleo del futuro.',
+  'about.story.text':
+    'Fundada en 2024, Course Flow nacio de la necesidad de ofrecer un entorno de aprendizaje mas accesible y solidario en el ambito del desarrollo tecnologico. Lo que comenzo como un proyecto local de inclusion digital se ha consolidado en una plataforma robusta disenada para conectar la formacion de calidad con el empleo del futuro.',
 
   'courses.hero.titlePrefix': 'Nuestros itinerarios',
   'courses.hero.titleAccent': 'formativos',
-  'courses.hero.subtitle': 'Descubre y aprende con nuestros programas gratuitos disenados para impulsar tu carrera en tecnologia.',
+  'courses.hero.subtitle':
+    'Descubre y aprende con nuestros programas gratuitos disenados para impulsar tu carrera en tecnologia.',
   'courses.categories.title': 'Explora por especialidad',
   'courses.categories.web.title': 'Desarrollo Web y Apps',
-  'courses.categories.web.text': 'Adquiere las competencias tecnicas en front-end y back-end mas demandadas del sector digital.',
+  'courses.categories.web.text':
+    'Adquiere las competencias tecnicas en front-end y back-end mas demandadas del sector digital.',
   'courses.categories.data.title': 'Datos e Inteligencia Artificial',
-  'courses.categories.data.text': 'Domina el analisis de datos y aprende a aplicar soluciones de inteligencia artificial en proyectos reales.',
+  'courses.categories.data.text':
+    'Domina el analisis de datos y aprende a aplicar soluciones de inteligencia artificial en proyectos reales.',
   'courses.categories.systems.title': 'Soporte y Sistemas',
-  'courses.categories.systems.text': 'Especializate en infraestructuras de red, sistemas cloud y soporte informatico profesional.',
+  'courses.categories.systems.text':
+    'Especializate en infraestructuras de red, sistemas cloud y soporte informatico profesional.',
   'courses.catalog.title': 'Catalogo de Cursos',
   'courses.loading': 'Cargando cursos...',
   'courses.error': 'Error: {message}',
@@ -80,7 +96,8 @@ export const es: TranslationDictionary = {
   'courses.showLess': 'Mostrar menos',
   'courses.showMore': 'Ver mas',
   'courses.comingSoon.title': 'Catalogo completo en desarrollo',
-  'courses.comingSoon.text': 'Estamos preparando un catalogo interactivo de cursos. Muy pronto podras buscar, filtrar e inscribirte directamente en nuestras formaciones de calidad.',
+  'courses.comingSoon.text':
+    'Estamos preparando un catalogo interactivo de cursos. Muy pronto podras buscar, filtrar e inscribirte directamente en nuestras formaciones de calidad.',
   'courses.duration.tbd': 'Por definir',
   'courses.duration.year': 'ano',
   'courses.duration.years': 'anos',
@@ -93,7 +110,8 @@ export const es: TranslationDictionary = {
 
   'contact.hero.titlePrefix': 'Sumate al',
   'contact.hero.titleAccent': 'cambio',
-  'contact.hero.subtitle': 'Tienes dudas sobre nuestras formaciones o quieres colaborar con nosotros? Nuestro equipo esta listo para ayudarte.',
+  'contact.hero.subtitle':
+    'Tienes dudas sobre nuestras formaciones o quieres colaborar con nosotros? Nuestro equipo esta listo para ayudarte.',
   'contact.info.title': 'Informacion de contacto',
   'contact.write.title': 'Escribenos',
   'contact.call.title': 'Llamanos',
@@ -163,19 +181,25 @@ export const es: TranslationDictionary = {
   'courseDetail.syllabus': 'Temario',
   'courseDetail.outcomes': 'Que aprenderas',
   'courseDetail.private.title': 'Inscripcion Privada',
-  'courseDetail.private.text': 'Debes estar registrado e iniciar sesion para poder postular a este curso.',
+  'courseDetail.private.text':
+    'Debes estar registrado e iniciar sesion para poder postular a este curso.',
   'courseDetail.private.cta': 'Iniciar Sesion',
   'courseDetail.enrolled.title': 'Ya estas inscrito!',
-  'courseDetail.enrolled.text': 'Tu solicitud para este curso ya ha sido registrada y esta en estado pendiente de revision.',
+  'courseDetail.enrolled.text':
+    'Tu solicitud para este curso ya ha sido registrada y esta en estado pendiente de revision.',
   'courseDetail.inactive.title': 'Curso Inactivo',
-  'courseDetail.inactive.text': 'Este curso no esta recibiendo nuevas solicitudes de inscripcion en este momento.',
+  'courseDetail.inactive.text':
+    'Este curso no esta recibiendo nuevas solicitudes de inscripcion en este momento.',
   'courseDetail.closed.title': 'Inscripciones Cerradas',
   'courseDetail.closed.text': 'Este curso comenzo el {date} y ya no acepta nuevos alumnos.',
   'courseDetail.full.title': 'Cupo Agotado',
-  'courseDetail.full.text': 'Lo sentimos, este curso ha superado el aforo y el cupo maximo para la lista de espera.',
+  'courseDetail.full.text':
+    'Lo sentimos, este curso ha superado el aforo y el cupo maximo para la lista de espera.',
   'courseDetail.form.title': 'Interesado en este curso?',
-  'courseDetail.form.warning': 'Aforo completo. Tu solicitud entrara en lista de espera (Pendiente).',
-  'courseDetail.form.subtitle': 'Completa este formulario y nos pondremos en contacto contigo en breve.',
+  'courseDetail.form.warning':
+    'Aforo completo. Tu solicitud entrara en lista de espera (Pendiente).',
+  'courseDetail.form.subtitle':
+    'Completa este formulario y nos pondremos en contacto contigo en breve.',
   'courseDetail.form.personal': 'Tu Informacion',
   'courseDetail.form.name': 'Nombre *',
   'courseDetail.form.lastName': 'Apellido *',
@@ -193,7 +217,8 @@ export const es: TranslationDictionary = {
   'courseDetail.form.requirements': 'Requisitos del Curso',
   'courseDetail.form.requirementsLabel': 'Requisitos previos del curso:',
   'courseDetail.form.previousEducation': 'Detalla tu formacion previa relacionada (Opcional)',
-  'courseDetail.form.previousEducationPlaceholder': 'Explica brevemente tus estudios o experiencia...',
+  'courseDetail.form.previousEducationPlaceholder':
+    'Explica brevemente tus estudios o experiencia...',
   'courseDetail.form.remainingChars': '{count} caracteres restantes',
   'courseDetail.form.location': 'Ubicacion',
   'courseDetail.form.municipality': 'Municipio',
@@ -228,10 +253,14 @@ export const es: TranslationDictionary = {
   'courseDetail.form.submit': 'Enviar Inscripcion',
   'courseDetail.validation.login': 'Debes iniciar sesion para inscribirte.',
   'courseDetail.validation.terms': 'Por favor, acepta los terminos y condiciones.',
-  'courseDetail.validation.dni': 'El formato del DNI/NIE no es valido. Debe tener 8 numeros y 1 letra (ej. 12345678Z) o formato NIE valido (ej. X1234567Z).',
+  'courseDetail.validation.dni':
+    'El formato del DNI/NIE no es valido. Debe tener 8 numeros y 1 letra (ej. 12345678Z) o formato NIE valido (ej. X1234567Z).',
   'courseDetail.validation.age': 'Debes tener al menos 18 anos para inscribirte en este curso.',
-  'courseDetail.validation.darde': 'Por favor, selecciona si estas desempleado con DARDE actualizado o no.',
-  'courseDetail.validation.previousEducation': 'La descripcion de tu formacion previa no puede superar los 250 caracteres.',
-  'courseDetail.validation.success': 'Tu solicitud de inscripcion se ha registrado con exito. Estado: Pendiente de revision.',
+  'courseDetail.validation.darde':
+    'Por favor, selecciona si estas desempleado con DARDE actualizado o no.',
+  'courseDetail.validation.previousEducation':
+    'La descripcion de tu formacion previa no puede superar los 250 caracteres.',
+  'courseDetail.validation.success':
+    'Tu solicitud de inscripcion se ha registrado con exito. Estado: Pendiente de revision.',
   'courseDetail.validation.submitError': 'Error al enviar la inscripcion. Intentalo de nuevo.',
 }
