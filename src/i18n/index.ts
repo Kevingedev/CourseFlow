@@ -15,6 +15,7 @@ const dictionaries: Record<LocaleCode, TranslationDictionary> = {
 export const localeOptions: LocaleOption[] = [
   { code: 'es', label: 'Castellano', shortLabel: 'ES' },
   { code: 'en', label: 'English', shortLabel: 'EN' },
+  { code: 'eu', label: 'Euskara', shortLabel: 'EU' },
 ]
 
 const defaultLocale: LocaleCode = 'es'
