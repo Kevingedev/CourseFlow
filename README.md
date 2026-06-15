@@ -1,5 +1,6 @@
 # CourseFlow Frontend
 
+Proyecto disponible en https://courseflow-8auy.onrender.com
 Frontend público y administrativo de CourseFlow, construido con Vue 3, Vite, TypeScript, Pinia y Vue Router. La aplicación consume la API REST del backend mediante cookie HttpOnly y separa la experiencia en dos áreas:
 
 - Sitio público: inicio, catálogo, detalle de curso, contacto, login y registro.
